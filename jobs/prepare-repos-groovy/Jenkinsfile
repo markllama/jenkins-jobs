@@ -103,13 +103,6 @@ IS_TEST_MODE = TEST.toBoolean()
 BUILD_VERSION_MAJOR = BUILD_VERSION.tokenize('.')[0].toInteger() // Store the "X" in X.Y
 BUILD_VERSION_MINOR = BUILD_VERSION.tokenize('.')[1].toInteger() // Store the "Y" in X.Y
 SIGN_RPMS = SIGN.toBoolean()
-BUILD_CONTAINER_IMAGES = BUILD_CONTAINER_IMAGES.toBoolean()
-
-if (BUILD_EXCLUSIONS != "") {
-    // clean up string delimiting
-    BUILD_EXCLUSIONS = BUILD_EXCLUSIONS.replaceAll(',', ' ')
-    BUILD_EXCLUSIONS = BUILD_EXCLUSIONS.split().join(',')
-}
 
 def get_mirror_url(build_mode, version) {
     if (build_mode == "online:int") {
