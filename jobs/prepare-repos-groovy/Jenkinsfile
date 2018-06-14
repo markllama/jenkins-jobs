@@ -139,12 +139,7 @@ def mail_success(buildlib, version, mirrorURL, record_log) {
         exclude_subject = " [excluded images: ${BUILD_EXCLUSIONS}]"
     }
 
-    image_details = """${timing_report}
-Images:
-  - Images have been pushed to registry.reg-aws.openshift.com:443     (Get pull access [1])
-    [1] https://github.com/openshift/ops-sop/blob/master/services/opsregistry.asciidoc#using-the-registry-manually-using-rh-sso-user
-${image_list}
-"""
+    image_details = """Nothing"""
 
     mail_list = MAIL_LIST_SUCCESS
     if (!BUILD_CONTAINER_IMAGES) {
@@ -185,25 +180,6 @@ https://github.com/openshift/openshift-ansible/commits/openshift-ansible-${NEW_V
 ${oa_changelog}
 """);
 
-    try {
-        if (BUILD_EXCLUSIONS == "" && BUILD_CONTAINER_IMAGES) {
-            timeout(3) {
-                sendCIMessage(messageContent: "New build for OpenShift ${target}: ${version}",
-                              messageProperties: """build_mode=${BUILD_MODE}
-                          puddle_url=${mirrorURL}/${OCP_PUDDLE}
-                          image_registry_root=registry.reg-aws.openshift.com:443
-                          brew_task_url_openshift=${OSE_BREW_URL}
-                          product=OpenShift Container Platform
-                          """,
-                              messageType: 'ProductBuildDone',
-                              overrides: [topic: 'VirtualTopic.qe.ci.jenkins'],
-                              providerName: 'Red Hat UMB'
-                )
-            }
-        }
-    } catch (mex) {
-        echo "Error while sending CI message: ${mex}"
-    }
 }
 
 // extract timing information from the record_log and write a report string
