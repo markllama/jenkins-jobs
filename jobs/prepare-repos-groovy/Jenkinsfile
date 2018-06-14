@@ -268,7 +268,7 @@ node(TARGET_NODE) {
     sh "rm -rf ${OIT_WORKING}"
     sh "mkdir -p ${OIT_WORKING}"
 
-    PREV_BUILD = sh(returnStdout: true, script: "brew latest-build --quiet rhaos-${BUILD_VERSION}-rhel-7-candidate atomic-openshift | awk '{print \$1}'").trim()
+//    PREV_BUILD = sh(returnStdout: true, script: "brew latest-build --quiet rhaos-${BUILD_VERSION}-rhel-7-candidate atomic-openshift | awk '{print \$1}'").trim()
 
     //stage("enterprise-images repo") {
     //    buildlib.initialize_enterprise_images_dir()
