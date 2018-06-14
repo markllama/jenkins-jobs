@@ -270,9 +270,9 @@ node(TARGET_NODE) {
 
     PREV_BUILD = sh(returnStdout: true, script: "brew latest-build --quiet rhaos-${BUILD_VERSION}-rhel-7-candidate atomic-openshift | awk '{print \$1}'").trim()
 
-    stage("enterprise-images repo") {
-        buildlib.initialize_enterprise_images_dir()
-    }
+    //stage("enterprise-images repo") {
+    //    buildlib.initialize_enterprise_images_dir()
+    //}
 
     stage("ose repo") {
         master_spec = buildlib.initialize_ose()
