@@ -1,8 +1,4 @@
 
-def commonlib = load("pipeline-scripts/commonlib.groovy")
-
-commonlib.initialize()
-
 GITHUB_URLS = [:]
 GITHUB_BASE_PATHS = [:]
 
