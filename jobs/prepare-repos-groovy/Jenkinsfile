@@ -283,8 +283,8 @@ node(TARGET_NODE) {
             script: "git rev-parse HEAD",
     ).trim()
 
-    def commonlib = load("pipeline-scripts/commonlib.groovy")
-    commonlib.initialize()
+//    def commonlib = load("pipeline-scripts/commonlib.groovy")
+//    commonlib.initialize()
 
     def buildlib = load("pipeline-scripts/buildlib.groovy")
     buildlib.initialize()
