@@ -76,7 +76,19 @@ online:stg                {origin,origin-web-console,openshift-ansible}/stage ->
                     description: 'Run as much code as possible without pushing / building?',
                     $class: 'hudson.model.BooleanParameterDefinition',
                     defaultValue: true
-                ]
+                ],
+                [
+                    name: 'MAIL_LIST_SUCCESS',
+                    description: "Who to tell things are good",
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: "markllama@redhat.com"
+                ],
+                [
+                    name: 'MAIL_LIST_FAILURE',
+                    description: "Who to tell things are good",
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: "markllama@redhat.com"
+                ],
             ]
         ],
         disableConcurrentBuilds()
