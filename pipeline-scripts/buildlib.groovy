@@ -5,7 +5,7 @@ GITHUB_BASE_PATHS = [:]
 def initialize() {
     //this.registry_login()
     this.path_setup()
-    this.kinit()
+    //this.kinit()
 
     GITHUB_URLS = [:]
     GITHUB_BASE_PATHS = [:]
