@@ -56,7 +56,7 @@ def get_changelog(rpm_name, record_log) {
         m = b.getText() =~ /buildID=(\d+)/
         build_id = m[0][1]
     } catch (err) {
-        error "looking up build id from ${task_url}"
+        error "looking up build id from ${task_url}: ${err}"
     }
 
     // buildinfo can return the changelog.  Return just the text after
