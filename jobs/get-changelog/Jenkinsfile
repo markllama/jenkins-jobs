@@ -70,13 +70,16 @@ def get_changelog(rpm_name, record_log) {
     // buildinfo can return the changelog.  Return just the text after
     // the Changelog: line
     try {
-        return sh(
+        changelog = sh(
             returnStdout: true,
             script: "brew buildinfo ${build_id} --changelog"
         ).trim() 
     } catch (err) {
         error "failed to get build info and changelog for build ${build_id}"
+        changelog = ""
     }
+
+    return changelog
 }
 
 def record_log = [
@@ -100,7 +103,7 @@ node(TARGET_NODE) {
 
     stage("test") {
         changelog = get_changelog("openshift-ansible", record_log)
-        echo changelog
+        //echo changelog
     }
     
 }
