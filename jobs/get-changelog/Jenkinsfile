@@ -54,7 +54,7 @@ def get_changelog(rpm_name, record_log) {
     // there must be an API way to do this MAL 20180622
     build_id = sh(
         returnStdout: true,
-        script: "curl --silent --insecure https://brewweb.engineering.redhat.com/brew/taskinfo?taskID=16825181 | sed -n -e 's/.*buildID=\\([0-9]*\\).*/\1/p'"
+        script: "curl --silent --insecure https://brewweb.engineering.redhat.com/brew/taskinfo?taskID=16825181 | sed -n -e 's/.*buildID=\\([0-9]*\\).*/\\1/p'"
     ).trim()
 
     // buildinfo can return the changelog.  Return just the text after
