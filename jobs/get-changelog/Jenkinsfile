@@ -62,6 +62,7 @@ def get_changelog(rpm_name, record_log) {
     try {
         m = task_page =~ /buildID=(\d+)/
         build_id = m[0][1]
+        echo "match = ${m}, build_id = ${m[0]}"
     } catch (err) {
         error "looking up build id from ${task_url}: ${err}"
     }
