@@ -75,22 +75,20 @@ def get_changelog(rpm_name, record_log) {
 }
 
 def record_log = [
-    [
-        'build_rpm': [
-            [
-                'rpm': 'openshift-enterprise-autoheal',
-                'task_url': 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskID=16825180'
-            ],
-            [
-                'rpm': 'openshift-ansible',
-                'task_url': 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskID=16825181'
-            ],
-            [
-                'rpm': 'atomic-openshift-dockerregistry',
-                'task_url': 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskID=16825211'
-            ]
-        ]     
-    ]
+    'build_rpm': [
+        [
+            'rpm': 'openshift-enterprise-autoheal',
+            'task_url': 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskID=16825180'
+        ],
+        [
+            'rpm': 'openshift-ansible',
+            'task_url': 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskID=16825181'
+        ],
+        [
+            'rpm': 'atomic-openshift-dockerregistry',
+            'task_url': 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskID=16825211'
+        ]
+    ]     
 ]
 
 node(TARGET_NODE) {
