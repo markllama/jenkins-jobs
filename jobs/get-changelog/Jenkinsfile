@@ -55,8 +55,10 @@ def get_changelog(rpm_name, record_log) {
     task_page = sh(
         returnStdout: true,
         script: "curl --silent --insecure ${task_url} | grep buildID="
-    )
+    ).trip()
 
+    echo "task page result: ${task_page}"
+    
     try {
         m = task_page =~ /buildID=(\d+)/
         build_id = m[0][1]
