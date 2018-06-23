@@ -74,7 +74,7 @@ def get_changelog(rpm_name, record_log) {
     }
 }
 
-records = [
+def record_log = [
     [
         'build_rpm': [
             [
