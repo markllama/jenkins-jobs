@@ -59,13 +59,11 @@ def get_changelog(rpm_name, record_log) {
 
     // buildinfo can return the changelog.  Return just the text after
     // the Changelog: line
-    echo "retriving buildinfo for ${build_id}"
     try {
         changelog = sh(
             returnStdout: true,
             script: "brew buildinfo ${build_id} --changelog | sed -n '/Changelog/,\$p'"
         ).trim()
-        echo "finised getting changelog"
     } catch (err) {
         error "failed to get build info and changelog for build ${build_id}"
         changelog = ""
