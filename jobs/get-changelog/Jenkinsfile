@@ -96,7 +96,7 @@ def record_log = [
 node(TARGET_NODE) {
 
     stage("test") {
-        changelog = get_changelog("openshift-ansible", records)
+        changelog = get_changelog("openshift-ansible", record_log)
         echo changelog
     }
     
