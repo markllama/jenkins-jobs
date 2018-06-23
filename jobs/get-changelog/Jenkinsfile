@@ -53,8 +53,7 @@ def get_changelog(rpm_name, record_log) {
     // get the build ID from the web page
     // there must be an API way to do this MAL 20180622
     try {
-        b = new URL(task_url)
-        m = b.getText() =~ /buildID=(\d+)/
+        m = new URL(task_url).getText() =~ /buildID=(\d+)/
         build_id = m[0][1]
     } catch (err) {
         error "looking up build id from ${task_url}: ${err}"
