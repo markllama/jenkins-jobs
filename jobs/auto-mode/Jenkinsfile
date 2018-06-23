@@ -1,0 +1,29 @@
+// Test OCP auto mode
+properties(
+    [
+        buildDiscarder(
+            logRotator(
+                artifactDaysToKeepStr: '5',
+                artifactNumToKeepStr: '10',
+                daysToKeepStr: '5',
+                numToKeepStr: '10')),
+        [
+            $class: 'ParametersDefinitionProperty',
+            parameterDefinitions: [
+                [
+                    name: 'TARGET_NODE',
+                    description: 'Jenkins agent node',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: 'container'
+                ],
+            ]
+        ]
+        disableConcurrentBuilds()
+    ]
+)
+
+node(TARGET_NODE) {
+    stage("startup") {
+        echo "running"
+    }
+}
