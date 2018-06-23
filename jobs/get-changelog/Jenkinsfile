@@ -32,7 +32,7 @@ def get_changelog(rpm_name, record_log) {
     //   record_log - an array of build records with | separated fields
     
     rpm_builds = record_log['build_rpm']
-    if (rpm_builds == null or rpm_builds.size() == 0) {
+    if (rpm_builds == null || rpm_builds.size() == 0) {
         return ""
     }
 
