@@ -61,7 +61,7 @@ def get_changelog(rpm_name, record_log) {
     
     try {
         m = task_page =~ /buildID=(\d+)/
-        build_id = m[0][1]
+        def build_id = m[0][1]
         echo "match = ${m}, build_id = ${build_id}"
     } catch (err) {
         error "looking up build id from ${task_url}: ${err}"
@@ -69,11 +69,13 @@ def get_changelog(rpm_name, record_log) {
 
     // buildinfo can return the changelog.  Return just the text after
     // the Changelog: line
+    echo "retriving buildinfo for ${build_id}"
     try {
         changelog = sh(
             returnStdout: true,
             script: "brew buildinfo ${build_id} --changelog"
-        ).trim() 
+        ).trim()
+        echo "finised getting changelog"
     } catch (err) {
         error "failed to get build info and changelog for build ${build_id}"
         changelog = ""
@@ -103,6 +105,7 @@ node(TARGET_NODE) {
 
     stage("test") {
         get_changelog("openshift-ansible", record_log)
+        echo "Finished"
         //echo changelog
     }
 }
