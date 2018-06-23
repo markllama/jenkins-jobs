@@ -72,11 +72,8 @@ def get_changelog(rpm_name, record_log) {
 //    try {
         return sh(
             returnStdout: true,
-            script: [
-                "brew buildinfo ${build_id} --changelog",
-                "sed -n '/Changelog:/,\$p'"
-            ].join(" | ")
-        )
+            script: "brew buildinfo ${build_id} --changelog | sed -n '/Changelog:/,\$p'"
+        ).trim() 
 //    } catch (err) {
 //        error "failed to get build info and changelog for build ${build_id}"
 //    }
