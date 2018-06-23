@@ -40,7 +40,7 @@ def get_changelog(rpm_name, record_log) {
     build_record_index = rpm_builds.findIndexOf {
         it['rpm'] == rpm_name
     }
-    if build_record_index == -1 {
+    if (build_record_index == -1) {
         return ""
     }
     build_record = rpm_builds[build_record_index]
