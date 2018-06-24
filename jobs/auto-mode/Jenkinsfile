@@ -16,6 +16,12 @@ properties(
                     $class: 'hudson.model.StringParameterDefinition',
                     defaultValue: 'container'
                 ],
+                [
+                    name: 'BUILD_VERSION',
+                    description: 'The version to try to build',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: 'latest'
+                ],
             ]
         ],
         disableConcurrentBuilds()
