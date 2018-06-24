@@ -61,15 +61,17 @@ node(TARGET_NODE) {
         echo "building ${BUILD_VERSION}"
     }
 
-    stage("get release branches") {
-        branches = get_branches(oso_repo_url, "enterprise-*")
-        echo "found branches: ${branches}"
-    }
-    
-    stage("checkout repo") {
-        checkout_repo(
-            ose_git_repo,
-            "ose"
-        )
+    sshagent(SSH_KEY_ID) {
+        stage("get release branches") {
+            branches = get_branches(oso_repo_url, "enterprise-*")
+            echo "found branches: ${branches}"
+        }
+        
+        stage("checkout repo") {
+            checkout_repo(
+                ose_git_repo,
+                "ose"
+            )
+        }
     }
 }
