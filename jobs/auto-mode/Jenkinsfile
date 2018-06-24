@@ -62,7 +62,7 @@ node(TARGET_NODE) {
         echo "building ${BUILD_VERSION}"
     }
 
-    sshagent(SSH_KEY_ID) {
+    sshagent([SSH_KEY_ID]) {
         stage("get release branches") {
             branches = get_branches(oso_repo_url, "enterprise-*")
             echo "found branches: ${branches}"
