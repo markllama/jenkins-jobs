@@ -28,8 +28,22 @@ properties(
     ]
 )
 
+
+def checkout_repo(repo_url, repo_path) {
+    sh(
+        "git clone ${repo_url} ${repo_path}"
+    )
+}
+
 node(TARGET_NODE) {
     stage("startup") {
         echo "building ${BUILD_VERSION}"
+    }
+
+    stage("checkout repo") {
+        checkout_repo(
+            "git@gihub.com:markllama/ose.git",
+            "ose"
+        )
     }
 }
