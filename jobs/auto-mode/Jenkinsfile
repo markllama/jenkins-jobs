@@ -42,7 +42,11 @@ def get_branches(repo_url, pattern="") {
 
     branch_text = sh(
         returnStdout: true,
-        script: "git ls-remote ${repo_url} ${pattern}"
+        script: [
+            "git ls-remote ${repo_url} ${pattern}",
+            "awk '{print \$2}'",
+            "cut -d\ -f3"
+        ].join(" | ")
     ).trim()
 
     return branch_text.split("\n")
@@ -70,7 +74,7 @@ node(TARGET_NODE) {
         
         stage("checkout repo") {
             checkout_repo(
-                ose_git_repo,
+                ose_repo_url,
                 "ose"
             )
         }
