@@ -30,6 +30,6 @@ properties(
 
 node(TARGET_NODE) {
     stage("startup") {
-        echo "running"
+        echo "building ${BUILD_VERSION}"
     }
 }
