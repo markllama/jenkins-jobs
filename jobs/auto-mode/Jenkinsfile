@@ -22,6 +22,15 @@ properties(
                     $class: 'hudson.model.StringParameterDefinition',
                     defaultValue: 'latest'
                 ],
+                [
+                    name: 'SSH_KEY_ID',
+                    description: 'SSH credential id to use',
+                    $class: 'hudson.model.ChoiceParameterDefinition',
+                    choices: [
+                        "markllama-aos-cd-bot"
+                    ].join("\n"),
+                    defaultValue: 'markllama-aos-cd-test'
+                ],
             ]
         ],
         disableConcurrentBuilds()
