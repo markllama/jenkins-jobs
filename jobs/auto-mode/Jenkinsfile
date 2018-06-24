@@ -27,9 +27,10 @@ properties(
                     description: 'SSH credential id to use',
                     $class: 'hudson.model.ChoiceParameterDefinition',
                     choices: [
-                        "markllama-aos-cd-bot"
+                        "markllama-aos-cd-bot",
+                        "markllama"
                     ].join("\n"),
-                    defaultValue: 'markllama-aos-cd-test'
+                    defaultValue: 'markllama-aos-cd-bot'
                 ],
             ]
         ],
