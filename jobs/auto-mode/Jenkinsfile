@@ -28,6 +28,15 @@ properties(
     ]
 )
 
+def get_branches(repo_url, pattern="") {
+
+    branch_text = sh(
+        returnStdout: true,
+        script: "git ls-remote ${repo_url} ${pattern}"
+    ).trim()
+
+    return branch_text.split("\n")
+}
 
 def checkout_repo(repo_url, repo_path) {
     sh(
@@ -36,13 +45,21 @@ def checkout_repo(repo_url, repo_path) {
 }
 
 node(TARGET_NODE) {
+
+    ose_repo_url = "git@github.com:markllama/ose.git"
+    
     stage("startup") {
         echo "building ${BUILD_VERSION}"
     }
 
+    stage("get release branches") {
+        branches = get_branches(oso_repo_url, "enterprise-*")
+        echo "found branches: ${branches}"
+    }
+    
     stage("checkout repo") {
         checkout_repo(
-            "git@gihub.com:markllama/ose.git",
+            ose_git_repo,
             "ose"
         )
     }
