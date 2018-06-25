@@ -74,6 +74,26 @@ def checkout_repo(repo_url, repo_path) {
     )
 }
 
+// Matcher is not serializable; use NonCPS
+@NonCPS
+def extract_rpm_version( spec_content ) {
+    def ver_matcher = spec_content =~ /Version:\s*([.0-9]+)/
+    if ( ! ver_matcher ) { // Groovy treats matcher as boolean in this context
+        error( "Unable to extract Version field from RPM spec" )
+    }
+    return ver_matcher[0][1]
+}
+
+// Matcher is not serializable; use NonCPS
+@NonCPS
+def extract_rpm_release_prefix(spec_content ) {
+    def rel_matcher = spec_content =~ /Release:\s*([.a-zA-Z0-9+-]+)/  // Do not match vars like %{?dist}
+    if ( ! rel_matcher ) { // Groovy treats matcher as boolean in this context
+        error( "Unable to extract Release field from RPM spec" )
+    }
+    return rel_matcher[0][1]
+}
+
 node(TARGET_NODE) {
 
     ose_repo_url = "git@github.com:markllama/ose.git"
@@ -94,6 +114,13 @@ node(TARGET_NODE) {
 	    spec_file = get_single_file("openshift", "ose", "origin.spec", github_auth_token)
 	    echo spec_file
 	}
+
+	stage("extract version-release") {
+	    master_version = extract_rpm_version(spec_file)
+	    echo "Master version: ${master_version}"
+	}
+	
+	// get version and release
         //stage("checkout repo") {
         //    checkout_repo(
         //        ose_repo_url,
