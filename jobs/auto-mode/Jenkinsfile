@@ -78,7 +78,7 @@ node(TARGET_NODE) {
 
     ose_repo_url = "git@github.com:markllama/ose.git"
 
-    github_auth_token = new File("/jenkins/agent/.ssh/github-token-oauth.txt").text().trim()
+    github_auth_token = new File("/jenkins/agent/.ssh/github-token-oauth.txt").text.trim()
     
     stage("startup") {
         echo "building ${BUILD_VERSION}"
