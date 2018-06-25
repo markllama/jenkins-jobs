@@ -52,6 +52,22 @@ def get_branches(repo_url, pattern="") {
     return branch_text.split("\n")
 }
 
+def get_single_file(owner, repo, file_name, repo_token) {
+    // Get a single file from a Github repository.
+
+    auth_header = "Authorization: token: " + repo_token
+    file_url = "https://api.github.com/repos/${owner}/${repo_name}/contents/${file_name}"
+    accept_header = "Accept: application/vnd.github.v3.raw"
+
+    query = "curl --silent -H '${auth_header}' -H '${accept_header}' -L ${file_url}"
+    content = sh(
+	returnStdout: true,
+	script: ""
+    )
+
+    return content
+}
+
 def checkout_repo(repo_url, repo_path) {
     sh(
         "git clone ${repo_url} ${repo_path}"
@@ -61,6 +77,8 @@ def checkout_repo(repo_url, repo_path) {
 node(TARGET_NODE) {
 
     ose_repo_url = "git@github.com:markllama/ose.git"
+
+    github_auth_token = File("/jenkins/agent/.ssh/github-token-oauth.txt").text().trim()
     
     stage("startup") {
         echo "building ${BUILD_VERSION}"
@@ -71,12 +89,16 @@ node(TARGET_NODE) {
             branches = get_branches(ose_repo_url, "enterprise-*")
             echo "found branches: ${branches}"
         }
-        
-        stage("checkout repo") {
-            checkout_repo(
-                ose_repo_url,
-                "ose"
-            )
-        }
+
+	stage("get master spec file") {
+	    spec_file = get_single_file("openshift", "ose", "origin.spec", github_auth_token)
+	    echo spec_file
+	}
+        //stage("checkout repo") {
+        //    checkout_repo(
+        //        ose_repo_url,
+        //        "ose"
+        //    )
+        //}
     }
 }
