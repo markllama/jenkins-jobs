@@ -118,6 +118,9 @@ node(TARGET_NODE) {
 	stage("extract version-release") {
 	    master_version = extract_rpm_version(spec_file)
 	    echo "Master version: ${master_version}"
+
+	    master_release = extract_rpm_release_prefix(spec_file)
+	    echo "Master release: ${master_release}"
 	}
 	
 	// get version and release
