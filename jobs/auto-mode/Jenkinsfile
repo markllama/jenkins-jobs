@@ -52,7 +52,7 @@ def get_branches(repo_url, pattern="") {
     return branch_text.split("\n")
 }
 
-def get_single_file(owner, repo, file_name, repo_token) {
+def get_single_file(owner, repo_name, file_name, repo_token) {
     // Get a single file from a Github repository.
 
     auth_header = "Authorization: token: " + repo_token
