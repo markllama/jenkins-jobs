@@ -112,7 +112,7 @@ node(TARGET_NODE) {
 
 	stage("get master spec file") {
 	    spec_file = get_single_file("openshift", "ose", "origin.spec", github_auth_token)
-	    echo spec_file
+	    echo "Spec file size: ${spec_file.size()}"
 	}
 
 	stage("extract version-release") {
