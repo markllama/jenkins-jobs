@@ -57,6 +57,8 @@ def get_releases(repo_url) {
         it - "enterprise-"
     }.findAll {
         it =~ /^\d+((\.\d+)*)$/
+    }.sort {
+        a, b -> cmp_version(a, b)
     }
 }
 
