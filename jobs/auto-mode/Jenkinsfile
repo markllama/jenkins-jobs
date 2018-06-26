@@ -152,6 +152,7 @@ node(TARGET_NODE) {
 	    master_version = extract_rpm_version(spec_file)
 	    echo "Master version: ${master_version}"
 	}
+
 	
 	// get version and release
         //stage("checkout repo") {
