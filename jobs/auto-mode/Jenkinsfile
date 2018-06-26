@@ -104,12 +104,14 @@ def cmp_version(v0, v1) {
 
     // split both into arrays on dots (.)
     try {
-        a0 = v0.split('.').collect { it as int }
-        a1 = v1.split('.').collect { it as int }
+        a0 = v0.tokenize('.').collect { it as int }
+        a1 = v1.tokenize('.').collect { it as int }
     } catch (convert_error) {
         error("Invalid version strings: ${v0} or ${v1} - ${convert_error}")
     }
 
+    println "a0 = ${a0}"
+    
     // extend both to 3 fields with zeros if needed
     while (a0.size() < 3) { a0 << 0 }
     while (a1.size() < 3) { a1 << 0 }
@@ -117,11 +119,12 @@ def cmp_version(v0, v1) {
     // zip these two together for comparison
     // major.minor.revision
     mmr = [a0, a1].transpose()
+    println "mmr = ${mmr}"
 
     // if any pair do not match, return the result
-    mmr.each {
-        if (it[0] != it[1]) {
-            return it[0].compareTo(it[1])
+    for (field in mmr) {
+        if (field[0] != field[1]) {
+            return field[0].compareTo(field[1])
         }
     }
 
