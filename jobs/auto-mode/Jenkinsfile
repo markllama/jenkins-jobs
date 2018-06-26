@@ -53,7 +53,7 @@ def get_branches(repo_url, pattern="") {
 }
 
 def get_releases(repo_url) {
-    return get_branches(repo_url, "enterprise-*").collect {
+    return get_branches(repo_url, "^enterprise-*").collect {
         it - "enterprise-"
     }
 }
