@@ -54,7 +54,7 @@ def get_branches(repo_url, pattern="") {
 
 @NonCPS
 def get_releases(repo_url) {
-    return get_branches(repo_url, "enterprise-*").each {
+    return get_branches(repo_url, "enterprise-*").collect {
         it - "enterprise-"
     }
 }
@@ -117,7 +117,7 @@ def cmp_version(v0, v1) {
     // if any pair do not match, return the result
     mmr.each {
         if (it[0] != it[1]) {
-            it[0].compareTo(it[1])
+            return it[0].compareTo(it[1])
         }
     }
 
