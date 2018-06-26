@@ -55,7 +55,7 @@ def get_branches(repo_url, pattern="") {
 @NonCPS
 def get_releases(repo_url) {
     return get_branches(repo_url, "enterprise-*").each {
-        it = "/^enterprise-/"
+        it - "enterprise-"
     }
 }
 
@@ -148,27 +148,28 @@ node(TARGET_NODE) {
             branches = get_branches(ose_repo_url, "enterprise-*")
             echo "found branches: ${branches}"
 
-            versions = branches.each { it 
-            }
+            releases = get_releases(ose_repo_url)
+            echo "found releases: ${releases}"
 
-            stage("get master spec file") {
-                spec_file = get_single_file("openshift", "ose", "origin.spec", github_auth_token)
-                echo "Spec file size: ${spec_file.size()}"
-            }
-
-            stage("extract version-release") {
-                master_version = extract_rpm_version(spec_file)
-                echo "Master version: ${master_version}"
-            }
-            
-            
-            // get version and release
-            //stage("checkout repo") {
-            //    checkout_repo(
-            //        ose_repo_url,
-            //        "ose"
-            //    )
-            //}
         }
+        
+        stage("get master spec file") {
+            spec_file = get_single_file("openshift", "ose", "origin.spec", github_auth_token)
+            echo "Spec file size: ${spec_file.size()}"
+        }
+
+        stage("extract version-release") {
+            master_version = extract_rpm_version(spec_file)
+            echo "Master version: ${master_version}"
+        }
+            
+            
+        // get version and release
+        //stage("checkout repo") {
+        //    checkout_repo(
+        //        ose_repo_url,
+        //        "ose"
+        //    )
+        //}
     }
 }
