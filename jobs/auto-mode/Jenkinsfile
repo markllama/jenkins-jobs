@@ -57,9 +57,9 @@ def get_releases(repo_url) {
         it - "enterprise-"
     }.findAll {
         it =~ /^\d+((\.\d+)*)$/
-    }.sort {
-        a, b -> cmp_version(a, b) > 0 ? a : b
-    }
+    }//.sort {
+    //    a, b -> cmp_version(a, b) > 0 ? a : b
+    //}
 }
 
 def get_single_file(owner, repo_name, file_name, repo_token) {
