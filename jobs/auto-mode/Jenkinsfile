@@ -68,8 +68,8 @@ def get_single_file(owner, repo_name, file_name, repo_token) {
 
     query = "curl --silent -H '${auth_header}' -H '${accept_header}' -L ${file_url}"
     content = sh(
-	returnStdout: true,
-	script: query
+	      returnStdout: true,
+        script: query
     )
 
     return content
@@ -100,10 +100,10 @@ def cmp_version(v0, v1) {
 
     // split both into arrays on dots (.)
     try {
-	a0 = v0.split('.').each { it as int }
-	a1 = v1.split('.').each { it as int }
+        a0 = v0.split('.').each { it as int }
+        a1 = v1.split('.').each { it as int }
     } catch (convert_error) {
-	      error("Invalid version strings: ${v0} or ${v1} - ${convert_error}")
+        error("Invalid version strings: ${v0} or ${v1} - ${convert_error}")
     }
 
     // extend both to 3 fields with zeros if needed
@@ -116,9 +116,9 @@ def cmp_version(v0, v1) {
 
     // if any pair do not match, return the result
     mmr.each {
-	if (it[0] != it[1]) {
-	    it[0].compareTo(it[1])
-	}
+        if (it[0] != it[1]) {
+            it[0].compareTo(it[1])
+        }
     }
 
     // all pairs matched, the versions are equal
@@ -149,25 +149,25 @@ node(TARGET_NODE) {
             echo "found branches: ${branches}"
 
             versions = branches.each { it 
+            }
+
+            stage("get master spec file") {
+                spec_file = get_single_file("openshift", "ose", "origin.spec", github_auth_token)
+                echo "Spec file size: ${spec_file.size()}"
+            }
+
+            stage("extract version-release") {
+                master_version = extract_rpm_version(spec_file)
+                echo "Master version: ${master_version}"
+            }
+            
+            
+            // get version and release
+            //stage("checkout repo") {
+            //    checkout_repo(
+            //        ose_repo_url,
+            //        "ose"
+            //    )
+            //}
         }
-
-	      stage("get master spec file") {
-	          spec_file = get_single_file("openshift", "ose", "origin.spec", github_auth_token)
-	          echo "Spec file size: ${spec_file.size()}"
-	      }
-
-	      stage("extract version-release") {
-	          master_version = extract_rpm_version(spec_file)
-	          echo "Master version: ${master_version}"
-	      }
-        
-	
-	      // get version and release
-        //stage("checkout repo") {
-        //    checkout_repo(
-        //        ose_repo_url,
-        //        "ose"
-        //    )
-        //}
     }
-}
