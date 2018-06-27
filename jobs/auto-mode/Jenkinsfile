@@ -54,14 +54,21 @@ def get_branches(repo_url, pattern="") {
 
 @NonCPS
 def get_releases(repo_url) {
-    r = get_branches(repo_url, "enterprise-*").collect {
-        it - "enterprise-"
-    }.findAll {
-        it =~ /^\d+((\.\d+)*)$/
-    }
+    r = get_branches(repo_url, "enterprise-*")
 
-    s = r
-    //s = r.sort{ a, b -> cmp_version(a, b) }
+    echo "branches = ${r}"
+    
+    v_strings = r.collect { it - "enterprise-" }
+
+    echo "v_strings = ${v_strings}"
+    
+    v_numbers = v_strings.findAll { it =~ /^\d+((\.\d+)*)$/ }
+
+    echo "v_numbers = ${v_numbers}"
+    
+    s = v_numbers
+
+    s.sort{ a, b -> cmp_version(a, b) }
 
     echo "sorted releases = ${s}"
 
