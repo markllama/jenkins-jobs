@@ -163,7 +163,8 @@ node(TARGET_NODE) {
         echo(" b = ${b}")
 
         x = [3, 5, 1, 2, 7]
-        y = x.sort()
+        echo(" x = ${x}")
+        y = x.sort(m, n -> m == n? 0: m > n ? 1 : 0)
 
         echo(" x = ${x}")
         echo(" y = ${y}")
