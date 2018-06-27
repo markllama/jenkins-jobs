@@ -70,10 +70,11 @@ def get_releases(repo_url) {
 
     echo("unsorted releases = ${s}")
 
-    // s.sort{ a, b -> return cmp_version(a, b) }
+    t = s.sort{ a, b -> return cmp_version(a, b) }
 
-    // echo("sorted releases = ${s}")
-
+    echo("sorted releases = ${s}")
+    echo("sort returned ${t}")
+    
     // return s
 
     return r
