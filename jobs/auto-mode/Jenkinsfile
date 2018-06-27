@@ -57,9 +57,9 @@ def get_branches(repo_url, pattern="") {
 def get_releases(repo_url) {
     r = get_branches(repo_url, "enterprise-*").collect {
         it - "enterprise-"
-    }.findAll {
-        it =~ /^\d+((\.\d+)*)$/
-    }
+    }//.findAll {
+    //    it =~ /^\d+((\.\d+)*)$/
+    //}
 
     s = r
     //s = r.sort{ a, b -> cmp_version(a, b) }
