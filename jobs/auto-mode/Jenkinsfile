@@ -174,7 +174,7 @@ node(TARGET_NODE) {
             branches = get_branches(ose_repo_url, "enterprise-*")
             echo "found branches: ${branches}"
 
-            String[] releases = get_releases(ose_repo_url)
+            releases = get_releases(ose_repo_url)
             echo "found releases: ${releases}"
 
         }
