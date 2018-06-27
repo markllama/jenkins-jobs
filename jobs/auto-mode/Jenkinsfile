@@ -234,7 +234,11 @@ node(TARGET_NODE) {
             echo "Selecting mode - build version = ${BUILD_VERSION}"
 
             if (BUILD_VERSION == "latest") {
-                BUILD_VERSION = master_version.split('.')[0..1].join('.')
+
+                // get the first two fields of the master version
+                fields = master_version.split('.')
+                echo "Fields = ${fields}"
+                BUILD_VERSION = fields[0,1].join('.')
             }
 
             echo "Building ${BUILD_VERSION}"
