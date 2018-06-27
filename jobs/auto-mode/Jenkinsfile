@@ -53,13 +53,13 @@ def get_branches(repo_url, pattern="") {
 }
 
 def get_releases(repo_url) {
-    return get_branches(repo_url, "enterprise-*").collect {
+    r = get_branches(repo_url, "enterprise-*").collect {
         it - "enterprise-"
     }.findAll {
         it =~ /^\d+((\.\d+)*)$/
-    }.sort {
-        a, b -> cmp_version(a, b)
     }
+
+    return r.sort { a, b -> cmp_version(a, b) }
 }
 
 def get_single_file(owner, repo_name, file_name, repo_token) {
