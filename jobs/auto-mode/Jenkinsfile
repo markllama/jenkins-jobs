@@ -55,8 +55,8 @@ def get_branches(repo_url, pattern="") {
 
 @NonCPS
 def get_releases(repo_url) {
-    String[] r = get_branches(repo_url, "enterprise-*").collect {
-        it.trim() - "enterprise-"
+    r = get_branches(repo_url, "enterprise-*").collect {
+        it - "enterprise-"
     }.findAll {
         it =~ /^\d+((\.\d+)*)$/
     }
