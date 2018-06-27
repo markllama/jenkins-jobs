@@ -57,9 +57,9 @@ def get_releases(repo_url) {
         it - "enterprise-"
     }.findAll {
         it =~ /^\d+((\.\d+)*)$/
-    }//.sort {
-    //    a, b -> cmp_version(a, b) > 0 ? a : b
-    //}
+    }.sort {
+        a, b -> cmp_version(a, b)
+    }
 }
 
 def get_single_file(owner, repo_name, file_name, repo_token) {
@@ -94,7 +94,7 @@ def extract_rpm_version( spec_content ) {
     return ver_matcher[0][1]
 }
 
-def cmp_version(v0, v1) {
+def cmp_version(String v0, String v1) {
     // compare two version strings.
     // return:
     //   v0 < v1: -1
@@ -109,8 +109,6 @@ def cmp_version(v0, v1) {
         error("Invalid version strings: ${v0} or ${v1} - ${convert_error}")
     }
 
-    println "a0 = ${a0}"
-    
     // extend both to 3 fields with zeros if needed
     while (a0.size() < 3) { a0 << 0 }
     while (a1.size() < 3) { a1 << 0 }
@@ -118,25 +116,21 @@ def cmp_version(v0, v1) {
     // zip these two together for comparison
     // major.minor.revision
     mmr = [a0, a1].transpose()
-    println "mmr = ${mmr}"
 
     // if any pair do not match, return the result
     for (field in mmr) {
-        if (field[0] != field[1]) {
-            return field[0].compareTo(field[1])
-        }
+        t = field[0].compareTo(field[1])
+        if (t != 0) { return t }
     }
-
-    // all pairs matched, the versions are equal
     return 0
 }
 
-def eq_version(v0, v1) {
+def eq_version(String v0, String v1) {
     // determine if two versions are the same
     // return:
     //   v0 == v1: true
     //   v0 != v1: false
-    return cmp_version(v0, v1) == 0
+    return cmp_version(v0, v1)
 }
 
 node(TARGET_NODE) {
