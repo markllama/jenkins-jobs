@@ -160,7 +160,7 @@ def test_sort() {
     echo(" x = ${x}")
     echo(" y = ${y}")
 
-    return x, y
+    return [x, y]
 }
 
 node(TARGET_NODE) {
@@ -196,7 +196,7 @@ node(TARGET_NODE) {
 
         echo "---- try again ----"
 
-        (m, n) = test_sort()
+        m, n = test_sort()
 
         echo "${m}"
         echo "${n}"
