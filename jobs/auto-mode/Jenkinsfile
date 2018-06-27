@@ -123,6 +123,7 @@ def sort_versions(v_in) {
     v_out = v_in.sort{a, b -> return cmp_version(a, b)}
 }
 
+@NonCPS
 def cmp_version(String v0, String v1) {
     // compare two version strings.
     // return:
@@ -154,6 +155,7 @@ def cmp_version(String v0, String v1) {
     return 0
 }
 
+@NonCPS
 def eq_version(String v0, String v1) {
     // determine if two versions are the same
     // return:
@@ -198,35 +200,33 @@ node(TARGET_NODE) {
     }
 
 
-    // stage("test version sort") {
-    //     a = ['3.10', '2.9', '3.1', '3.5.1']
+    stage("test version sort") {
+        a = ['3.10', '2.9', '3.1', '3.5.1']
 
 
-    //     echo("comparing ${a[0]} to ${a[1]}: ${cmp_version(a[0], a[1])}")
-    //     //println(" a = ${a}")
-    //     //a.sort()
+        echo("comparing ${a[0]} to ${a[1]}: ${cmp_version(a[0], a[1])}")
+        //println(" a = ${a}")
+        //a.sort()
 
-    //     String[] b = a.sort{f0, f1 -> return cmp_version(f0, f1)}
+        String[] b = a.sort{f0, f1 -> return cmp_version(f0, f1)}
         
-    //     echo(" a = ${a}")
-    //     echo(" b = ${b}")
+        echo(" a = ${a}")
+        echo(" b = ${b}")
 
-    //     x = [3, 5, 1, 2, 7]
-    //     echo(" x = ${x}")
-    //     y = x.sort{ 0 }
+        x = [3, 5, 1, 2, 7]
+        echo(" x = ${x}")
+        y = x.sort{ 0 }
 
-    //     echo(" x = ${x}")
-    //     echo(" y = ${y}")
+        echo(" x = ${x}")
+        echo(" y = ${y}")
 
-    //     echo "---- try again ----"
+        echo "---- try again ----"
 
-    //     m = test_sort()
+        m = test_sort()
 
-    //     echo "${m}"
-    //     //echo "${m[1]}"
-           
-        
-    // }
+        echo "${m}"
+        //echo "${m[1]}"        
+    }
 
     
     sshagent([SSH_KEY_ID]) {
