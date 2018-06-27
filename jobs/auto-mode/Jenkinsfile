@@ -59,7 +59,8 @@ def get_releases(repo_url) {
         it =~ /^\d+((\.\d+)*)$/
     }
 
-    return r.sort { a, b -> cmp_version(a, b) }
+    return r
+    //return r.sort { a, b -> cmp_version(a, b) }
 }
 
 def get_single_file(owner, repo_name, file_name, repo_token) {
