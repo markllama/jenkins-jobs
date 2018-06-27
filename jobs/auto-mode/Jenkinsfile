@@ -55,9 +55,9 @@ def get_branches(repo_url, pattern="") {
 def get_releases(repo_url) {
     r = get_branches(repo_url, "enterprise-*").collect {
         it - "enterprise-"
-    }//.findAll {
-    //    it =~ /^\d+((\.\d+)*)$/
-    //}
+    }.findAll {
+        it =~ /^\d+((\.\d+)*)$/
+    }
 
     s = r
     //s = r.sort{ a, b -> cmp_version(a, b) }
@@ -157,7 +157,7 @@ node(TARGET_NODE) {
         //println(" a = ${a}")
         //a.sort()
 
-        b = a.sort(cmp_version)
+        b = a.sort{f0, f1 -> return cmp_version(f0, f1)}
         
         echo(" a = ${a}")
         echo(" b = ${b}")
