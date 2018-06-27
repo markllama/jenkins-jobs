@@ -66,7 +66,9 @@ def get_releases(repo_url) {
 
     echo("v_numbers = ${v_numbers}")
     
-    // String[] s = v_numbers
+    String[] s = v_numbers
+
+    // echo("unsorted releases = ${s}")
 
     // s.sort{ a, b -> return cmp_version(a, b) }
 
