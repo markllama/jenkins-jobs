@@ -162,6 +162,12 @@ node(TARGET_NODE) {
         echo(" a = ${a}")
         echo(" b = ${b}")
 
+        x = [3, 5, 1, 2, 7]
+        y = x.sort()
+
+        echo(" x = ${x}")
+        echo(" y = ${y}")
+        
     }
 
     
