@@ -164,7 +164,7 @@ node(TARGET_NODE) {
 
         x = [3, 5, 1, 2, 7]
         echo(" x = ${x}")
-        y = x.sort{ it }
+        y = x.sort{ 0 }
 
         echo(" x = ${x}")
         echo(" y = ${y}")
