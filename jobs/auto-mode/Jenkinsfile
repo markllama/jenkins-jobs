@@ -59,8 +59,7 @@ def get_releases(repo_url) {
         it =~ /^\d+((\.\d+)*)$/
     }
 
-
-    s = String[] r.sort{ a, b -> cmp_version(a, b) }
+    s = r.sort{ a, b -> cmp_version(a, b) }
 
     echo "sorted releases = ${s}"
 
@@ -148,6 +147,21 @@ node(TARGET_NODE) {
         echo "building ${BUILD_VERSION}"
     }
 
+
+    stage("test version sort") {
+        String[] a = ['3.10', '2.9', '3.1', '3.5.1']
+
+        //println(" a = ${a}")
+        //a.sort()
+
+        b = a.sort{ x, y -> cmp_version(x, y) }
+        
+        echo(" a = ${a}")
+        echo (" b = ${b}")
+
+    }
+
+    
     sshagent([SSH_KEY_ID]) {
         stage("get release branches") {
             branches = get_branches(ose_repo_url, "enterprise-*")
