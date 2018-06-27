@@ -263,7 +263,7 @@ node(TARGET_NODE) {
             build_is_release = releases.contains(BUILD_VERSION)
 
             echo "build_is_master : ${build_is_master}"
-            echo "build_is_release: ${build_is_release"
+            echo "build_is_release: ${build_is_release}"
             mode = mode_table[build_is_master][build_is_release]
 
             if (mode == null) {
