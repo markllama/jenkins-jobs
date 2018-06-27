@@ -196,10 +196,10 @@ node(TARGET_NODE) {
 
         echo "---- try again ----"
 
-        m, n = test_sort()
+        m = test_sort()
 
-        echo "${m}"
-        echo "${n}"
+        echo "${m[0]}"
+        echo "${m[1]}"
            
         
     }
