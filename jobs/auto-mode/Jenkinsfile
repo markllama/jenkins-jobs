@@ -157,7 +157,7 @@ def test_sort() {
 
     x = [3, 5, 1, 2, 7]
     echo(" x = ${x}")
-    y = x.sort{ 0 }
+    y = x.sort()
 
     echo(" x = ${x}")
     echo(" y = ${y}")
