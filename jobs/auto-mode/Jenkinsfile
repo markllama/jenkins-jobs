@@ -58,9 +58,9 @@ def get_releases(repo_url) {
 
     // echo("branches = ${r}")
     
-    // String[] v_strings = r.collect { it - "enterprise-" }
+    String[] v_strings = r.collect { it - "enterprise-" }
 
-    // echo("v_strings = ${v_strings}")
+    echo("v_strings = ${v_strings}")
     
     // String[] v_numbers = v_strings.findAll { it =~ /^\d+((\.\d+)*)$/ }
 
