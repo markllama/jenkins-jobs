@@ -74,6 +74,10 @@ def get_releases(repo_url) {
 
     echo("sorted releases = ${s}")
     echo("sort returned ${t}")
+
+    z = sort_versions(s)
+
+    echo("used sort function: ${z}")
     
     // return s
 
@@ -112,6 +116,11 @@ def extract_rpm_version( spec_content ) {
     return ver_matcher[0][1]
 }
 
+
+@NonCPS
+def sort_versions(v_in) {
+    v_out = v_in.sort{a, b -> return cmp_version(a, b)}
+}
 
 def cmp_version(String v0, String v1) {
     // compare two version strings.
