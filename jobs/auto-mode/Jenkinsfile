@@ -49,18 +49,18 @@ def get_branches(repo_url, pattern="") {
         ].join(" | ")
     ).trim()
 
-    return branch_text.split("\n")
+    return String[] branch_text.split("\n")
 }
 
 def get_releases(repo_url) {
-    r = get_branches(repo_url, "enterprise-*").collect {
+    String[] r = get_branches(repo_url, "enterprise-*").collect {
         it - "enterprise-"
     }.findAll {
         it =~ /^\d+((\.\d+)*)$/
     }
 
     //return r
-    return r.sort { a, b -> cmp_version(a, b) }
+    return String[] r.sort { a, b -> cmp_version(a, b) }
 }
 
 def get_single_file(owner, repo_name, file_name, repo_token) {
