@@ -238,6 +238,7 @@ node(TARGET_NODE) {
                 // get the first two fields of the master version
                 fields = master_version.tokenize(".")
                 echo "Version = ${master_version}, Fields = ${fields}"
+                // requires script security whitelist for static method getAt() on arrays 
                 BUILD_VERSION = fields[0,1].join('.')
             }
 
