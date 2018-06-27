@@ -178,33 +178,33 @@ node(TARGET_NODE) {
     }
 
 
-    stage("test version sort") {
-        a = ['3.10', '2.9', '3.1', '3.5.1']
+    // stage("test version sort") {
+    //     a = ['3.10', '2.9', '3.1', '3.5.1']
 
 
-        echo("comparing ${a[0]} to ${a[1]}: ${cmp_version(a[0], a[1])}")
-        //println(" a = ${a}")
-        //a.sort()
+    //     echo("comparing ${a[0]} to ${a[1]}: ${cmp_version(a[0], a[1])}")
+    //     //println(" a = ${a}")
+    //     //a.sort()
 
-        String[] b = a.sort{f0, f1 -> return cmp_version(f0, f1)}
+    //     String[] b = a.sort{f0, f1 -> return cmp_version(f0, f1)}
         
-        echo(" a = ${a}")
-        echo(" b = ${b}")
+    //     echo(" a = ${a}")
+    //     echo(" b = ${b}")
 
-        x = [3, 5, 1, 2, 7]
-        echo(" x = ${x}")
-        y = x.sort{ 0 }
+    //     x = [3, 5, 1, 2, 7]
+    //     echo(" x = ${x}")
+    //     y = x.sort{ 0 }
 
-        echo(" x = ${x}")
-        echo(" y = ${y}")
+    //     echo(" x = ${x}")
+    //     echo(" y = ${y}")
 
-        echo "---- try again ----"
+    //     echo "---- try again ----"
 
-        m = test_sort()
+    //     m = test_sort()
 
-        echo "${m}"
-        //echo "${m[1]}"        
-    }
+    //     echo "${m}"
+    //     //echo "${m[1]}"        
+    // }
 
     
     sshagent([SSH_KEY_ID]) {
@@ -218,15 +218,15 @@ node(TARGET_NODE) {
             echo "found releases: ${releases}"
         }
         
-        // stage("get master spec file") {
-        //     spec_file = get_single_file("openshift", "ose", "origin.spec", github_auth_token)
-        //     echo "Spec file size: ${spec_file.size()}"
-        // }
+        stage("get master spec file") {
+            spec_file = get_single_file("openshift", "ose", "origin.spec", github_auth_token)
+            echo "Spec file size: ${spec_file.size()}"
+        }
 
-        // stage("extract version-release") {
-        //     master_version = extract_rpm_version(spec_file)
-        //     echo "Master version: ${master_version}"
-        // }
+        stage("extract version-release") {
+            master_version = extract_rpm_version(spec_file)
+            echo "Master version: ${master_version}"
+        }
             
             
         // get version and release
