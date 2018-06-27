@@ -144,21 +144,23 @@ def test_sort() {
  a = ['3.10', '2.9', '3.1', '3.5.1']
 
 
-        echo("comparing ${a[0]} to ${a[1]}: ${cmp_version(a[0], a[1])}")
-        //println(" a = ${a}")
-        //a.sort()
+    echo("comparing ${a[0]} to ${a[1]}: ${cmp_version(a[0], a[1])}")
+    //println(" a = ${a}")
+    //a.sort()
 
-        String[] b = a.sort{f0, f1 -> return cmp_version(f0, f1)}
-        
-        echo(" a = ${a}")
-        echo(" b = ${b}")
+    String[] b = a.sort{f0, f1 -> return cmp_version(f0, f1)}
+    
+    echo(" a = ${a}")
+    echo(" b = ${b}")
 
-        x = [3, 5, 1, 2, 7]
-        echo(" x = ${x}")
-        y = x.sort{ 0 }
+    x = [3, 5, 1, 2, 7]
+    echo(" x = ${x}")
+    y = x.sort{ 0 }
 
-        echo(" x = ${x}")
-        echo(" y = ${y}")
+    echo(" x = ${x}")
+    echo(" y = ${y}")
+
+    return x, y
 }
 
 node(TARGET_NODE) {
@@ -194,7 +196,11 @@ node(TARGET_NODE) {
 
         echo "---- try again ----"
 
-        test_sort()
+        (m, n) = test_sort()
+
+        echo "${m}"
+        echo "${n}"
+           
         
     }
 
