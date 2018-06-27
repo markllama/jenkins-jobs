@@ -60,17 +60,17 @@ def get_releases(repo_url) {
     
     String[] v_strings = r.collect { it - "enterprise-" }
 
-    echo "v_strings = ${v_strings}"
+    echo("v_strings = ${v_strings}")
     
     String[] v_numbers = v_strings.findAll { it =~ /^\d+((\.\d+)*)$/ }
 
-    echo "v_numbers = ${v_numbers}"
+    echo("v_numbers = ${v_numbers}")
     
     String[] s = v_numbers
 
     s.sort{ a, b -> return cmp_version(a, b) }
 
-    echo "sorted releases = ${s}"
+    echo("sorted releases = ${s}")
 
     return s
 }
