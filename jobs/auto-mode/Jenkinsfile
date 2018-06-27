@@ -259,7 +259,7 @@ node(TARGET_NODE) {
                 (false): [ (true): "release",     (false): null  ]
             ]
 
-            mode = mode_table[BUILD_VERSION == master_version][releases.contains(BUILD_VERSION)]
+            mode = mode_table[eq_version(BUILD_VERSION, master_version)][releases.contains(BUILD_VERSION)]
 
             if (mode != null) {
                 echo "Build mode: ${mode}"
