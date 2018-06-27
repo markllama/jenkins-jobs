@@ -54,10 +54,8 @@ def get_branches(repo_url, pattern="") {
 
 
 def get_releases(repo_url) {
-    r = get_branches(repo_url, "enterprise-*").collect { it - "enterprise-" }
-    String[] v_numbers = v_strings.findAll { it =~ /^\d+((\.\d+)*)$/ }
-    String[] s = v_numbers
-    z = sort_versions(s)
+    r = get_branches(repo_url, "enterprise-*").collect { it - "enterprise-" }.findAll { it =~ /^\d+((\.\d+)*)$/ }
+    z = sort_versions(r)
     return z
 }
 
