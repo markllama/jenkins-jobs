@@ -56,32 +56,10 @@ def get_branches(repo_url, pattern="") {
 def get_releases(repo_url) {
      r = get_branches(repo_url, "enterprise-*")
 
-    // echo("branches = ${r}")
-    
     String[] v_strings = r.collect { it - "enterprise-" }
-
-    echo("v_strings = ${v_strings}")
-    
     String[] v_numbers = v_strings.findAll { it =~ /^\d+((\.\d+)*)$/ }
-
-    echo("v_numbers = ${v_numbers}")
-    
     String[] s = v_numbers
-
-    echo("unsorted releases = ${s}")
-
-    t = s.sort{ a, b -> return cmp_version(a, b) }
-
-    echo("sorted releases = ${s}")
-    echo("sort returned ${t}")
-
     z = sort_versions(s)
-
-    echo("used sort function: ${z}")
-    echo("sorted releases = ${s}")
-    
-    // return s
-
     return z
 }
 
