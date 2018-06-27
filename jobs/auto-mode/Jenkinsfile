@@ -259,13 +259,16 @@ node(TARGET_NODE) {
                 (false): [ (true): "release",     (false): null  ]
             ]
 
-            mode = mode_table[eq_version(BUILD_VERSION, master_version)][releases.contains(BUILD_VERSION)]
+            build_is_master = eq_version(BUILD_VERSION, master_version)
+            build_is_release = releases.contains(BUILD_VERSION)
+            
+            mode = mode_table[build_is_master][build_is_release]
 
-            if (mode != null) {
-                echo "Build mode: ${mode}"
-            } else {
+            if (mode == null) {
                 error("Invalid build: no build branch for version ${BUILD_VERSION}")
             }
+
+            echo "Build mode: ${mode}"
         }
         // get version and release
         //stage("checkout repo") {
