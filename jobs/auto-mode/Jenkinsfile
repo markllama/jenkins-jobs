@@ -265,11 +265,8 @@ node(TARGET_NODE) {
             ]
 
             build_is_master = eq_version(BUILD_VERSION, master_version)
-            build_is_release = releases.contains(BUILD_VERSION)
-
-            echo "build_is_master : ${build_is_master}"
-            echo "build_is_release: ${build_is_release}"
-            mode = mode_table[build_is_master][build_is_release]
+            build_has_release_branch = releases.contains(BUILD_VERSION)
+            mode = mode_table[build_is_master][build_has_release_branch]
 
             if (mode == null) {
                 error("Invalid build: no build branch for version ${BUILD_VERSION}")
