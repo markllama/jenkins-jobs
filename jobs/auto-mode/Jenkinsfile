@@ -53,8 +53,14 @@ def get_branches(repo_url, pattern="") {
 }
 
 
+//
+//
+//
 def get_releases(repo_url) {
+    // too clever: chain - get branch names, remove prefix, suffix
     r = get_branches(repo_url, "enterprise-*").collect { it - "enterprise-" }.findAll { it =~ /^\d+((\.\d+)*)$/ }
+
+    // and sort
     z = sort_versions(r)
     return z
 }
@@ -92,7 +98,7 @@ def extract_rpm_version( spec_content ) {
 }
 
 
-@NonCPS
+@NonCPS // because sorting in-line in Jenkins requires NonCPS all the way out
 def sort_versions(v_in) {
     v_out = v_in.sort{a, b -> return cmp_version(a, b)}
 }
