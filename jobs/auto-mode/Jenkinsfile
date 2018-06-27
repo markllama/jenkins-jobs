@@ -82,7 +82,7 @@ def get_releases(repo_url) {
     
     // return s
 
-    return r
+    return z
 }
 
 def get_single_file(owner, repo_name, file_name, repo_token) {
