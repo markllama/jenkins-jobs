@@ -226,7 +226,7 @@ node(TARGET_NODE) {
         }
 
         stage("extract version-release") {
-            master_version = extract_rpm_version(spec_file).trim()
+            master_version = extract_rpm_version(spec_file)
             echo "Master version: ${master_version}"
         }
             
@@ -236,7 +236,7 @@ node(TARGET_NODE) {
             if (BUILD_VERSION == "latest") {
 
                 // get the first two fields of the master version
-                fields = master_version.split(".")
+                fields = master_version.tokenize(".")
                 echo "Version = ${master_version}, Fields = ${fields}"
                 BUILD_VERSION = fields[0,1].join('.')
             }
