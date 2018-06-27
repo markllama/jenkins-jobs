@@ -222,7 +222,7 @@ node(TARGET_NODE) {
             branches = get_branches(ose_repo_url, "enterprise-*")
             echo "found branches: ${branches}"
 
-            echo "branch array: ${branches.split('\n')"
+            echo "branch array: ${branches.split('\n')}"
         }
 
         stage("get release versions") {
