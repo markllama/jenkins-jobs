@@ -226,7 +226,7 @@ node(TARGET_NODE) {
         }
 
         stage("extract version-release") {
-            master_version = extract_rpm_version(spec_file)
+            master_version = extract_rpm_version(spec_file).trim()
             echo "Master version: ${master_version}"
         }
             
