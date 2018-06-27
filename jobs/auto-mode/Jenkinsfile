@@ -238,6 +238,36 @@ node(TARGET_NODE) {
             }
 
             echo "Building ${BUILD_VERSION}"
+
+            // assume auto mode
+            //
+            // Conditions:
+            //   BUILD_VERSION == master_version
+            //   BUILD_VERSION in releases
+            //
+            //                |  BUILD_VERSION in releases
+            // --------------------------------------------
+            // build = master |   true      |   false     |
+            // --------------------------------------------
+            //      true      | pre-release |    dev      |
+            // -------------------------------------------
+            //      false     |   release   |     X       |
+            // -------------------------------------------
+
+            mode_table = [
+                true: [
+                    true: "pre-release",
+                    false: "dev"
+                ],
+                false: [
+                    true: "release",
+                    false: null
+                ]
+            ]
+
+            mode = mode_table[BUILD_VERSION == master_version][releases.contains(BUILD_VERSION)]
+
+            echo "Build mode: ${mode}"
         }
         // get version and release
         //stage("checkout repo") {
