@@ -56,23 +56,25 @@ def get_branches(repo_url, pattern="") {
 def get_releases(repo_url) {
     String[] r = get_branches(repo_url, "enterprise-*")
 
-    echo("branches = ${r}")
+    // echo("branches = ${r}")
     
-    String[] v_strings = r.collect { it - "enterprise-" }
+    // String[] v_strings = r.collect { it - "enterprise-" }
 
-    echo("v_strings = ${v_strings}")
+    // echo("v_strings = ${v_strings}")
     
-    String[] v_numbers = v_strings.findAll { it =~ /^\d+((\.\d+)*)$/ }
+    // String[] v_numbers = v_strings.findAll { it =~ /^\d+((\.\d+)*)$/ }
 
-    echo("v_numbers = ${v_numbers}")
+    // echo("v_numbers = ${v_numbers}")
     
-    String[] s = v_numbers
+    // String[] s = v_numbers
 
-    s.sort{ a, b -> return cmp_version(a, b) }
+    // s.sort{ a, b -> return cmp_version(a, b) }
 
-    echo("sorted releases = ${s}")
+    // echo("sorted releases = ${s}")
 
-    return s
+    // return s
+
+    return r
 }
 
 def get_single_file(owner, repo_name, file_name, repo_token) {
