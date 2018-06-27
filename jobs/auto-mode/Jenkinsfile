@@ -232,6 +232,12 @@ node(TARGET_NODE) {
             
         stage("select mode") {
             echo "Selecting mode - build version = ${BUILD_VERSION}"
+
+            if (BUILD_VERSION == "latest") {
+                BUILD_VERSION = master_version
+            }
+
+            echo "Building ${BUILD_VERSION}"
         }
         // get version and release
         //stage("checkout repo") {
