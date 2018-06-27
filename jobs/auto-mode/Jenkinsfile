@@ -98,6 +98,7 @@ def extract_rpm_version( spec_content ) {
     return ver_matcher[0][1]
 }
 
+@NonCPS
 def cmp_version(String v0, String v1) {
     // compare two version strings.
     // return:
