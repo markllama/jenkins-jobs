@@ -60,7 +60,7 @@ def get_releases(repo_url) {
     }
 
     //return r
-    return String[] r.sort { a, b -> cmp_version(a, b) }
+    return r.sort { a, b -> cmp_version(a, b) }
 }
 
 def get_single_file(owner, repo_name, file_name, repo_token) {
