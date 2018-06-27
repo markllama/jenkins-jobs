@@ -52,7 +52,7 @@ def get_branches(repo_url, pattern="") {
     return branch_text.split("\n")
 }
 
-@NonCPS
+
 def get_releases(repo_url) {
      r = get_branches(repo_url, "enterprise-*")
 
