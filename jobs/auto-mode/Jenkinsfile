@@ -253,16 +253,10 @@ node(TARGET_NODE) {
             // -------------------------------------------
             //      false     |   release   |     X       |
             // -------------------------------------------
-
+            // non-string map keys require parens during definition
             mode_table = [
-                true: [
-                    true: "pre-release",
-                    false: "dev"
-                ],
-                false: [
-                    true: "release",
-                    false: null
-                ]
+                (true):  [ (true): "pre-release", (false): "dev" ],
+                (false): [ (true): "release",     (false): null  ]
             ]
 
             mode = mode_table[BUILD_VERSION == master_version][releases.contains(BUILD_VERSION)]
