@@ -38,7 +38,6 @@ properties(
     ]
 )
 
-@NonCPS
 def get_branches(repo_url, pattern="") {
 
     branch_text = sh(
