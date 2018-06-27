@@ -78,6 +78,7 @@ def get_releases(repo_url) {
     z = sort_versions(s)
 
     echo("used sort function: ${z}")
+    echo("sorted releases = ${s}")
     
     // return s
 
