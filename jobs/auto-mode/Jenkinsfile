@@ -141,7 +141,7 @@ def eq_version(String v0, String v1) {
     // return:
     //   v0 == v1: true
     //   v0 != v1: false
-    return cmp_version(v0, v1)
+    return cmp_version(v0, v1) == 0
 }
 
 
