@@ -230,7 +230,9 @@ node(TARGET_NODE) {
             echo "Master version: ${master_version}"
         }
             
-            
+        stage("select mode") {
+            echo "Selecting mode - build version = ${BUILD_VERSION}"
+        }
         // get version and release
         //stage("checkout repo") {
         //    checkout_repo(
