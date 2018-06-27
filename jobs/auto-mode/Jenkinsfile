@@ -198,8 +198,8 @@ node(TARGET_NODE) {
 
         m = test_sort()
 
-        echo "${m[0]}"
-        echo "${m[1]}"
+        echo "${m}"
+        //echo "${m[1]}"
            
         
     }
