@@ -236,8 +236,8 @@ node(TARGET_NODE) {
             if (BUILD_VERSION == "latest") {
 
                 // get the first two fields of the master version
-                fields = master_version.split('.')
-                echo "Fields = ${fields}"
+                fields = master_version.split(".")
+                echo "Version = ${master_version}, Fields = ${fields}"
                 BUILD_VERSION = fields[0,1].join('.')
             }
 
