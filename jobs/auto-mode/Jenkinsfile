@@ -59,9 +59,8 @@ def get_releases(repo_url) {
         it =~ /^\d+((\.\d+)*)$/
     }
 
-    echo "unsorted releases = ${r}"
 
-    s = r.sort{ a, b -> cmp_version(a, b) }
+    s = String[] r.sort{ a, b -> cmp_version(a, b) }
 
     echo "sorted releases = ${s}"
 
