@@ -157,7 +157,7 @@ node(TARGET_NODE) {
         //println(" a = ${a}")
         //a.sort()
 
-        b = a.sort{f0, f1 -> return cmp_version(f0, f1)}
+        String[] b = a.sort{f0, f1 -> return cmp_version(f0, f1)}
         
         echo(" a = ${a}")
         echo(" b = ${b}")
