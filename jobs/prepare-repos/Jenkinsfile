@@ -25,6 +25,17 @@ properties(
     ]
 )
 
+// get a single file from a github repo
+def get_single_file() {
+    return ""
+}
+
+def get_remote_branches() {
+    return []
+}
+
+// get a list of branches from a remote github
+
 node(TARGET_NODE) {
 
     //
@@ -33,6 +44,12 @@ node(TARGET_NODE) {
     //
     stage("survey") {
         echo "BEGIN STAGE: survey"
+
+        // 
+        master_rpm_spec = get_single_file()
+
+        //
+        branches = get_remote_branches()
 
         echo "END STAGE: survey"
     }
