@@ -1,0 +1,39 @@
+//
+// Create the repos needed to build OpenShift
+//
+// Expose properties for a parameterized build
+properties(
+    [
+        buildDiscarder(
+            logRotator(
+                artifactDaysToKeepStr: '',
+                artifactNumToKeepStr: '',
+                daysToKeepStr: '',
+                numToKeepStr: '1000')),
+        [
+            $class: 'ParametersDefinitionProperty',
+            parameterDefinitions: [
+                [
+                    name: 'TARGET_NODE',
+                    description: 'Jenkins agent node',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: 'openshift-build-1'
+                ],
+            ]
+        ]
+        disableConcurrentBuilds()
+    ]
+)
+
+node(TARGET_NODE) {
+
+    //
+    // Given a version number to build, determmine how to configure the
+    // local git workspacexz
+    //
+    stage("survey") {
+        echo "BEGIN STAGE: survey"
+
+        echo "END STAGE: survey"
+    }
+}
