@@ -25,7 +25,8 @@ properties(
     ]
 )
 
-token_file = new File('/jenkins/agent/.ssh/github_token.txt')
+token_file_name = '/jenkins/agent/.ssh/github_token.txt'
+token_file = new File(token_file_name)
 github_token = token_file.exists() ? token_file.getText().trim() : ""
 
 // get a single file from a github repo
@@ -59,6 +60,10 @@ node(TARGET_NODE) {
     //
     stage("survey") {
         echo "BEGIN STAGE: survey"
+
+        if (github_token == "") {
+            error("failed to read file $token_file_name")
+        }
 
         // 
         master_rpm_spec = get_single_file(
