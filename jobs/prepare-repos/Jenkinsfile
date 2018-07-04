@@ -20,7 +20,7 @@ properties(
                     defaultValue: 'openshift-build-1'
                 ],
             ]
-        ]
+        ],
         disableConcurrentBuilds()
     ]
 )
