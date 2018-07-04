@@ -25,9 +25,24 @@ properties(
     ]
 )
 
+token_file = new File('/jenkins/agent/.ssh/github_token.txt')
+github_token = token_file.exists() ? token_file.getText().trim() : ""
+
 // get a single file from a github repo
-def get_single_file() {
-    return ""
+
+def get_single_file(owner, repo_name, file_name, repo_token) {
+    // Get a single file from a Github repository.
+
+    auth_header = "Authorization: token " + repo_token
+    file_url = "https://api.github.com/repos/${owner}/${repo_name}/contents/${file_name}"
+    accept_header = "Accept: application/vnd.github.v3.raw"
+    query = "curl --silent -H '${auth_header}' -H '${accept_header}' -L ${file_url}"
+    content = sh(
+	      returnStdout: true,
+        script: query
+    )
+
+    return content
 }
 
 def get_remote_branches() {
@@ -46,8 +61,12 @@ node(TARGET_NODE) {
         echo "BEGIN STAGE: survey"
 
         // 
-        master_rpm_spec = get_single_file()
+        master_rpm_spec = get_single_file(
+            'markllama', 'ose', 'origin.spec', github_token
+        )
 
+        echo master_rpm_spec
+        
         //
         branches = get_remote_branches()
 
