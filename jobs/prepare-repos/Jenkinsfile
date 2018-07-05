@@ -25,15 +25,6 @@ properties(
     ]
 )
 
-secret_dir_name = '.'
-secret_dir = new File(secret_dir_name)
-
-echo "cws = ${pwd()}"
-
-token_file_name = '/jenkins/agent/.ssh/github_token.txt'
-token_file = new File(token_file_name)
-//github_token = token_file.exists() ? token_file.getText().trim() : ""
-github_token = token_file.getText().trim()
 
 // get a single file from a github repo
 
@@ -58,7 +49,11 @@ def get_remote_branches() {
 // get a list of branches from a remote github
 
 node(TARGET_NODE) {
-    echo "cws = ${pwd()}"
+
+    token_file_name = '/jenkins/agent/.ssh/github_token.txt'
+    token_file = new File(token_file_name)
+    //github_token = token_file.exists() ? token_file.getText().trim() : ""
+    github_token = token_file.getText().trim()
 
     //
     // Given a version number to build, determmine how to configure the
