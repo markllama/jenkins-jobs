@@ -76,6 +76,7 @@ def extract_version_release(spec_file_contents) {
     } else {
         version = null
     }
+    echo "{version_match[0]}"
     echo "version = ${version}"
     
     echo "checking release match"
@@ -85,6 +86,7 @@ def extract_version_release(spec_file_contents) {
     } else {
         release = null
     }
+    echo "{release_match[0]}"
     echo "release = ${release}"
 
     return [
