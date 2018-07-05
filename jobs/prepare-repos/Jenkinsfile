@@ -25,12 +25,12 @@ properties(
     ]
 )
 
-def read_token(token_file) {
-    token_file = new File(token_file_name)
-    token_string = token_file.exists() ? token_file.getText().trim() : ""
-    //github_token = token_file.getText().trim()
-    return token_string
-}
+//def read_token(token_file) {
+//    token_file = new File(token_file_name)
+//    token_string = token_file.exists() ? token_file.getText().trim() : ""
+//    //github_token = token_file.getText().trim()
+//    return token_string
+//}
 
 def read_token_sh(token_file) {
 
@@ -67,7 +67,7 @@ node(TARGET_NODE) {
 
     token_file_name = '/jenkins/agent/.ssh/github_token.txt'
 
-    github_token = read_token(token_file_name)
+    github_token = read_token_sh(token_file_name)
     //
     // Given a version number to build, determmine how to configure the
     // local git workspacexz
