@@ -60,8 +60,59 @@ def get_single_file(owner, repo_name, file_name, repo_token) {
     return content
 }
 
-def get_remote_branches() {
-    return []
+/**
+ * Take an RPM spec file and return a map with the version and release strings
+**/
+def extract_version_release(spec_file_contents) {
+    version_re = /^Version:\s+([^\s]+)\s*.*$/
+    release_re = /^Release:\s+([^\s]+)\s*.*$/
+
+    return [
+        version: (spec_file_contents =~ version_re)[0][1],
+        release: (spec_file_contents =~ release_re)[0][1]
+    ]
+}
+
+/**
+ * Retrive the branch list from a remote repository
+ * @param repo_url a git@ repository URL.
+ * @param pattern a matching pattern for the branch list. Only return matching branches
+ *
+ * @return a list of branch names.  Removes the leading ref path
+ *
+ * Requires SSH_AGENT to have set a key for access to the remote repository
+ */
+def get_remote_branches(repo_url, pattern="") {
+
+    branch_text = sh(
+        returnStdout: true,
+        script: [
+            "git ls-remote ${repo_url} ${pattern}",
+            "awk '{print \$2}'",
+            "cut -d/ -f3"
+        ].join(" | ")
+    )
+
+    return branch_text.split("\n")
+}
+
+/**
+ * Retrive a list of release numbers from the OCP remote repository
+ * @param repo_url a git@ repository URL.
+ * @return a list of OSE release numbers.
+ *
+ * Get the branch names beginning with 'enterprise-'.
+ * Extract the release number string from each branch release name
+ * Sort in version order (compare fields as integers, not strings)
+ * Requires SSH_AGENT to have set a key for access to the remote repository
+ */
+def get_releases(repo_url) {
+    // too clever: chain - get branch names, remove prefix, suffix
+    r = get_branches(repo_url, "enterprise-*").collect { it - "enterprise-" }.findAll { it =~ /^\d+((\.\d+)*)$/ }
+
+    // and sort
+    z = sort_versions(r)
+    return z
 }
 
 // get a list of branches from a remote github
@@ -85,6 +136,8 @@ node(TARGET_NODE) {
         master_rpm_spec = get_single_file(
             'markllama', 'ose', 'origin.spec', github_token
         )
+
+        master_version = 
 
         echo master_rpm_spec
         
