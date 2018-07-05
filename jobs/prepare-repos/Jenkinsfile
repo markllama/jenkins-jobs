@@ -137,13 +137,14 @@ node(TARGET_NODE) {
             'markllama', 'ose', 'origin.spec', github_token
         )
 
-        master_version = 
+        master_version = extract_version_release(master_rpm_spec)
 
-        echo master_rpm_spec
+        echo master_version
         
         //
         branches = get_remote_branches()
 
+        echo branches
         echo "END STAGE: survey"
     }
 }
