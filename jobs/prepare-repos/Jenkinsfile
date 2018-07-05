@@ -82,7 +82,7 @@ def extract_version_release(spec_file_contents) {
     }
     
     return [
-        'version': version
+        'version': version,
         'release': release
     ]
 }
