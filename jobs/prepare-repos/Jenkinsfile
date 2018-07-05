@@ -62,7 +62,8 @@ def get_single_file(owner, repo_name, file_name, repo_token) {
 
 /**
  * Take an RPM spec file and return a map with the version and release strings
-**/
+ **/
+@NonCPS
 def extract_version_release(spec_file_contents) {
     version_re = /^Version:\s+([^\s]+)\s*.*$/
     release_re = /^Release:\s+([^\s]+)\s*.*$/
