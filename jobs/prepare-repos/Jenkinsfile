@@ -34,8 +34,8 @@ properties(
 
 def read_oauth_token(token_file) {
     token_file = new File(token_file_name)
-    token_string = token_file.exists() ? token_file.getText().trim() : ""
-    //github_token = token_file.getText().trim()
+    //token_string = token_file.exists() ? token_file.getText().trim() : ""
+    token_string = token_file.getText().trim()
     return token_string
 }
 
