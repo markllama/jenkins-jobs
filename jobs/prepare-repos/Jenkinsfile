@@ -32,15 +32,16 @@ properties(
     ]
 )
 
-//def read_token(token_file) {
-//    token_file = new File(token_file_name)
-//    token_string = token_file.exists() ? token_file.getText().trim() : ""
-//    //github_token = token_file.getText().trim()
-//    return token_string
-//}
+def read_oauth_token(token_file) {
+    token_file = new File(token_file_name)
+    token_string = token_file.exists() ? token_file.getText().trim() : ""
+    //github_token = token_file.getText().trim()
+    return token_string
+}
 
-def read_token_sh(token_file) {
-
+// @param token_file - a file containing a single OAuth token string
+// @return - a string containing the OAuth token
+def read_oath_token_sh(token_file) {
     token_string = sh (
         returnStdout: true,
         script: "cat ${token_file}"
@@ -73,7 +74,7 @@ def get_remote_branches() {
 node(TARGET_NODE) {
 
     token_file_name = GITHUB_TOKEN_FILENAME
-    github_token = read_token_sh(token_file_name)
+    github_token = read_oauth_token(token_file_name)
     //
     // Given a version number to build, determmine how to configure the
     // local git workspacexz
