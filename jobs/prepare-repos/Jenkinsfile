@@ -121,6 +121,7 @@ def get_remote_branches(repo_url, pattern="") {
  * Sort in version order (compare fields as integers, not strings)
  * Requires SSH_AGENT to have set a key for access to the remote repository
  */
+@NonCPS
 def get_releases(repo_url) {
     // too clever: chain - get branch names, remove prefix, suffix
     r = get_branches(repo_url, "enterprise-*").collect { it - "enterprise-" }.findAll { it =~ /^\d+((\.\d+)*)$/ }
