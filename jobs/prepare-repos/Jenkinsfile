@@ -58,6 +58,7 @@ def get_remote_branches() {
 // get a list of branches from a remote github
 
 node(TARGET_NODE) {
+    echo "cws = ${pwd()}"
 
     //
     // Given a version number to build, determmine how to configure the
