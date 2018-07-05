@@ -27,7 +27,8 @@ properties(
 
 token_file_name = '/jenkins/agent/.ssh/github_token.txt'
 token_file = new File(token_file_name)
-github_token = token_file.exists() ? token_file.getText().trim() : ""
+//github_token = token_file.exists() ? token_file.getText().trim() : ""
+github_token = token_file.getText().trim()
 
 // get a single file from a github repo
 
