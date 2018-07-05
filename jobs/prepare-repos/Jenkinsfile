@@ -32,16 +32,11 @@ properties(
     ]
 )
 
-def read_oauth_token(token_file) {
-    token_file = new File(token_file_name)
-    //token_string = token_file.exists() ? token_file.getText().trim() : ""
-    token_string = token_file.getText().trim()
-    return token_string
-}
 
+// Read a string from a file.  The string should be an OAuth token for access to a Github account
 // @param token_file - a file containing a single OAuth token string
 // @return - a string containing the OAuth token
-def read_oath_token_sh(token_file) {
+def read_oauth_token(token_file) {
     token_string = sh (
         returnStdout: true,
         script: "cat ${token_file}"
