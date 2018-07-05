@@ -28,7 +28,7 @@ properties(
 secret_dir_name = '.'
 secret_dir = new File(secret_dir_name)
 
-echo "cws = ${secret_dir.listFiles()}"
+echo "cws = ${pwd()}"
 
 token_file_name = '/jenkins/agent/.ssh/github_token.txt'
 token_file = new File(token_file_name)
