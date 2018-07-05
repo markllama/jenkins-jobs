@@ -25,6 +25,11 @@ properties(
     ]
 )
 
+secret_dir_name = '/jenkins/agent/.ssh'
+secret_dir = new File(secret_dir_name)
+
+echo secret_dir.listFiles()
+
 token_file_name = '/jenkins/agent/.ssh/github_token.txt'
 token_file = new File(token_file_name)
 //github_token = token_file.exists() ? token_file.getText().trim() : ""
@@ -43,7 +48,6 @@ def get_single_file(owner, repo_name, file_name, repo_token) {
 	      returnStdout: true,
         script: query
     )
-
     return content
 }
 
