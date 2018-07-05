@@ -160,7 +160,7 @@ node(TARGET_NODE) {
         
         master_version = extract_version_release(master_rpm_spec)
 
-        echo master_version
+        //echo master_version
         
         //
         branches = get_remote_branches()
