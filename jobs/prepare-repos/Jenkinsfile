@@ -17,8 +17,15 @@ properties(
                     name: 'TARGET_NODE',
                     description: 'Jenkins agent node',
                     $class: 'hudson.model.StringParameterDefinition',
-                    defaultValue: 'openshift-build-1'
+                    defaultValue: 'container'
                 ],
+                [
+                    name: 'GITHUB_TOKEN_FILENAME',
+                    description: 'The name of a file containing an OAuth token for API access',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: '/jenkins/agent/.ssh/github-token-oauth.txt'
+                ],
+
             ]
         ],
         disableConcurrentBuilds()
@@ -65,8 +72,7 @@ def get_remote_branches() {
 
 node(TARGET_NODE) {
 
-    token_file_name = '/jenkins/agent/.ssh/github_token.txt'
-
+    token_file_name = GITHUB_TOKEN_FILENAME
     github_token = read_token_sh(token_file_name)
     //
     // Given a version number to build, determmine how to configure the
