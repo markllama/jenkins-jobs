@@ -127,7 +127,7 @@ def get_remote_branches(repo_url, pattern="") {
 @NonCPS
 def get_releases(repo_url) {
     // too clever: chain - get branch names, remove prefix, suffix
-    r = get_branches(repo_url, "enterprise-*").collect { it - "enterprise-" }.findAll { it =~ /^\d+((\.\d+)*)$/ }
+    r = get_remote_branches(repo_url, "enterprise-*").collect { it - "enterprise-" }.findAll { it =~ /^\d+((\.\d+)*)$/ }
 
     // and sort
     z = sort_versions(r)
@@ -167,13 +167,10 @@ node(TARGET_NODE) {
 
         sshagent([SSH_KEY_ID]) {
         //
-            branches = get_remote_branches(
-                "git@github.com:markllama/ose",
-                "enterprise-*"
-            )
+            releases = get_releases("git@github.com:markllama/ose")
         }
 
-        echo "branches: ${branches}"
+        echo "releases: ${releases}"
         echo "END STAGE: survey"
     }
 }
