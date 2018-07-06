@@ -67,8 +67,8 @@ def get_single_file(owner, repo_name, file_name, repo_token) {
 def extract_version_release(spec_file_contents) {
     //version_re = /^Version:\s+([^\s]+)\s*.*$/
     //release_re = /^Release:\s+([^\s]+)\s*.*$/
-    version_re = /^Version:\s+([^\s]+)/
-    release_re = /^Release:\s+([^\s]+)/
+    def version_re = /^Version:\s+([^\s]+)/
+    def release_re = /^Release:\s+([^\s]+)/
 
     echo "size of spec_file_contents: ${spec_file_contents.size()}"
 
