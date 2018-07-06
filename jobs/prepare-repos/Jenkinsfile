@@ -177,7 +177,7 @@ node(TARGET_NODE) {
             releases = get_releases("git@github.com:markllama/ose")
         }
 
-        //echo "releases: ${releases}"
+        echo "releases: ${releases}"
         echo "END STAGE: survey"
     }
 }
