@@ -25,7 +25,16 @@ properties(
                     $class: 'hudson.model.StringParameterDefinition',
                     defaultValue: '/jenkins/agent/.ssh/github-token-oauth.txt'
                 ],
-
+                [
+                    name: 'SSH_KEY_ID',
+                    description: 'SSH credential id to use',
+                    $class: 'hudson.model.ChoiceParameterDefinition',
+                    choices: [
+                        "markllama",
+                        "none"
+                    ].join("\n"),
+                    defaultValue: 'markllama'
+                ],
             ]
         ],
         disableConcurrentBuilds()
@@ -153,10 +162,17 @@ node(TARGET_NODE) {
         master_version = extract_rpm_version(master_rpm_spec)
         master_release = extract_rpm_release(master_rpm_spec)
 
-        //echo master_version
-        
+        echo master_version
+        echo master_release
+
+
+        ssh_agent([SSH_KEY_ID]) {
         //
-        branches = get_remote_branches()
+            branches = get_remote_branches(
+                "git@github.com:markllama/ose",
+                "enterprise-"
+            )
+        }
 
         echo branches
         echo "END STAGE: survey"
