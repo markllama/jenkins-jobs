@@ -63,32 +63,24 @@ def get_single_file(owner, repo_name, file_name, repo_token) {
 /**
  * Take an RPM spec file and return a map with the version and release strings
  **/
+
 @NonCPS
-def extract_version_release(spec_file_contents) {
-    //version_re = /^Version:\s+([^\s]+)\s*.*$/
-    //release_re = /^Release:\s+([^\s]+)\s*.*$/
-    def version_re = /^Version:\s+([^\s]+)/
-    def release_re = /^Release:\s+([^\s]+)/
-
-    echo "size of spec_file_contents: ${spec_file_contents.size()}"
-
-    lines = spec_file_contents.tokenize("\n")
-
-    echo "spec file has ${lines.size()} lines"
-
-    for (line in lines) {
-        def version_match = line =~ version_re
-        def release_match = line =~ release_re
-
-        if (version_match && release_match) {
-            continue
-        }
+def extract_rpm_version(spec_content) {
+    def ver_matcher = spec_content =~ /Version:\s*([.0-9]+)/
+    if ( ! ver_matcher ) { // Groovy treats matcher as boolean in this context
+        error( "Unable to extract Version field from RPM spec" )
     }
+    return ver_matcher[0][1]
+}
 
-    return [
-        'version': version_match[0][1],
-        'release': release_match[0][1]
-    ]
+// Matcher is not serializable; use NonCPS
+@NonCPS
+def extract_rpm_release(spec_content) {
+    def rel_matcher = spec_content =~ /Release:\s*([.a-zA-Z0-9+-]+)/  // Do not match vars like %{?dist}
+    if ( ! rel_matcher ) { // Groovy treats matcher as boolean in this context
+        error( "Unable to extract Release field from RPM spec" )
+    }
+    return rel_matcher[0][1]
 }
 
 /**
@@ -158,7 +150,8 @@ node(TARGET_NODE) {
 
         echo "master rpm spec size: ${master_rpm_spec.size()}"
         
-        master_version = extract_version_release(master_rpm_spec)
+        master_version = extract_rpm_version(master_rpm_spec)
+        master_release = extract_rpm_release(master_rpm_spec)
 
         //echo master_version
         
