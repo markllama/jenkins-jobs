@@ -166,7 +166,7 @@ node(TARGET_NODE) {
         echo master_release
 
 
-        ssh_agent([SSH_KEY_ID]) {
+        sshagent([SSH_KEY_ID]) {
         //
             branches = get_remote_branches(
                 "git@github.com:markllama/ose",
