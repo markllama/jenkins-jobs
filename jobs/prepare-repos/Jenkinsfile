@@ -173,7 +173,7 @@ node(TARGET_NODE) {
             )
         }
 
-        //echo branches
+        echo "branches: ${branches}"
         echo "END STAGE: survey"
     }
 }
