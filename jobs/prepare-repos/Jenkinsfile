@@ -74,6 +74,8 @@ def extract_version_release(spec_file_contents) {
 
     lines = spec_file_contents.tokenize("\n")
 
+    echo "spec file has ${lines.size()} lines"
+
     for (line in lines) {
         version_match = line =~ version_re
         release_match = line =~ release_re
