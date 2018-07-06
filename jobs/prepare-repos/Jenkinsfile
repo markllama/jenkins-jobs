@@ -77,8 +77,8 @@ def extract_version_release(spec_file_contents) {
     echo "spec file has ${lines.size()} lines"
 
     for (line in lines) {
-        version_match = line =~ version_re
-        release_match = line =~ release_re
+        def version_match = line =~ version_re
+        def release_match = line =~ release_re
 
         if (version_match && release_match) {
             continue
