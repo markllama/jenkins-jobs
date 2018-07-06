@@ -100,6 +100,7 @@ def extract_rpm_release(spec_content) {
  *
  * Requires SSH_AGENT to have set a key for access to the remote repository
  */
+@NonCPS
 def get_remote_branches(repo_url, pattern="") {
 
     branch_text = sh(
@@ -128,10 +129,10 @@ def get_remote_branches(repo_url, pattern="") {
 def get_releases(repo_url) {
     // too clever: chain - get branch names, remove prefix, suffix
     branches = get_remote_branches(repo_url, 'enterprise-*')
-    echo "Branches: ${branches}"
+    echo "branches: ${branches}"
     r = branches.collect { it - 'enterprise-' }.findAll { it =~ /^\d+((\.\d+)*)$/ }
 
-    echo "releases: ${r}"
+    echo "unsorted releases: ${r}"
     
     // and sort
     z = sort_versions(r)
@@ -176,7 +177,7 @@ node(TARGET_NODE) {
             releases = get_releases("git@github.com:markllama/ose")
         }
 
-        echo "releases: ${releases}"
+        //echo "releases: ${releases}"
         echo "END STAGE: survey"
     }
 }
