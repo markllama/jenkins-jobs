@@ -41,7 +41,6 @@ properties(
     ]
 )
 
-
 // Read a string from a file.  The string should be an OAuth token for access to a Github account
 // @param token_file - a file containing a single OAuth token string
 // @return - a string containing the OAuth token
