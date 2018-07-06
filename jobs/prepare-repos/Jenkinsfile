@@ -127,10 +127,16 @@ def get_remote_branches(repo_url, pattern="") {
 @NonCPS
 def get_releases(repo_url) {
     // too clever: chain - get branch names, remove prefix, suffix
-    r = get_remote_branches(repo_url, 'enterprise-*').collect { it - 'enterprise-' }.findAll { it =~ /^\d+((\.\d+)*)$/ }
+    branches = get_remote_branches(repo_url, 'enterprise-*')
+    echo "Branches: ${branches}"
+    r = branches.collect { it - 'enterprise-' }.findAll { it =~ /^\d+((\.\d+)*)$/ }
 
+    echo "releases: ${r}"
+    
     // and sort
     z = sort_versions(r)
+
+    echo "sorted releases: ${z}"
     return z
 }
 
