@@ -170,7 +170,7 @@ node(TARGET_NODE) {
         //
             branches = get_remote_branches(
                 "git@github.com:markllama/ose",
-                "enterprise-"
+                "enterprise-*"
             )
         }
 
