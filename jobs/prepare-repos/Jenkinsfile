@@ -141,6 +141,121 @@ def get_releases(repo_url) {
     return z
 }
 
+@NonCPS // because sorting in-line in Jenkins requires NonCPS all the way out
+def sort_versions(v_in) {
+    v_out = v_in.sort{a, b -> return cmp_version(a, b)}
+}
+
+/**
+ * Compare two version strings
+ * These are dot separated lists of numbers.  Each field is compared to the matching field numerically
+ * @param v0 a version string
+ * @param v1 a second version string
+ * @return 0 if the versions are equal.  1 if v0 > v1, -1 if v0 < v1
+ *
+ * If two strings have different numbers of fields, the missing fields are padded with 0s
+ * Two versions are equal if all fields are equal
+ */
+@NonCPS
+def cmp_version(String v0, String v1) {
+    // compare two version strings.
+    // return:
+    //   v0 < v1: -1
+    //   v0 > v1:  1
+    //   v0 = v1:  0
+
+    // split both into arrays on dots (.)
+    try {
+        a0 = v0.tokenize('.').collect { it as int }
+        a1 = v1.tokenize('.').collect { it as int }
+    } catch (convert_error) {
+        error("Invalid version strings: ${v0} or ${v1} - ${convert_error}")
+    }
+
+    // extend both to 3 fields with zeros if needed
+    while (a0.size() < 3) { a0 << 0 }
+    while (a1.size() < 3) { a1 << 0 }
+
+    // zip these two together for comparison
+    // major.minor.revision
+    mmr = [a0, a1].transpose()
+
+    // if any pair do not match, return the result
+    for (field in mmr) {
+        t = field[0].compareTo(field[1])
+        if (t != 0) { return t }
+    }
+    return 0
+}
+
+/**
+ * Test if two version strings are equivalent
+ * @param v0 a dot separated version string
+ * @param v1 a dot separated version string
+ * @return true if versions are equal.  False otherwise
+ *
+ * If two strings have different numbers of fields, the missing fields are padded with 0s
+ * Two versions are equal if all fields are equal
+ */
+@NonCPS
+def eq_version(String v0, String v1) {
+    // determine if two versions are the same
+    // return:
+    //   v0 == v1: true
+    //   v0 != v1: false
+    return cmp_version(v0, v1) == 0
+}
+
+/**
+ * Determine the "build mode" based on the requested version, the version on HEAD of the master branch
+ * and the versions found in the release branch list
+ *
+ * @param build_version a version string.  The version to be built
+ * @param master_version a version string. The version on the master branch at HEAD
+ * @param releases an array of version strings.  Each version string is from a release branch name
+ * @return string the "build mode" to use when creating the local workspaces for OCP builds
+ *
+ * online:int: build from master
+ * pre-release: build on release branch, merge master and upstream master before build
+ * release: build from release branch
+ *
+ * NOTE: Must build either from master HEAD or an existing release branch. A build version which is not one of these
+ * is invalid
+ */
+def auto_mode(build_version, master_version, releases) {
+    // Conditions:
+    //   BUILD_VERSION == master_version
+    //   BUILD_VERSION in releases
+    //
+    //                |  BUILD_VERSION in releases
+    // --------------------------------------------
+    // build = master |   true      |   false     |
+    // --------------------------------------------
+    //      true      | pre-release |    online:int      |
+    // -------------------------------------------
+    //      false     |   release   |     X       |
+    // -------------------------------------------
+    // non-string map keys require parens during definition
+    mode_table = [
+        (true):  [ (true): "pre-release", (false): "online:int" ],
+        (false): [ (true): "release",     (false): null  ]
+    ]
+
+    build_is_master = eq_version(build_version, master_version)
+    build_has_release_branch = releases.contains(build_version)
+    mode = mode_table[build_is_master][build_has_release_branch]
+
+    if (mode == null) {
+        error("""
+invalid mode build != master and no release branch
+  BUILD_VERSION: ${build_version}
+  MASTER_VERSION: ${master_version}
+  RELEASES: ${releases}
+""")
+    }
+    return mode
+}
+
 // get a list of branches from a remote github
 
 node(TARGET_NODE) {
