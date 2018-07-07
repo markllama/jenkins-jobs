@@ -293,7 +293,7 @@ node(TARGET_NODE) {
 
         sshagent([SSH_KEY_ID]) {
         //
-            releases = get_releases("git@github.com:{GITHUB_OWNER}/ose")
+            releases = get_releases("git@github.com:${GITHUB_OWNER}/ose")
         }
 
         master_major_minor = major_minor(master_version)
