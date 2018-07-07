@@ -367,7 +367,7 @@ SOURCE BRANCHES -
 
 RPM_VERSION  : ${version['version']}-${version['release']}
 ------------------------------------------------------------------------------
-"""
+""".trim()
 
     echo banner
 }
