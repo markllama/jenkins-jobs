@@ -100,7 +100,7 @@ def extract_rpm_release(spec_content) {
  *
  * Requires SSH_AGENT to have set a key for access to the remote repository
  */
-@NonCPS
+//@NonCPS
 def get_remote_branches(repo_url, pattern="") {
 
     branch_text = sh(
