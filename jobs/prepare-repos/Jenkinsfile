@@ -389,7 +389,7 @@ node(TARGET_NODE) {
         echo "Build mode: ${mode}"
 
         // define build branches for origin and upstream remotes
-        remote_branch_names = get_branch_names(BUILD_VERSION, mode)
+        remote_branch_names = get_branch_names(mode, BUILD_VERSION)
         echo "Branch Names: ${remote_branch_names}"
         
         // define new version/release for openshift packages
