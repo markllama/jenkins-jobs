@@ -292,7 +292,10 @@ node(TARGET_NODE) {
 
         echo "releases: ${releases}"
 
-        
+        if (BUILD_VERSION in releases) {
+            echo "build version is a release"
+        }
+
         echo "END STAGE: survey"
     }
 }
