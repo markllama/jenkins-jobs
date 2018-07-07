@@ -394,6 +394,17 @@ node(TARGET_NODE) {
         
         // define new version/release for openshift packages
 
+        branch_rpm_spec = get_single_file(
+            GITHUB_OWNER, 'ose', 'origin.spec', github_token, remote_branch_names['origin']
+        )
+        branch_version = extract_rpm_version(branch_rpm_spec)
+        branch_release = extract_rpm_release(branch_rpm_spec)
+        //branch_major_minor = major_minor(branch_version)
+
+        new_build_version = new_version(mode, branch_version, branch_release)
+
+        echo "new build version/release: ${new_build_version}"
+        
         echo "END STAGE: survey"
     }
 }
