@@ -20,6 +20,12 @@ properties(
                     defaultValue: 'container'
                 ],
                 [
+                    name: 'GITHUB_OWNER',
+                    description: 'The base URL of the github repos',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: "markllama"
+                ]
+                [
                     name: 'GITHUB_TOKEN_FILENAME',
                     description: 'The name of a file containing an OAuth token for API access',
                     $class: 'hudson.model.StringParameterDefinition',
@@ -277,7 +283,7 @@ node(TARGET_NODE) {
 
         // 
         master_rpm_spec = get_single_file(
-            'markllama', 'ose', 'origin.spec', github_token
+            GITHUB_OWNER, 'ose', 'origin.spec', github_token
         )
 
         echo "master rpm spec size: ${master_rpm_spec.size()}"
@@ -285,18 +291,12 @@ node(TARGET_NODE) {
         master_version = extract_rpm_version(master_rpm_spec)
         master_release = extract_rpm_release(master_rpm_spec)
 
-        echo master_version
-        echo master_release
-
         sshagent([SSH_KEY_ID]) {
         //
-            releases = get_releases("git@github.com:markllama/ose")
+            releases = get_releases("git@github.com:{GITHUB_OWNER}/ose")
         }
 
-        echo "releases: ${releases}"
-
         master_major_minor = major_minor(master_version)
-        echo "master major/minor = ${master_major_minor}"
         
         if (eq_version(BUILD_VERSION, major_minor(master_version))) {
             echo "build version ${BUILD_VERSION} is on master"
