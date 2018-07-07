@@ -254,6 +254,10 @@ invalid mode build != master and no release branch
     return mode
 }
 
+def major_minor(version) {
+    return version.tokenize('.')[0..1].join('.')
+}
+
 // get a list of branches from a remote github
 
 node(TARGET_NODE) {
@@ -284,7 +288,6 @@ node(TARGET_NODE) {
         echo master_version
         echo master_release
 
-
         sshagent([SSH_KEY_ID]) {
         //
             releases = get_releases("git@github.com:markllama/ose")
@@ -292,6 +295,10 @@ node(TARGET_NODE) {
 
         echo "releases: ${releases}"
 
+        if (eq_version(BUILD_VERSION, major_minor(master_version))) {
+            echo "build version is on master"
+        }
+        
         if (BUILD_VERSION in releases) {
             echo "build version is a release"
         }
