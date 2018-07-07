@@ -139,7 +139,7 @@ def get_releases(repo_url) {
     return z
 }
 
-//@NonCPS // because sorting in-line in Jenkins requires NonCPS all the way out
+@NonCPS // because sorting in-line in Jenkins requires NonCPS all the way out
 def sort_versions(v_in) {
     v_out = v_in.sort{a, b -> return cmp_version(a, b)}
 }
