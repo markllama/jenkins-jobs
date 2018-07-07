@@ -355,6 +355,23 @@ def use_web_console_server(version_string) {
 
 // get a list of branches from a remote github
 
+def survey_banner(build_version, build_mode, branches, version) {
+    banner = """
+------------------------------------------------------------------------------
+BUILD_VERSION: ${build_version}
+BUILD_MODE   : ${build_mode}
+
+SOURCE BRANCHES - 
+  origin(*)  : ${branches['origin']}   (* git remote 'origin')
+  upstream   : ${branches['upstream']}
+
+RPM_VERSION  : ${version['version']}-${version['release']}
+------------------------------------------------------------------------------
+"""
+
+    echo banner
+}
+
 node(TARGET_NODE) {
 
     token_file_name = GITHUB_TOKEN_FILENAME
@@ -375,17 +392,18 @@ node(TARGET_NODE) {
             GITHUB_OWNER, 'ose', 'origin.spec', github_token
         )
         master_version = extract_rpm_version(master_rpm_spec)
-        master_release = extract_rpm_release(master_rpm_spec)
-        master_major_minor = major_minor(master_version)
+        //master_release = extract_rpm_release(master_rpm_spec)
         
-        if (eq_version(BUILD_VERSION, major_minor(master_version))) {
-            echo "build version ${BUILD_VERSION} is on master"
-        } else {
-            echo "build version ${BUILD_VERSION} is not on master"
-        }
+        // release versions only use the first two fields for branch naming
+        // the final field is a build number
+        master_major_minor = major_minor(master_version)
+
+        on_master = eq_version(BUILD_VERSION, major_minor(master_version)) ?
+            "": "not "
+        echo "build version ${BUILD_VERSION} is ${on_master}on master"
 
         sshagent([SSH_KEY_ID]) {
-        //
+            // git@github access requires SSH authentication
             releases = get_releases("git@github.com:${GITHUB_OWNER}/ose")
         }
         
@@ -413,6 +431,11 @@ node(TARGET_NODE) {
         new_build_version = new_version(mode, branch_version, branch_release)
 
         echo "new build version/release: ${new_build_version}"
+
+        //
+        //
+        //
+        survey_banner(BUILD_VERSION, mode, remote_branch_names, new_build_version)
         
         echo "END STAGE: survey"
     }
