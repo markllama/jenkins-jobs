@@ -308,6 +308,10 @@ node(TARGET_NODE) {
             echo "build version is a release"
         }
 
+        mode = auto_mode(BUILD_VERSION, master_major_minor, releases)
+
+        echo "Build mode: ${mode}"
+
         echo "END STAGE: survey"
     }
 }
