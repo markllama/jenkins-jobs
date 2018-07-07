@@ -301,7 +301,7 @@ node(TARGET_NODE) {
         if (eq_version(BUILD_VERSION, major_minor(master_version))) {
             echo "build version ${BUILD_VERSION} is on master"
         } else {
-            echo "build version ${BUILD_VERSION} is on master"
+            echo "build version ${BUILD_VERSION} is not on master"
         }
         
         if (BUILD_VERSION in releases) {
