@@ -78,7 +78,7 @@ def get_single_file(owner, repo_name, file_name, repo_token) {
  * Take an RPM spec file and return a map with the version and release strings
  **/
 
-@NonCPS
+//@NonCPS
 def extract_rpm_version(spec_content) {
     def ver_matcher = spec_content =~ /Version:\s*([.0-9]+)/
     if ( ! ver_matcher ) { // Groovy treats matcher as boolean in this context
@@ -88,7 +88,7 @@ def extract_rpm_version(spec_content) {
 }
 
 // Matcher is not serializable; use NonCPS
-@NonCPS
+//@NonCPS
 def extract_rpm_release(spec_content) {
     def rel_matcher = spec_content =~ /Release:\s*([.a-zA-Z0-9+-]+)/  // Do not match vars like %{?dist}
     if ( ! rel_matcher ) { // Groovy treats matcher as boolean in this context
@@ -139,7 +139,7 @@ def get_releases(repo_url) {
     return z
 }
 
-@NonCPS // because sorting in-line in Jenkins requires NonCPS all the way out
+//@NonCPS // because sorting in-line in Jenkins requires NonCPS all the way out
 def sort_versions(v_in) {
     v_out = v_in.sort{a, b -> return cmp_version(a, b)}
 }
@@ -154,7 +154,7 @@ def sort_versions(v_in) {
  * If two strings have different numbers of fields, the missing fields are padded with 0s
  * Two versions are equal if all fields are equal
  */
-@NonCPS
+//@NonCPS
 def cmp_version(String v0, String v1) {
     // compare two version strings.
     // return:
@@ -195,7 +195,7 @@ def cmp_version(String v0, String v1) {
  * If two strings have different numbers of fields, the missing fields are padded with 0s
  * Two versions are equal if all fields are equal
  */
-@NonCPS
+//@NonCPS
 def eq_version(String v0, String v1) {
     // determine if two versions are the same
     // return:
