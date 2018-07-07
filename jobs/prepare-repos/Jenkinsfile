@@ -24,7 +24,7 @@ properties(
                     description: 'The base URL of the github repos',
                     $class: 'hudson.model.StringParameterDefinition',
                     defaultValue: "markllama"
-                ]
+                ],
                 [
                     name: 'GITHUB_TOKEN_FILENAME',
                     description: 'The name of a file containing an OAuth token for API access',
