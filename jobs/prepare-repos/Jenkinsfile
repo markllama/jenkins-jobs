@@ -295,6 +295,9 @@ node(TARGET_NODE) {
 
         echo "releases: ${releases}"
 
+        master_major_minor = major_minor(master_version)
+        echo "master major/minor = ${master_major_minor}"
+        
         if (eq_version(BUILD_VERSION, major_minor(master_version))) {
             echo "build version ${BUILD_VERSION} is on master"
         } else {
