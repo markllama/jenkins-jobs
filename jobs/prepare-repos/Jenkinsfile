@@ -131,7 +131,7 @@ def get_releases(repo_url) {
     // too clever: chain - get branch names, remove prefix, suffix
     branches = get_remote_branches(repo_url, 'enterprise-*')
     echo "branches: ${branches}"
-    r = branches //.collect { it - 'enterprise-' }
+    r = branches.collect { it - 'enterprise-' }
     // .findAll { it =~ /^\d+((\.\d+)*)$/ }
 
     echo "unsorted releases: ${r}"
