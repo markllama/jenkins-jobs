@@ -110,9 +110,9 @@ def get_remote_branches(repo_url, pattern="") {
             "awk '{print \$2}'",
             "cut -d/ -f3"
         ].join(" | ")
-    )
+    ).trim()
 
-    return branch_text.split("\n")
+    return branch_text.tokenize("\n")
 }
 
 /**
