@@ -285,23 +285,19 @@ node(TARGET_NODE) {
         master_rpm_spec = get_single_file(
             GITHUB_OWNER, 'ose', 'origin.spec', github_token
         )
-
-        echo "master rpm spec size: ${master_rpm_spec.size()}"
-        
         master_version = extract_rpm_version(master_rpm_spec)
         master_release = extract_rpm_release(master_rpm_spec)
-
-        sshagent([SSH_KEY_ID]) {
-        //
-            releases = get_releases("git@github.com:${GITHUB_OWNER}/ose")
-        }
-
         master_major_minor = major_minor(master_version)
         
         if (eq_version(BUILD_VERSION, major_minor(master_version))) {
             echo "build version ${BUILD_VERSION} is on master"
         } else {
             echo "build version ${BUILD_VERSION} is not on master"
+        }
+
+        sshagent([SSH_KEY_ID]) {
+        //
+            releases = get_releases("git@github.com:${GITHUB_OWNER}/ose")
         }
         
         if (BUILD_VERSION in releases) {
@@ -311,6 +307,10 @@ node(TARGET_NODE) {
         mode = auto_mode(BUILD_VERSION, master_major_minor, releases)
 
         echo "Build mode: ${mode}"
+
+        // define build branches for origin and upstream remotes
+
+        // define new version/release for openshift packages
 
         echo "END STAGE: survey"
     }
