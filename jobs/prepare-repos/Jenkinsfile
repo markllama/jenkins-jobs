@@ -64,19 +64,28 @@ def read_oauth_token(token_file) {
     return token_string
 }
 
-// get a single file from a github repo
-
-def get_single_file(owner, repo_name, file_name, repo_token) {
+/**
+ * Retrieve a single file from a Github repository
+ * @param owner
+ * @param repo_name
+ * @param file_name
+ * @param repo_token
+ * @param branch
+ * @return a string containing the contents of the specified file
+ */
+def get_single_file(owner, repo_name, file_name, repo_token, branch='master') {
     // Get a single file from a Github repository.
 
     auth_header = "Authorization: token " + repo_token
-    file_url = "https://api.github.com/repos/${owner}/${repo_name}/contents/${file_name}"
+    file_url = "https://api.github.com/repos/${owner}/${repo_name}/contents/${file_name}?ref=${branch}"
     accept_header = "Accept: application/vnd.github.v3.raw"
+
     query = "curl --silent -H '${auth_header}' -H '${accept_header}' -L ${file_url}"
     content = sh(
 	      returnStdout: true,
         script: query
     )
+
     return content
 }
 
