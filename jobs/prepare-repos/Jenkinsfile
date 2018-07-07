@@ -112,7 +112,7 @@ def get_remote_branches(repo_url, pattern="") {
         ].join(" | ")
     ).trim()
 
-    return branch_text.tokenize("\n")
+    return branch_text.tokenize()
 }
 
 /**
