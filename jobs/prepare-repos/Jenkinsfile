@@ -88,7 +88,7 @@ def extract_rpm_version(spec_content) {
 }
 
 // Matcher is not serializable; use NonCPS
-//@NonCPS
+@NonCPS
 def extract_rpm_release(spec_content) {
     def rel_matcher = spec_content =~ /Release:\s*([.a-zA-Z0-9+-]+)/  // Do not match vars like %{?dist}
     if ( ! rel_matcher ) { // Groovy treats matcher as boolean in this context
