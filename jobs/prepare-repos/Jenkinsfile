@@ -97,7 +97,7 @@ class GitRepository {
     // @param token_file - a file containing a single OAuth token string
     // @return - a string containing the OAuth token
     def load_oauth_token(token_file) {
-        token_string = sh (
+        token_string = script.sh (
             returnStdout: true,
             script: "cat ${token_file}"
         ).trim()
@@ -118,7 +118,7 @@ class GitRepository {
 
         repo_url = this.http_url()
         
-        branch_text = sh(
+        branch_text = script.sh(
             returnStdout: true,
             script: [
                 "git ls-remote ${repo_url} ${pattern}",
@@ -151,7 +151,7 @@ class GitRepository {
         accept_header = "Accept: application/vnd.github.v3.raw"
 
         query = "curl --silent -H '${auth_header}' -H '${accept_header}' -L ${file_url}"
-        content = sh(
+        content = script.sh(
 	          returnStdout: true,
             script: query
         )
