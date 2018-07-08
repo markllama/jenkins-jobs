@@ -79,6 +79,22 @@ class GitRepository {
     String project
     String oauth_token
 
+    def http_url() {
+        return "https://github.com/${this.owner}/${this.project}"
+    }
+
+    // Read a string from a file.  The string should be an OAuth token for access to a Github account
+    // @param token_file - a file containing a single OAuth token string
+    // @return - a string containing the OAuth token
+    def read_oauth_token(token_file) {
+        token_string = sh (
+            returnStdout: true,
+            script: "cat ${token_file}"
+        ).trim()
+
+        this.oauth_token = token_string
+    }
+
     /**
      * Retrive the branch list from a remote repository
      * @param repo_url a git@ repository URL.
@@ -88,8 +104,10 @@ class GitRepository {
      *
      * Requires SSH_AGENT to have set a key for access to the remote repository
      */
-    def get_remote_branches(repo_url, pattern="") {
+    def get_remote_branches(pattern="") {
 
+        repo_url = this.http_url()
+        
         branch_text = sh(
             returnStdout: true,
             script: [
@@ -111,11 +129,11 @@ class GitRepository {
      * @param branch
      * @return a string containing the contents of the specified file
      */
-    def get_single_file(owner, repo_name, file_name, repo_token, branch='master') {
+    def get_single_file(file_name, repo_token, branch='master') {
         // Get a single file from a Github repository.
 
         auth_header = "Authorization: token " + repo_token
-        file_url = "https://api.github.com/repos/${owner}/${repo_name}/contents/${file_name}?ref=${branch}"
+        file_url = "https://api.github.com/repos/${this.owner}/${this.project}/contents/${file_name}?ref=${branch}"
         accept_header = "Accept: application/vnd.github.v3.raw"
 
         query = "curl --silent -H '${auth_header}' -H '${accept_header}' -L ${file_url}"
