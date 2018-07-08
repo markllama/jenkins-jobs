@@ -1,6 +1,14 @@
 //
 // Create the repos needed to build OpenShift
 //
+
+
+// ===========================================================================
+//
+//
+//
+// ===========================================================================
+
 // Expose properties for a parameterized build
 properties(
     [
@@ -58,6 +66,68 @@ properties(
         disableConcurrentBuilds()
     ]
 )
+
+
+// ===========================================================================
+//
+//
+//
+// ===========================================================================
+
+class GitRepository {
+    String owner
+    String project
+    String oauth_token
+
+    /**
+     * Retrive the branch list from a remote repository
+     * @param repo_url a git@ repository URL.
+     * @param pattern a matching pattern for the branch list. Only return matching branches
+     *
+     * @return a list of branch names.  Removes the leading ref path
+     *
+     * Requires SSH_AGENT to have set a key for access to the remote repository
+     */
+    def get_remote_branches(repo_url, pattern="") {
+
+        branch_text = sh(
+            returnStdout: true,
+            script: [
+                "git ls-remote ${repo_url} ${pattern}",
+                "awk '{print \$2}'",
+                "cut -d/ -f3"
+            ].join(" | ")
+        ).trim()
+
+        return branch_text.split()
+    }
+
+    /**
+     * Retrieve a single file from a Github repository
+     * @param owner
+     * @param repo_name
+     * @param file_name
+     * @param repo_token
+     * @param branch
+     * @return a string containing the contents of the specified file
+     */
+    def get_single_file(owner, repo_name, file_name, repo_token, branch='master') {
+        // Get a single file from a Github repository.
+
+        auth_header = "Authorization: token " + repo_token
+        file_url = "https://api.github.com/repos/${owner}/${repo_name}/contents/${file_name}?ref=${branch}"
+        accept_header = "Accept: application/vnd.github.v3.raw"
+
+        query = "curl --silent -H '${auth_header}' -H '${accept_header}' -L ${file_url}"
+        content = sh(
+	          returnStdout: true,
+            script: query
+        )
+
+        return content
+    }
+}
+
 
 // Read a string from a file.  The string should be an OAuth token for access to a Github account
 // @param token_file - a file containing a single OAuth token string
@@ -377,6 +447,21 @@ RPM_VERSION  : ${version['version']}-${version['release']}
 
     echo banner
 }
+
+// ===========================================================================
+//
+// REPO CONTROL FUNCTIONS
+//
+// ===========================================================================
+
+
+
+
+// ===========================================================================
+//
+// MAIN
+//
+// ===========================================================================
 
 node(TARGET_NODE) {
     checkout scm
