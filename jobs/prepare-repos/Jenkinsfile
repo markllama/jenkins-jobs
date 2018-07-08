@@ -79,6 +79,12 @@ class GitRepository {
     String project
     String oauth_token
 
+    GitRepository(owner, project) {
+        this.owner = owner
+        this.project = project
+    }
+
+    
     def http_url() {
         return "https://github.com/${this.owner}/${this.project}"
     }
@@ -133,10 +139,14 @@ class GitRepository {
      * @param branch
      * @return a string containing the contents of the specified file
      */
-    def get_single_file(file_name, repo_token, branch='master') {
+    def get_single_file(file_name, branch='master') {
         // Get a single file from a Github repository.
 
-        auth_header = "Authorization: token " + repo_token
+        if (this.oauth_token == "") {
+            error("Null token: cannot retrive file from github API")
+        }
+
+        auth_header = "Authorization: token " + this.oauth_token
         file_url = "https://api.github.com/repos/${this.owner}/${this.project}/contents/${file_name}?ref=${branch}"
         accept_header = "Accept: application/vnd.github.v3.raw"
 
@@ -487,6 +497,9 @@ RPM_VERSION  : ${version['version']}-${version['release']}
 
 node(TARGET_NODE) {
     checkout scm
+
+    ose_repo = GitRepository('openshift', 'ose')
+    ose_repo.load_oauth_token(GITHUB_TOKEN_FILENAME)
     
     token_file_name = GITHUB_TOKEN_FILENAME
     github_token = read_oauth_token(token_file_name)
