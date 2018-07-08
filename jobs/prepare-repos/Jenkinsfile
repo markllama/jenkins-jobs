@@ -83,6 +83,10 @@ class GitRepository {
         return "https://github.com/${this.owner}/${this.project}"
     }
 
+    def git_url() {
+        return "git@github.com:${this.owner}/${this.project}"
+    }
+
     // Read a string from a file.  The string should be an OAuth token for access to a Github account
     // @param token_file - a file containing a single OAuth token string
     // @return - a string containing the OAuth token
