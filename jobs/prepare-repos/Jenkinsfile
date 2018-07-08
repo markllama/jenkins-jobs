@@ -13,12 +13,24 @@ properties(
         [
             $class: 'ParametersDefinitionProperty',
             parameterDefinitions: [
+                // where to run the build. This really should be done by
+                // tagging the job and a set of agent nodes to match
                 [
                     name: 'TARGET_NODE',
                     description: 'Jenkins agent node',
                     $class: 'hudson.model.StringParameterDefinition',
                     defaultValue: 'container'
                 ],
+
+                // Actual build control parameters
+                [
+                    name: 'BUILD_VERSION',
+                    description: 'The version to build',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: '3.10'
+                ],
+
+                // all of these parameters are used to access git repos
                 [
                     name: 'GITHUB_OWNER',
                     description: 'The base URL of the github repos',
@@ -41,12 +53,6 @@ properties(
                     ].join("\n"),
                     defaultValue: 'markllama-aos-cd-bot'
                 ],
-                [
-                    name: 'BUILD_VERSION',
-                    description: 'The version to build',
-                    $class: 'hudson.model.StringParameterDefinition',
-                    defaultValue: '3.10'
-                ]
             ]
         ],
         disableConcurrentBuilds()
@@ -373,7 +379,8 @@ RPM_VERSION  : ${version['version']}-${version['release']}
 }
 
 node(TARGET_NODE) {
-
+    checkout scm
+    
     token_file_name = GITHUB_TOKEN_FILENAME
     github_token = read_oauth_token(token_file_name)
     //
@@ -436,7 +443,30 @@ node(TARGET_NODE) {
         //
         //
         survey_banner(BUILD_VERSION, mode, remote_branch_names, new_build_version)
-        
+
+        // The output result for the next stage is the BUILD_CONFIG
+        BUILD_CONFIG = [
+            version: BUILD_VERSION,
+            mode: mode,
+            branches: remote_branch_names,
+            rpm_version: new_build_version
+        ]
+        // SSH_KEY_ID: ??
+        // github_oauth_token ??
+
         echo "END STAGE: survey"
+    }
+
+    stage('prepare ose workspace') {
+        echo "BEGIN STAGE: prepare ose workspace"
+        // clone the ose github repo and configure for the requested build
+
+
+        // for releases, there is no merge.  Just clone the single branch/layer
+        
+        // for dev, add the upstream for OpenShift Origin
+
+        // 
+        echo "END STAGE: prepare ose workspace"
     }
 }
