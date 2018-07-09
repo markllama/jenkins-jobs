@@ -74,6 +74,12 @@ properties(
 //
 // ===========================================================================
 
+Script.environment = this
+
+public class Script {
+    public static environment
+}
+
 class GitRepository {
     String owner
     String project
@@ -84,10 +90,22 @@ class GitRepository {
         this.project = project
     }
 
+    // Read a string from a file.  The string should be an OAuth token for access to a Github account
+    // @param token_file - a file containing a single OAuth token string
+    // @return - a string containing the OAuth token
+    def read_oauth_token(token_file) {
+        token_string = Script.environment.sh (
+            returnStdout: true,
+            script: "cat ${token_file}"
+        ).trim()
+        return token_string
+    }
+
     def set_oauth_token(token) {
         this.oauth_token = token
     }
 
+    
     def http_url() {
         return "https://github.com/${this.owner}/${this.project}"
     }
@@ -111,7 +129,7 @@ class GitRepository {
         
         branch_text = script.sh(
             returnStdout: true,
-            script: [
+            Script.environment.sh: [
                 "git ls-remote ${repo_url} ${pattern}",
                 "awk '{print \$2}'",
                 "cut -d/ -f3"
@@ -489,6 +507,8 @@ RPM_VERSION  : ${version['version']}-${version['release']}
 node(TARGET_NODE) {
     checkout scm
 
+    
+    
     ose_repo = new GitRepository('openshift', 'ose')
     ose_repo.set_oauth_token(read_oauth_token((GITHUB_TOKEN_FILE))
     //ose_repo.load_oauth_token(GITHUB_TOKEN_FILENAME)
