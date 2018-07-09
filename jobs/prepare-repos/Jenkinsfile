@@ -486,7 +486,7 @@ RPM_VERSION  : ${version['version']}-${version['release']}
 node(TARGET_NODE) {
     checkout scm
 
-    //ose_repo = new GitRepository('openshift', 'ose')
+    ose_repo = new GitRepository('openshift', 'ose')
     //ose_repo.load_oauth_token(GITHUB_TOKEN_FILENAME)
     
     token_file_name = GITHUB_TOKEN_FILENAME
