@@ -96,8 +96,8 @@ class GitRepository {
     // Read a string from a file.  The string should be an OAuth token for access to a Github account
     // @param token_file - a file containing a single OAuth token string
     // @return - a string containing the OAuth token
-    private static String read_oauth_token(token_file) {
-        def token_string = sh (
+    public static String read_oauth_token(token_file) {
+        def token_string = shell.sh (
             returnStdout: true,
             script: "cat ${token_file}"
         ).trim()
