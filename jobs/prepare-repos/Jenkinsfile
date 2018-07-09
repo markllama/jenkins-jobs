@@ -97,7 +97,7 @@ class GitRepository {
     // @param token_file - a file containing a single OAuth token string
     // @return - a string containing the OAuth token
     public static String read_oauth_token(token_file) {
-        def token_string = shell.sh (
+        def token_string = script.sh (
             returnStdout: true,
             script: "cat ${token_file}"
         ).trim()
