@@ -84,7 +84,11 @@ class GitRepository {
         this.project = project
     }
 
-    
+
+    def set_oauth_token(token) {
+        this.oauth_token = token
+    }
+
     def http_url() {
         return "https://github.com/${this.owner}/${this.project}"
     }
