@@ -105,7 +105,7 @@ class GitRepository {
         return token_string
     }
 
-    load_oauth_token(token_file) {
+    def load_oauth_token(token_file) {
         this.oath_token = read_oauth_token(token_file)
     }
 
