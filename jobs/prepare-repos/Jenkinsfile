@@ -511,7 +511,7 @@ node(TARGET_NODE) {
     
     ose_repo = new GitRepository('openshift', 'ose')
     //ose_repo.set_oauth_token(read_oauth_token(GITHUB_TOKEN_FILENAME))
-    ose_repo.load_oauth_token(GITHUB_TOKEN_FILENAME)
+    ose_repo.read_oauth_token(GITHUB_TOKEN_FILENAME)
     
     token_file_name = GITHUB_TOKEN_FILENAME
     github_token = read_oauth_token(token_file_name)
