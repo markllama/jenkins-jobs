@@ -129,7 +129,7 @@ class GitRepository {
         
         branch_text = Script.environment.sh (
             returnStdout: true,
-            script [
+            script: [
                 "git ls-remote ${repo_url} ${pattern}",
                 "awk '{print \$2}'",
                 "cut -d/ -f3"
