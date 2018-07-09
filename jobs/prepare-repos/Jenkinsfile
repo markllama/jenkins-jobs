@@ -155,12 +155,12 @@ class GitRepository {
             error("Null token: cannot retrive file from github API")
         }
 
-        auth_header = "Authorization: token " + this.oauth_token
-        file_url = "https://api.github.com/repos/${this.owner}/${this.project}/contents/${file_name}?ref=${branch}"
-        accept_header = "Accept: application/vnd.github.v3.raw"
+        def auth_header = "Authorization: token " + this.oauth_token
+        def file_url = "https://api.github.com/repos/${this.owner}/${this.project}/contents/${file_name}?ref=${branch}"
+        def accept_header = "Accept: application/vnd.github.v3.raw"
 
-        query = "curl --silent -H '${auth_header}' -H '${accept_header}' -L ${file_url}"
-        content = Script.environment.sh (
+        def query = "curl --silent -H '${auth_header}' -H '${accept_header}' -L ${file_url}"
+        def content = Script.environment.sh (
 	          returnStdout: true,
             script: query
         )
