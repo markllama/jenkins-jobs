@@ -127,7 +127,7 @@ class GitRepository {
 
         repo_url = this.http_url()
         
-        branch_text = Script.environment.sh(
+        branch_text = Script.environment.sh (
             returnStdout: true,
             script [
                 "git ls-remote ${repo_url} ${pattern}",
@@ -160,7 +160,7 @@ class GitRepository {
         accept_header = "Accept: application/vnd.github.v3.raw"
 
         query = "curl --silent -H '${auth_header}' -H '${accept_header}' -L ${file_url}"
-        content = Script.environment.sh(
+        content = Script.environment.sh (
 	          returnStdout: true,
             script: query
         )
