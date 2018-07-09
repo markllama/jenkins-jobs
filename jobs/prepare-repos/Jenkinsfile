@@ -98,7 +98,7 @@ class GitRepository {
             returnStdout: true,
             script: "cat ${token_file}"
         ).trim()
-        this.oauth_token = return token_string
+        this.oauth_token = token_string
     }
 
     def set_oauth_token(token) {
