@@ -127,7 +127,7 @@ class GitRepository {
 
         def repo_url = this.http_url()
         
-        branch_text = Script.environment.sh (
+        def branch_text = Script.environment.sh (
             returnStdout: true,
             script: [
                 "git ls-remote ${repo_url} ${pattern}",
