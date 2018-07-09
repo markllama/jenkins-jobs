@@ -521,7 +521,7 @@ node(TARGET_NODE) {
 
         sshagent([SSH_KEY_ID]) {
             // git@github access requires SSH authentication
-            releases = get_releases("git@github.com:${GITHUB_OWNER}/ose")
+            releases = ose_repo.get_releases()
         }
         
         if (BUILD_VERSION in releases) {
