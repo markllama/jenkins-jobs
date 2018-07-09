@@ -84,7 +84,6 @@ class GitRepository {
         this.project = project
     }
 
-
     def set_oauth_token(token) {
         this.oauth_token = token
     }
