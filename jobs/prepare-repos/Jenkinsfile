@@ -96,13 +96,17 @@ class GitRepository {
     // Read a string from a file.  The string should be an OAuth token for access to a Github account
     // @param token_file - a file containing a single OAuth token string
     // @return - a string containing the OAuth token
-    public static void load_oauth_token(token_file) {
+    private static String read_oauth_token(token_file) {
         token_string = script.sh (
             returnStdout: true,
             script: "cat ${token_file}"
         ).trim()
 
-        this.oauth_token = token_string
+        return token_string
+    }
+
+    load_oauth_token(token_file) {
+        this.oath_token = read_oauth_token(token_file)
     }
 
     /**
