@@ -125,7 +125,7 @@ class GitRepository {
      */
     def get_remote_branches(pattern="") {
 
-        repo_url = this.http_url()
+        def repo_url = this.http_url()
         
         branch_text = Script.environment.sh (
             returnStdout: true,
