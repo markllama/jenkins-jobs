@@ -27,6 +27,7 @@ node(TARGET_NODE) {
 
     checkout scm
 
+    echo "Loading version library"
     def v = load("jobs/versions/version.groovy")
     
     stage("test versions") {
