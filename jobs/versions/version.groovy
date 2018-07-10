@@ -1,4 +1,5 @@
 #!/usr/bin/groovy
+package version
 
 class Version implements Comparable<Version>{
     private v_array
@@ -87,5 +88,5 @@ class RpmId {
 }
 
 
-return this
+//return this
 
