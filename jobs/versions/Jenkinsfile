@@ -42,5 +42,6 @@ node(TARGET_NODE) {
         vt = new VersionTest()
 
         vt.test_pad()
+        vt.test_cmp()
     }
 }
