@@ -64,7 +64,7 @@ class VersionTest {
         /// test equality of different length versions
         def shortVer = new Version("3.1")
         def longVer = new Version("3.1.0")
-        actual = shortVer <=> longVer
+        def actual = shortVer <=> longVer
         try {
             assert actual == expected
             pass_count++
