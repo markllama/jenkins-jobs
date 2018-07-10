@@ -22,6 +22,8 @@ properties(
     ]
 )
 
+@Library('art')
+import com.redhat.art.Version
 
 node(TARGET_NODE) {
 
@@ -29,8 +31,6 @@ node(TARGET_NODE) {
 
     echo "Loading version library"
 
-    @Library('art')
-    import com.redhat.art.Version
 
     //echo "Loading version library tests"
     //def tests = load("jobs/versions/version_test.groovy")
