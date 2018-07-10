@@ -25,6 +25,10 @@ properties(
 
 node(TARGET_NODE) {
 
+    checkout scm
+
+    def v = load("jobs/versions/version.groovy")
+    
     stage("test versions") {
         echo "TESTING"
     }

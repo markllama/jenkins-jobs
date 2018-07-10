@@ -85,7 +85,7 @@ class VersionString {
     VersionString(version, release) {
         this.version = version
         this.release = release
-    }g
+    }gg
 }
 
 
@@ -450,6 +450,9 @@ RPM_VERSION  : ${version['version']}-${version['release']}
 // ===========================================================================
 
 node(TARGET_NODE) {
+
+    load v = load("jobs/versions/version.groovy")
+    
     checkout scm
     
     ose_repo = new GitRepository('openshift', 'ose')
