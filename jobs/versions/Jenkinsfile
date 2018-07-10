@@ -31,12 +31,14 @@ node(TARGET_NODE) {
     checkout scm
 
     echo "Loading version library"
-
+    
 
     //echo "Loading version library tests"
     //def tests = load("jobs/versions/version_test.groovy")
     
     stage("test versions") {
-        echo "TESTING"    
+        echo "TESTING"
+
+        vt = new VersionTest()
     }
 }
