@@ -1,5 +1,6 @@
-@Library('art')
-import com.redhat.art.Version
+package com.redhat.art
+//@Library('art')
+//import com.redhat.art.Version
 
 // ===========================================================================
 //
