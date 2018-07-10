@@ -33,7 +33,7 @@ class VersionTest {
         def fail_count = 0
         
         // initial values
-        values = [
+        def values = [
             "1.2",
             "3.0",
             "3.0.2",
@@ -46,12 +46,12 @@ class VersionTest {
             "6" // can you do single digit ones?
         ]
 
-        versions = values.collect { new Version(it) }
+        def versions = values.collect { new Version(it) }
         
         // test "equals"
-        expected = 0
+        def expected = 0
         versions.each {
-            actual = (it <=> it)
+            def actual = (it <=> it)
             try {
                 assert actual == expected
                 pass_count++
@@ -62,8 +62,8 @@ class VersionTest {
         }
 
         /// test equality of different length versions
-        shortVer = new Version("3.1")
-        longVer = new Version("3.1.0")
+        def shortVer = new Version("3.1")
+        def longVer = new Version("3.1.0")
         actual = shortVer <=> longVer
         try {
             assert actual == expected
