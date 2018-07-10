@@ -29,8 +29,8 @@ class VersionTest {
 
     def test_cmp() {
 
-        pass_count = 0
-        fail_count = 0
+        def pass_count = 0
+        def fail_count = 0
         
         // initial values
         values = [
