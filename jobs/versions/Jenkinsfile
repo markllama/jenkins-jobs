@@ -29,6 +29,8 @@ node(TARGET_NODE) {
 
     echo "Loading version library"
     def v = load("jobs/versions/version.groovy")
+
+    def tests = load("jobs/versions/version_test.groovy")
     
     stage("test versions") {
         echo "TESTING"
