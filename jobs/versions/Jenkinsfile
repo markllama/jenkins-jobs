@@ -1,3 +1,6 @@
+@Library('art')
+import com.redhat.art.Version
+
 properties(
     [
         buildDiscarder(
@@ -21,9 +24,6 @@ properties(
         ]
     ]
 )
-
-@Library('art')
-import com.redhat.art.Version
 
 node(TARGET_NODE) {
 
