@@ -40,5 +40,7 @@ node(TARGET_NODE) {
         echo "TESTING"
 
         vt = new VersionTest()
+
+        vt.test_pad()
     }
 }
