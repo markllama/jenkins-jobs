@@ -1,0 +1,31 @@
+properties(
+    [
+        buildDiscarder(
+            logRotator(
+                artifactDaysToKeepStr: '',
+                artifactNumToKeepStr: '',
+                daysToKeepStr: '',
+                numToKeepStr: '1000')),
+        [
+            $class: 'ParametersDefinitionProperty',
+            parameterDefinitions: [
+                // where to run the build. This really should be done by
+                // tagging the job and a set of agent nodes to match
+                [
+                    name: 'TARGET_NODE',
+                    description: 'Jenkins agent node',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: 'container'
+                ],
+            ]
+        ]
+    ]
+)
+
+
+node(TARGET_NODE) {
+
+    stage("test versions") {
+        echo "TESTING"
+    }
+}
