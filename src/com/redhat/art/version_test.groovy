@@ -1,4 +1,5 @@
-v = load("src/com/redhat/art/version.groovy")
+@Library('art')
+import com.redhat.art.Version
 
 // ===========================================================================
 //
