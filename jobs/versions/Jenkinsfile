@@ -28,8 +28,9 @@ node(TARGET_NODE) {
     checkout scm
 
     echo "Loading version library"
-    
-    def tests = load("src/com/redhat/art/version_test.groovy")
+
+    @Library('art')
+    import com.redhat.art.Version
 
     //echo "Loading version library tests"
     //def tests = load("jobs/versions/version_test.groovy")
