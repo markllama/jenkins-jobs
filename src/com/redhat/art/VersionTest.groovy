@@ -17,9 +17,32 @@ class VersionTest {
     }
 
     def test_constructor() {
+        
+        def pass_count = 0
+        def fail_count = 0
+
         def v0 = new Version('1.2.3')
 
+        def expected = [1, 2, 3]
+        def actual = v0.v_array
+               
+        try {
+            assert actual == expected
+            pass_count++
+        } catch (e) {
+            env.echo("FAIL: new Version from string: actual: ${actual}, expected = ${expected}")
+        }
+            
         def v1 = new Version(v0)
+
+        actual = v1.v_array
+        try {
+            assert actual == expected
+            pass_count++
+        } catch (e) {
+            env.echo("FAIL: new Version from clone: actual: ${actual}, expected = ${expected}")
+        }
+        
     }
 
     
