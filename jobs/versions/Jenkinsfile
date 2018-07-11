@@ -37,11 +37,14 @@ node(TARGET_NODE) {
     //def tests = load("jobs/versions/version_test.groovy")
     
     stage("test versions") {
-        echo "TESTING"
+        echo "BEGIN TESTING"
 
         vt = new VersionTest(this)
 
+        vt.test_constructor()
         vt.test_pad()
         vt.test_cmp()
+
+        echo "END TESTING"
     }
 }

@@ -15,6 +15,13 @@ class VersionTest {
     def VersionTest(pipeline_env=null) {
         env = pipeline_env
     }
+
+    def test_constructor() {
+        v0 = new Version('1.2.3')
+
+        v1 = new Version(v0)
+    }
+
     
     def test_pad() {
 
