@@ -22,7 +22,7 @@ class VersionTest {
             values.each { assert new Version(it['input']).size() == it['size'] }
             values.each { assert new Version(it['input']).pad().size() >= 3  }
         } catch (size_error) {
-           echo("error testing size: ${size_error}")
+           println("error testing size: ${size_error}")
         }    
     }
 
@@ -57,7 +57,7 @@ class VersionTest {
                 pass_count++
             } catch (AssertionError e) {
                 fail_count++
-               echo "FAIL: ${it}.cmp(${it} - expected: ${expected}, actual: ${actual}"
+               println "FAIL: ${it}.cmp(${it} - expected: ${expected}, actual: ${actual}"
             }
         }
 
@@ -70,7 +70,7 @@ class VersionTest {
             pass_count++
         } catch (AssertionError e) {
             fail_count++
-           echo "FAIL: ${shortVer}.cmp(${longVer}) - expected: ${expected}, actual: ${actual}"
+           println "FAIL: ${shortVer}.cmp(${longVer}) - expected: ${expected}, actual: ${actual}"
         }
 
         // test "less than"
@@ -82,7 +82,7 @@ class VersionTest {
                 pass_count++
             } catch (AssertionError e) {
                 fail_count++
-               echo "FAIL: ${versions[it]}.cmp(${versions[it + 1]}) - expected: ${expected}, actual: ${actual}"
+               println "FAIL: ${versions[it]}.cmp(${versions[it + 1]}) - expected: ${expected}, actual: ${actual}"
             }
         }
 
@@ -97,7 +97,7 @@ class VersionTest {
             pass_count++
         } catch (AssertionError e) {
             fail_count++
-           echo "FAIL: ${shortVer}.cmp({$longVer})- expected: ${expected}, actual: ${actual}"
+           println "FAIL: ${shortVer}.cmp({$longVer})- expected: ${expected}, actual: ${actual}"
         }
 
         // test "greater than"
@@ -109,7 +109,7 @@ class VersionTest {
                 pass_count++
             } catch (AssertionError e) {
                 fail_count++
-               echo "FAIL: cmp_version(${values[it]}, ${values[it - 1]}) - expected: ${expected}, actual: ${actual}"
+               println "FAIL: cmp_version(${values[it]}, ${values[it - 1]}) - expected: ${expected}, actual: ${actual}"
             }
         }
         
@@ -122,13 +122,13 @@ class VersionTest {
             pass_count++
         } catch (AssertionError e) {
             fail_count++
-           echo "FAIL: cmp_version(\"3.1.1\"}, \"3.1\") - expected: ${expected}, actual: ${actual}"
+           println "FAIL: cmp_version(\"3.1.1\"}, \"3.1\") - expected: ${expected}, actual: ${actual}"
         }
 
         if (fail_count == 0) {
-           echo "PASS: cmp_versopm() - ${pass_count} tests passed"
+           println "PASS: cmp_versopm() - ${pass_count} tests passed"
         } else {
-           echo "FAIL: cmp_version() - ${pass_count} tests passed, ${fail_count} tests failed"
+           println "FAIL: cmp_version() - ${pass_count} tests passed, ${fail_count} tests failed"
         }
     }
 
