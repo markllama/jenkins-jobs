@@ -3,11 +3,16 @@ package com.redhat.art
 
 class Version implements Comparable<Version>{
     private v_array
+
+    // new
     def Version(String v_string) {
         v_array = v_string.tokenize('.').collect { it as int }
     }
 
-    //def Version(
+    // copy
+    def Version(Version old) {
+        v_array = old.v_array.collect { it }
+    }
 
     def java.lang.String toString() {
         return v_array.collect { it.toString() }.join('.')
