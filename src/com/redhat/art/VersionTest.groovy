@@ -17,9 +17,9 @@ class VersionTest {
     }
 
     def test_constructor() {
-        v0 = new Version('1.2.3')
+        def v0 = new Version('1.2.3')
 
-        v1 = new Version(v0)
+        def v1 = new Version(v0)
     }
 
     
