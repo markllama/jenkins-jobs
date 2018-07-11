@@ -7,7 +7,7 @@ class Version implements Comparable<Version>{
         v_array = v_string.tokenize('.').collect { it as int }
     }
 
-    def Version(
+    //def Version(
 
     def java.lang.String toString() {
         return v_array.collect { it.toString() }.join('.')
