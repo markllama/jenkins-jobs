@@ -39,7 +39,7 @@ node(TARGET_NODE) {
     stage("test versions") {
         echo "TESTING"
 
-        vt = new VersionTest()
+        vt = new VersionTest(this)
 
         vt.test_pad()
         vt.test_cmp()

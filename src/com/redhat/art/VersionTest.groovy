@@ -9,7 +9,18 @@ package com.redhat.art
 // ===========================================================================
 
 class VersionTest {
+
+    def env
+    
+    def VersionTest(pipeline_env=null) {
+        env = pipeline_env
+    }
+    
     def test_pad() {
+
+        def pass_count = 0
+        def fail_count = 0
+        
         def values = [
             [input: '1.2.3',   size: 3, padded: '1.2.3'],
             [input: '1.2',     size: 2, padded: '1.2.0'],
@@ -22,7 +33,7 @@ class VersionTest {
             values.each { assert new Version(it['input']).size() == it['size'] }
             values.each { assert new Version(it['input']).pad().size() >= 3  }
         } catch (size_error) {
-           println("error testing size: ${size_error}")
+           env.echo("error testing size: ${size_error}")
         }    
     }
 
@@ -57,7 +68,7 @@ class VersionTest {
                 pass_count++
             } catch (AssertionError e) {
                 fail_count++
-               println "FAIL: ${it}.cmp(${it} - expected: ${expected}, actual: ${actual}"
+               env.echo "FAIL: ${it}.cmp(${it} - expected: ${expected}, actual: ${actual}"
             }
         }
 
@@ -70,7 +81,7 @@ class VersionTest {
             pass_count++
         } catch (AssertionError e) {
             fail_count++
-           println "FAIL: ${shortVer}.cmp(${longVer}) - expected: ${expected}, actual: ${actual}"
+           env.echo "FAIL: ${shortVer}.cmp(${longVer}) - expected: ${expected}, actual: ${actual}"
         }
 
         // test "less than"
@@ -82,7 +93,7 @@ class VersionTest {
                 pass_count++
             } catch (AssertionError e) {
                 fail_count++
-               println "FAIL: ${versions[it]}.cmp(${versions[it + 1]}) - expected: ${expected}, actual: ${actual}"
+               env.echo "FAIL: ${versions[it]}.cmp(${versions[it + 1]}) - expected: ${expected}, actual: ${actual}"
             }
         }
 
@@ -97,7 +108,7 @@ class VersionTest {
             pass_count++
         } catch (AssertionError e) {
             fail_count++
-           println "FAIL: ${shortVer}.cmp({$longVer})- expected: ${expected}, actual: ${actual}"
+           env.echo "FAIL: ${shortVer}.cmp({$longVer})- expected: ${expected}, actual: ${actual}"
         }
 
         // test "greater than"
@@ -109,7 +120,7 @@ class VersionTest {
                 pass_count++
             } catch (AssertionError e) {
                 fail_count++
-               println "FAIL: cmp_version(${values[it]}, ${values[it - 1]}) - expected: ${expected}, actual: ${actual}"
+               env.echo "FAIL: cmp_version(${values[it]}, ${values[it - 1]}) - expected: ${expected}, actual: ${actual}"
             }
         }
         
@@ -122,13 +133,13 @@ class VersionTest {
             pass_count++
         } catch (AssertionError e) {
             fail_count++
-           println "FAIL: cmp_version(\"3.1.1\"}, \"3.1\") - expected: ${expected}, actual: ${actual}"
+           env.echo "FAIL: cmp_version(\"3.1.1\"}, \"3.1\") - expected: ${expected}, actual: ${actual}"
         }
 
         if (fail_count == 0) {
-           println "PASS: cmp_versopm() - ${pass_count} tests passed"
+           env.echo "PASS: cmp_versopm() - ${pass_count} tests passed"
         } else {
-           println "FAIL: cmp_version() - ${pass_count} tests passed, ${fail_count} tests failed"
+           env.echo "FAIL: cmp_version() - ${pass_count} tests passed, ${fail_count} tests failed"
         }
     }
 
