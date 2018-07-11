@@ -133,13 +133,13 @@ class VersionTest {
             pass_count++
         } catch (AssertionError e) {
             fail_count++
-           env.echo "FAIL: cmp_version(\"3.1.1\"}, \"3.1\") - expected: ${expected}, actual: ${actual}"
+           env.echo "FAIL: Version(\"3.1.1\"}, \"3.1\") - expected: ${expected}, actual: ${actual}"
         }
 
         if (fail_count == 0) {
-           env.echo "PASS: cmp_versopm() - ${pass_count} tests passed"
+           env.echo "PASS: Version() - ${pass_count} tests passed"
         } else {
-           env.echo "FAIL: cmp_version() - ${pass_count} tests passed, ${fail_count} tests failed"
+           env.echo "FAIL: Version() - ${pass_count} tests passed, ${fail_count} tests failed"
         }
     }
 
