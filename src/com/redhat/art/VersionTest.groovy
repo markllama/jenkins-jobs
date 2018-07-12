@@ -200,8 +200,31 @@ class VersionTest {
                 fail_count++
                 env.echo("FAIL: ${input} incrMajor(): actual: ${actual}, expected: {expected}")
             }
+
+            expected = it.iminor
+            actual = input.incrMinor()
+            
+            try {
+                assert actual == expected
+                pass_count++
+            } catch (AssertionError e) {
+                fail_count++
+                env.echo("FAIL: ${input} incrMinor(): actual: ${actual}, expected: {expected}")
+            }
+            
+            expected = it.irev
+            actual = input.incrRevision()
+            
+            try {
+                assert actual == expected
+                pass_count++
+            } catch (AssertionError e) {
+                fail_count++
+                env.echo("FAIL: ${input} incrRevision(): actual: ${actual}, expected: {expected}")
+            }
+            
         }
 
-        env.echo("incr* : pass: ${pass_count}, fail: ${fail_count}")
+        env.echo("TEST incr*() : pass: ${pass_count}, fail: ${fail_count}")
     }
 }
