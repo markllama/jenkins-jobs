@@ -75,7 +75,8 @@ class Version implements Comparable<Version>{
         return (this <=> obj) == 0
     }
 
-    Version incMajor() {
+    // When incrementing one field, resets the sub-fields to 0
+    Version incrMajor() {
         this.v_array[0]++
         this.v_array[1] = 0
         if (this.v_array.size() > 2) {
@@ -83,7 +84,7 @@ class Version implements Comparable<Version>{
         }
     }
     
-    Version incMinor() {
+    Version incrMinor() {
         this.v_array[1]++
         this.v_array[2] = 0
         if (this.v_array.size() > 2) {
@@ -91,7 +92,7 @@ class Version implements Comparable<Version>{
         }
     }
 
-    Version incRevision() {
+    Version incrRevision() {
         if (this.v_array.size() > 2) {
             this.v_array[2]++
         } else {
@@ -100,13 +101,6 @@ class Version implements Comparable<Version>{
 
     }
 }
-
-
-class RpmId {
-    Version version
-    Version revision
-}
-
 
 //return this
 

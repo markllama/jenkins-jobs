@@ -173,4 +173,31 @@ class VersionTest {
         }
     }
 
+    def test_increments() {
+        def pass_count = 0
+        def fail_count = 0
+        
+        // test incrMajor
+        def samples = [
+            [
+                input: new Vector('3.2.1'),
+                imajor: new Vector('4.0.0'),
+                iminor: new Vector('3.3.0'),
+                irev: new Vector('3.2.2')
+            ]
+        ]
+
+
+        def input = new Version(samples[0].input)
+        def expected = samples[0].imajor
+        def actual = input.incrMajor()
+
+        try {
+            assert actual == expected
+            pass_count++
+        } except (AssertionError e) {
+            fail_count++
+            env.echo("FAIL: ${input} incrMajor(): actual: ${actual}, expected: {expected}"
+        }
+    }
 }
