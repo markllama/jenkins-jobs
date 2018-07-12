@@ -194,6 +194,7 @@ class VersionTest {
             def expected = it.imajor
             def actual = input.incrMajor()
 
+            env.echo "testing incrMajor"
             try {
                 assert actual == expected
                 pass_count++
@@ -205,6 +206,7 @@ class VersionTest {
             expected = it.iminor
             actual = input.incrMinor()
             
+            env.echo "testing incrMinor"
             try {
                 assert actual == expected
                 pass_count++
@@ -216,6 +218,7 @@ class VersionTest {
             expected = it.irev
             actual = input.incrRevision()
             
+            env.echo "testing incrRevision"
             try {
                 assert actual == expected
                 pass_count++
