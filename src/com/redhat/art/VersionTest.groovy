@@ -197,7 +197,7 @@ class VersionTest {
             pass_count++
         } catch (AssertionError e) {
             fail_count++
-            env.echo("FAIL: ${input} incrMajor(): actual: ${actual}, expected: {expected}"
+            env.echo("FAIL: ${input} incrMajor(): actual: ${actual}, expected: {expected}")
         }
     }
 }
