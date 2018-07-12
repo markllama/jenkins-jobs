@@ -45,6 +45,8 @@ node(TARGET_NODE) {
         vt.test_pad()
         vt.test_cmp()
 
+        ct.test_increments()
+        
         echo "END TESTING"
     }
 }
