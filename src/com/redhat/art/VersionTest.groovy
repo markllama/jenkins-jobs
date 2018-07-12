@@ -197,7 +197,7 @@ class VersionTest {
             try {
                 assert actual == expected
                 pass_count++
-            } catch (AssertionError e) {
+            } catch (e) {
                 env.echo("FAIL: ${input} incrMajor(): actual: ${actual}, expected: {expected}")
                 fail_count++
             }
@@ -208,7 +208,7 @@ class VersionTest {
             try {
                 assert actual == expected
                 pass_count++
-            } catch (AssertionError e) {
+            } catch (e) {
                 env.echo("FAIL: ${input} incrMinor(): actual: ${actual}, expected: {expected}")
                 fail_count++
             }
@@ -219,7 +219,7 @@ class VersionTest {
             try {
                 assert actual == expected
                 pass_count++
-            } catch (AssertionError e) {
+            } catch (e) {
                 env.echo("FAIL: ${input} incrRevision(): actual: ${actual}, expected: {expected}")
                 fail_count++
             }
