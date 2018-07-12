@@ -174,6 +174,7 @@ class VersionTest {
     }
 
     def test_increments() {
+
         def pass_count = 0
         def fail_count = 0
         
@@ -197,8 +198,9 @@ class VersionTest {
                 assert actual == expected
                 pass_count++
             } catch (AssertionError e) {
+                env.echo("FAIL: ${input} incrMajor(): actual: ${actual}, expecte
+d: {expected}")
                 fail_count++
-                env.echo("FAIL: ${input} incrMajor(): actual: ${actual}, expected: {expected}")
             }
 
             expected = it.iminor
@@ -208,8 +210,8 @@ class VersionTest {
                 assert actual == expected
                 pass_count++
             } catch (AssertionError e) {
-                fail_count++
                 env.echo("FAIL: ${input} incrMinor(): actual: ${actual}, expected: {expected}")
+                fail_count++
             }
             
             expected = it.irev
@@ -219,8 +221,8 @@ class VersionTest {
                 assert actual == expected
                 pass_count++
             } catch (AssertionError e) {
-                fail_count++
                 env.echo("FAIL: ${input} incrRevision(): actual: ${actual}, expected: {expected}")
+                fail_count++
             }
             
         }
