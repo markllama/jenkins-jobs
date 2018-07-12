@@ -180,10 +180,10 @@ class VersionTest {
         // test incrMajor
         def samples = [
             [
-                input: new Vector('3.2.1'),
-                imajor: new Vector('4.0.0'),
-                iminor: new Vector('3.3.0'),
-                irev: new Vector('3.2.2')
+                input: new Version('3.2.1'),
+                imajor: new Version('4.0.0'),
+                iminor: new Version('3.3.0'),
+                irev: new Version('3.2.2')
             ]
         ]
 
