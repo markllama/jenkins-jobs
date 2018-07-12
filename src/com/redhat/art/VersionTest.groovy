@@ -187,17 +187,21 @@ class VersionTest {
             ]
         ]
 
+        samples.each {
 
-        def input = new Version(samples[0].input)
-        def expected = samples[0].imajor
-        def actual = input.incrMajor()
+            def input = new Version(it.input)
+            def expected = it.imajor
+            def actual = input.incrMajor()
 
-        try {
-            assert actual == expected
-            pass_count++
-        } catch (AssertionError e) {
-            fail_count++
-            env.echo("FAIL: ${input} incrMajor(): actual: ${actual}, expected: {expected}")
+            try {
+                assert actual == expected
+                pass_count++
+            } catch (AssertionError e) {
+                fail_count++
+                env.echo("FAIL: ${input} incrMajor(): actual: ${actual}, expected: {expected}")
+            }
         }
+
+        env.echo("incr* : pass: ${pass_count}, fail: ${fail_count}")
     }
 }
