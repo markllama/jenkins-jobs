@@ -14,6 +14,10 @@ class Version implements Comparable<Version>{
         v_array = old.v_array.collect { it }
     }
 
+    def Version(int major, int minor, int revision=0) {
+        v_array = [major, minor, revision]
+    }
+
     def java.lang.String toString() {
         return v_array.collect { it.toString() }.join('.')
     }
@@ -71,17 +75,30 @@ class Version implements Comparable<Version>{
         return (this <=> obj) == 0
     }
 
-    //Version incMajor() {
-    //    
-    //}
+    Version incMajor() {
+        this.v_array[0]++
+        this.v_array[1] = 0
+        if (this.v_array.size() > 2) {
+            this.v_array[2] = 0
+        }
+    }
     
-    //Version incMinor() {
-    //    
-    //}
+    Version incMinor() {
+        this.v_array[1]++
+        this.v_array[2] = 0
+        if (this.v_array.size() > 2) {
+            this.v_array[2] = 0
+        }
+    }
 
-    //Version incRevision() {
-    //    
-    //}
+    Version incRevision() {
+        if (this.v_array.size() > 2) {
+            this.v_array[2]++
+        } else {
+            this.v_array[2] = 1
+        }
+
+    }
 }
 
 
