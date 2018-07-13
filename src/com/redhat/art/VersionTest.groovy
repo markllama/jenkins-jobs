@@ -31,17 +31,18 @@ class VersionTest {
         try {
             assert actual == expected
             pass_count++
-        } catch (e) {
+        } catch (AssertionError e) {
             env.echo("FAIL: new Version from string: actual: ${actual}, expected = ${expected}")
         }
-            
+
+        // clone constructor
         def v1 = new Version(v0)
 
         actual = v1.v_array
         try {
             assert actual == expected
             pass_count++
-        } catch (e) {
+        } catch (AssertionError e) {
             env.echo("FAIL: new Version from clone: actual: ${actual}, expected = ${expected}")
         }
         
