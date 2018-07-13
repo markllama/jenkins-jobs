@@ -78,12 +78,14 @@ class VersionTest {
         }
 
         values.each {
-            assert new Version(it['input']).pad().size() >= 3
-            pass_count++
-        } catch (size_error) {
-            fail_count++
-            env.echo("error testing size: ${size_error}")
-        } 
+            try {
+                assert new Version(it['input']).pad().size() >= 3
+                pass_count++
+            } catch (size_error) {
+                fail_count++
+                env.echo("error testing size: ${size_error}")
+            }
+        }
 
         if (fail_count == 0) {
            env.echo "PASS: pad() - ${pass_count} tests passed"
