@@ -200,7 +200,7 @@ class VersionTest {
             try {
                 assert actual == expected
                 pass_count++
-            } catch (e) {
+            } catch (AssertionError e) {
                 error_text << "FAIL: ${input} incrMajor(): actual: ${actual}, expected: {expected}"
                 fail_count++
             }
@@ -213,7 +213,7 @@ class VersionTest {
             try {
                 assert actual == expected
                 pass_count++
-            } catch (e) {
+            } catch (AssertionError e) {
                 error_text << "FAIL: ${input} incrMinor(): actual: ${actual}, expected: {expected}"
                 fail_count++
             }
@@ -226,7 +226,7 @@ class VersionTest {
             try {
                 assert actual == expected
                 pass_count++
-            } catch (e) {
+            } catch (AssertionError e) {
                 error_text << "FAIL: ${input} incrRevision(): actual: ${actual}, expected: {expected}"
                 fail_count++
             }
