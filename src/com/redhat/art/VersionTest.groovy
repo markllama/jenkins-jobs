@@ -212,7 +212,7 @@ class VersionTest {
             actual = input.incrMinor()
             
             env.echo "BEGIN testing incrMinor"
-            env.echo "comparing actual: ${actual}, expected: ${expected}"
+            env.echo "comparing actual: {actual}, expected: {expected}"
             try {
                 assert actual == expected
                 pass_count++
