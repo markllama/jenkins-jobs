@@ -8,6 +8,7 @@ package com.redhat.art
 //
 // ===========================================================================
 
+@NonCPS
 class VersionTest {
 
     def env
@@ -209,7 +210,7 @@ class VersionTest {
             expected = it.iminor
             actual = input.incrMinor()
             
-            env.echo "testing incrMinor"
+            env.echo "BEGIN testing incrMinor"
             try {
                 assert actual == expected
                 pass_count++
@@ -222,7 +223,7 @@ class VersionTest {
             expected = it.irev
             actual = input.incrRevision()
             
-            env.echo "testing incrRevision"
+            env.echo "BEGIN testing incrRevision"
             try {
                 assert actual == expected
                 pass_count++
@@ -230,6 +231,7 @@ class VersionTest {
                 error_text << "FAIL: ${input} incrRevision(): actual: ${actual}, expected: {expected}"
                 fail_count++
             }
+            env.echo "END testing incrRevision"
             
         }
 
