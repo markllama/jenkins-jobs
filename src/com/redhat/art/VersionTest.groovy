@@ -67,10 +67,11 @@ class VersionTest {
         ]
 
         try {
-            values.each { assert new Version(it['input']).size() == it['size'] }
-            values.each { assert new Version(it['input']).pad().size() >= 3  }
+            values.each { assert new Version(it['input']).size() == it['size'] ; pass_count++ }
+            values.each { assert new Version(it['input']).pad().size() >= 3  ; pass_count++ }
         } catch (size_error) {
-           env.echo("error testing size: ${size_error}")
+            fail_count++
+            env.echo("error testing size: ${size_error}")
         }    
 
         if (fail_count == 0) {
