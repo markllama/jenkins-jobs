@@ -74,9 +74,9 @@ class VersionTest {
         }    
 
         if (fail_count == 0) {
-           env.echo "PASS: Version() - ${pass_count} tests passed"
+           env.echo "PASS: pad() - ${pass_count} tests passed"
         } else {
-           env.echo "FAIL: Version() - ${pass_count} tests passed, ${fail_count} tests failed"
+           env.echo "FAIL: pad() - ${pass_count} tests passed, ${fail_count} tests failed"
         }
 
     }
@@ -180,9 +180,9 @@ class VersionTest {
         }
 
         if (fail_count == 0) {
-           env.echo "PASS: Version() - ${pass_count} tests passed"
+           env.echo "PASS: cmp() - ${pass_count} tests passed"
         } else {
-           env.echo "FAIL: Version() - ${pass_count} tests passed, ${fail_count} tests failed"
+           env.echo "FAIL: cmp() - ${pass_count} tests passed, ${fail_count} tests failed"
         }
     }
 
@@ -257,9 +257,9 @@ class VersionTest {
         //error_text.each { env.echo(it) }
             
         if (fail_count == 0) {
-           env.echo "PASS: Version() - ${pass_count} tests passed"
+           env.echo "PASS: incr*() - ${pass_count} tests passed"
         } else {
-           env.echo "FAIL: Version() - ${pass_count} tests passed, ${fail_count} tests failed"
+           env.echo "FAIL: incr*() - ${pass_count} tests passed, ${fail_count} tests failed"
         }
     }
 }
