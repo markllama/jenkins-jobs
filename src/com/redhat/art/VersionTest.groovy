@@ -8,7 +8,7 @@ package com.redhat.art
 //
 // ===========================================================================
 
-@NonCPS
+
 class VersionTest {
 
     def env
@@ -174,6 +174,7 @@ class VersionTest {
         }
     }
 
+    @NonCPS
     def test_increments() {
 
         def pass_count = 0
