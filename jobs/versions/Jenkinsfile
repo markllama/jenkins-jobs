@@ -2,6 +2,10 @@
 import com.redhat.art.Version
 import com.redhat.art.VersionTest
 
+import groovy.util.GroovyTestSuite 
+import junit.framework.Test 
+import junit.textui.TestRunner
+
 properties(
     [
         buildDiscarder(
