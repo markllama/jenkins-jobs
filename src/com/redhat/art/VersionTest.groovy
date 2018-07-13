@@ -22,6 +22,7 @@ class VersionTest {
         def pass_count = 0
         def fail_count = 0
 
+        // string constructor
         def v0 = new Version('1.2.3')
 
         def expected = [1, 2, 3]
@@ -44,6 +45,11 @@ class VersionTest {
             env.echo("FAIL: new Version from clone: actual: ${actual}, expected = ${expected}")
         }
         
+        if (fail_count == 0) {
+           env.echo "PASS: Version() - ${pass_count} tests passed"
+        } else {
+           env.echo "FAIL: Version() - ${pass_count} tests passed, ${fail_count} tests failed"
+        }
     }
 
     
@@ -66,9 +72,15 @@ class VersionTest {
         } catch (size_error) {
            env.echo("error testing size: ${size_error}")
         }    
+
+        if (fail_count == 0) {
+           env.echo "PASS: Version() - ${pass_count} tests passed"
+        } else {
+           env.echo "FAIL: Version() - ${pass_count} tests passed, ${fail_count} tests failed"
+        }
+
     }
-
-
+    
     def test_cmp() {
 
         def pass_count = 0
@@ -243,6 +255,11 @@ class VersionTest {
         env.echo("TEST incr*() : pass: ${pass_count}, fail: ${fail_count}")
         env.echo error_text
         //error_text.each { env.echo(it) }
-        
+            
+        if (fail_count == 0) {
+           env.echo "PASS: Version() - ${pass_count} tests passed"
+        } else {
+           env.echo "FAIL: Version() - ${pass_count} tests passed, ${fail_count} tests failed"
+        }
     }
 }
