@@ -177,6 +177,8 @@ class VersionTest {
 
         def pass_count = 0
         def fail_count = 0
+
+        def error_text = []
         
         // test incrMajor
         def samples = [
@@ -194,14 +196,15 @@ class VersionTest {
             def expected = it.imajor
             def actual = input.incrMajor()
 
-            env.echo "testing incrMajor"
+            env.echo "BEGIN testing incrMajor"
             try {
                 assert actual == expected
                 pass_count++
             } catch (e) {
-                env.echo("FAIL: ${input} incrMajor(): actual: ${actual}, expected: {expected}")
+                error_text << "FAIL: ${input} incrMajor(): actual: ${actual}, expected: {expected}"
                 fail_count++
             }
+            env.echo "END testing incrMajor"
 
             expected = it.iminor
             actual = input.incrMinor()
@@ -211,9 +214,10 @@ class VersionTest {
                 assert actual == expected
                 pass_count++
             } catch (e) {
-                env.echo("FAIL: ${input} incrMinor(): actual: ${actual}, expected: {expected}")
+                error_text << "FAIL: ${input} incrMinor(): actual: ${actual}, expected: {expected}"
                 fail_count++
             }
+            env.echo "END testing incrMinor"
             
             expected = it.irev
             actual = input.incrRevision()
@@ -223,12 +227,14 @@ class VersionTest {
                 assert actual == expected
                 pass_count++
             } catch (e) {
-                env.echo("FAIL: ${input} incrRevision(): actual: ${actual}, expected: {expected}")
+                error_text << "FAIL: ${input} incrRevision(): actual: ${actual}, expected: {expected}"
                 fail_count++
             }
             
         }
 
         env.echo("TEST incr*() : pass: ${pass_count}, fail: ${fail_count}")
+        error_text.each { env.echo(it) }
+        
     }
 }
