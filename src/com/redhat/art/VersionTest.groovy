@@ -67,13 +67,23 @@ class VersionTest {
             [input: '1.2.3.4', size: 4, padded: '1.2.3.4'],
         ]
 
-        try {
-            values.each { assert new Version(it['input']).size() == it['size'] ; pass_count++ }
-            values.each { assert new Version(it['input']).pad().size() >= 3  ; pass_count++ }
+        values.each {
+            try {
+                assert new Version(it['input']).size() == it['size']
+                pass_count++
+            } catch (AssertionError size_error) {
+                fail_count++
+                env.echo("error testing size: ${size_error}")
+            }
+        }
+
+        values.each {
+            assert new Version(it['input']).pad().size() >= 3
+            pass_count++
         } catch (size_error) {
             fail_count++
             env.echo("error testing size: ${size_error}")
-        }    
+        } 
 
         if (fail_count == 0) {
            env.echo "PASS: pad() - ${pass_count} tests passed"
