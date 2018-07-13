@@ -81,7 +81,7 @@ class VersionTest {
             try {
                 assert new Version(it['input']).pad().size() >= 3
                 pass_count++
-            } catch (size_error) {
+            } catch (AssertionError size_error) {
                 fail_count++
                 env.echo("error testing size: ${size_error}")
             }
@@ -221,7 +221,8 @@ class VersionTest {
         
         samples.each {
 
-            def input = new Version(it.input)
+            env.echo "input version: ${it.input}"
+            def input = new Version(it.input)            
             def expected = it.imajor
             def actual = input.incrMajor()
 
