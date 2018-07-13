@@ -191,6 +191,8 @@ class VersionTest {
             ]
         ]
 
+        env.echo "Samples: ${samples}"
+        
         samples.each {
 
             def input = new Version(it.input)
