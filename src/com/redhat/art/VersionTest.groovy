@@ -212,7 +212,7 @@ class VersionTest {
             actual = input.incrMinor()
             
             env.echo "BEGIN testing incrMinor"
-            env.echo "comparing actual: {actual}, expected: {expected}"
+            env.echo("comparing actual: ${actual}, expected: {expected}")
             try {
                 assert actual == expected
                 pass_count++
@@ -239,7 +239,8 @@ class VersionTest {
         }
 
         env.echo("TEST incr*() : pass: ${pass_count}, fail: ${fail_count}")
-        error_text.each { env.echo(it) }
+        env.echo error_text
+        //error_text.each { env.echo(it) }
         
     }
 }
