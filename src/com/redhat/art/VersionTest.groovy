@@ -174,7 +174,6 @@ class VersionTest {
         }
     }
 
-    @NonCPS
     def test_increments() {
 
         def pass_count = 0
