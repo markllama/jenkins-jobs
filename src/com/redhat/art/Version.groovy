@@ -18,9 +18,9 @@ class Version implements Comparable<Version>{
         v_array = [major, minor, revision]
     }
 
-    def String toString() {
-        return v_array.collect { it.toString() }.join('.')
-    }
+ //   def String toString() {
+ //       return v_array.collect { it.toString() }.join('.')
+ //   }
 
     def size() { return v_array.size() }
     
