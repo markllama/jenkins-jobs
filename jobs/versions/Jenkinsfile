@@ -53,7 +53,9 @@ node(TARGET_NODE) {
         
         echo "END TESTING"
 
+        echo "START Creating v0"
         v0 = new Version("3.2.1")
+        echo "END Creating v0"
 
         echo "v0 = ${v0}"
     }
