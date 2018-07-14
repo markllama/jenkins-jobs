@@ -59,6 +59,6 @@ node(TARGET_NODE) {
 
         v0_string = string v0
         
-        echo "v0 = ${v0_string}"
     }
+    echo "v0 = ${v0_string}"
 }
