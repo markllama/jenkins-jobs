@@ -1,7 +1,7 @@
 package com.redhat.art
 //@Library('art')
 //import com.redhat.art.Version
-import junit.
+//import junit.
 
 // ===========================================================================
 //
