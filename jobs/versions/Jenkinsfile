@@ -49,7 +49,7 @@ node(TARGET_NODE) {
         vt.test_pad()
         vt.test_cmp()
 
-        //vt.test_increments()
+        vt.test_increments()
         
         echo "END TESTING"
     }
