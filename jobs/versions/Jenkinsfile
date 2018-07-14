@@ -52,5 +52,9 @@ node(TARGET_NODE) {
         vt.test_increments()
         
         echo "END TESTING"
+
+        def v0 = new Version("3.2.1")
+
+        echo "v0 = ${v0}"
     }
 }
