@@ -57,6 +57,8 @@ node(TARGET_NODE) {
         v0 = new Version("3.2.1")
         echo "END Creating v0"
 
-        echo "v0 = ${v0}"
+        v0_string = String v0
+        
+        echo "v0 = ${v0_string}"
     }
 }
