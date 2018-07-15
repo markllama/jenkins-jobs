@@ -60,12 +60,16 @@ node(TARGET_NODE) {
         echo "hello1: ${v0.toString()}"
         hello2 = "hello2:" + v0
         echo "hello2.size() = ${hello2.size()}"
+        echo "== hello2 =="
         echo hello2
+        echo "-- pre --"
+        echo "${hello2}"
+        echo "-- post--"
 
         v0_string = v0 as String
         echo "v0_string.size() = ${v0_string.size()}"
         echo "v0_string(inline) = ${v0_string}"
-        echo "v0_string(concat) = " v0_string
+        echo "v0_string(concat) = " + v0_string
         
         echo "START Creating v1"
         v1 = new Version("3.9.2")
