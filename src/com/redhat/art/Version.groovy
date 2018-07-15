@@ -5,7 +5,6 @@ class Version implements Comparable<Version>{
     private v_array
 
     // new
-    @NonCPS
     def Version(String v_string) {
         v_array = v_string.tokenize('.').collect { it as int }
     }
