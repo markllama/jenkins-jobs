@@ -62,7 +62,7 @@ node(TARGET_NODE) {
         echo "hello2.size() = ${hello2.size()}"
         echo hello2
 
-        v0_string = string v0
+        v0_string = v0 as String
         echo "v0_string.size() = ${v0_string.size()}"
         echo "v0_string(inline) = ${v0_string}"
         echo "v0_string(concat) = " v0_string
