@@ -54,7 +54,7 @@ node(TARGET_NODE) {
         echo "END TESTING"
 
         echo "START Creating v0"
-        v0 = new Version("3.2.1")
+        def v0 = new Version("3.2.1")
         echo "END Creating v0"
         echo "hello0: " + v0.toString()
         echo "hello1: ${v0.toString()}"
