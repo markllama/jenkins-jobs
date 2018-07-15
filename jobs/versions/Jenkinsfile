@@ -65,5 +65,5 @@ node(TARGET_NODE) {
         echo "END Creating v1"
 
     }
-    echo "v0 = ${v0_string}"
+    //echo "v0 = ${v0_string}"
 }
