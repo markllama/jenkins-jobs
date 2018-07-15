@@ -56,7 +56,9 @@ node(TARGET_NODE) {
         echo "START Creating v0"
         v0 = new Version("3.2.1")
         echo "END Creating v0"
-        echo "hello:" + v0
+        echo "hello0:" + v0
+        echo "hello1: ${v0}"
+        echo "hello2:" + v0
 
         v0_string = string v0
 
