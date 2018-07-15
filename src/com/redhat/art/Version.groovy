@@ -1,6 +1,7 @@
 #!/usr/bin/groovy
 package com.redhat.art
 
+@NonCPS
 class Version implements Comparable<Version>{
     private v_array
 
