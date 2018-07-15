@@ -58,6 +58,7 @@ node(TARGET_NODE) {
         echo "END Creating v0"
         echo "hello0: " + v0.toString()
         echo "hello1: ${v0.toString()}"
+        echo "hello1a: ${v0}"
         hello2 = 'hello2:' + v0
         echo "hello2.size() = ${hello2.size()}"
         echo "== hello2 =="
