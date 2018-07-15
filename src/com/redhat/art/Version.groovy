@@ -5,6 +5,7 @@ class Version implements Comparable<Version>{
     private v_array
 
     // new
+    @NonCPS
     def Version(String v_string) {
         v_array = v_string.tokenize('.').collect { it as int }
     }
@@ -35,6 +36,7 @@ class Version implements Comparable<Version>{
         error("Version string too small: no revision field")
     }
 
+    @NonCPS
     def maj_min() {
         return v_array[0..1].collect { it.toString() }.join('.')
     }
