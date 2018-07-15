@@ -63,7 +63,10 @@ node(TARGET_NODE) {
         echo hello2
 
         v0_string = string v0
-
+        echo "v0_string.size() = ${v0_string.size()}"
+        echo "v0_string(inline) = ${v0_string}"
+        echo "v0_string(concat) = " v0_string
+        
         echo "START Creating v1"
         v1 = new Version("3.9.2")
         echo "END Creating v1"
