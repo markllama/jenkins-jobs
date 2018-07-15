@@ -1,7 +1,6 @@
 #!/usr/bin/groovy
 package com.redhat.art
 
-@NonCPS
 class Version implements Comparable<Version>{
     private v_array
 
@@ -19,6 +18,7 @@ class Version implements Comparable<Version>{
         v_array = [major, minor, revision]
     }
 
+    @NonCPS
     def String toString() {
         return v_array.collect { it.toString() }.join('.')
     }
