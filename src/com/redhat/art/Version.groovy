@@ -101,9 +101,3 @@ class Version implements Comparable<Version>{
 
     }
 }
-
-//return this
-
-main() {
-    println hello
-}
