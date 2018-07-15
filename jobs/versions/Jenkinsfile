@@ -56,6 +56,8 @@ node(TARGET_NODE) {
         echo "START Creating v0"
         def v0 = new Version("3.2.1")
         echo "END Creating v0"
+        echo "inspecting v0: " + v0.inspect()
+        
         echo "hello0: " + v0.toString()
         echo "hello1: ${v0.toString()}"
         echo "hello1a: ${v0}"
