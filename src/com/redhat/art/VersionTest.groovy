@@ -244,6 +244,7 @@ class VersionTest extends GroovyTestCase {
             }
             env.echo "END testing incrMajor"
 
+            input = new Version(it.input)            
             expected = it.iminor
             actual = input.incrMinor()
             
@@ -258,6 +259,7 @@ class VersionTest extends GroovyTestCase {
             }
             env.echo "END testing incrMinor"
             
+            input = new Version(it.input)            
             expected = it.irev
             actual = input.incrRevision()
             
