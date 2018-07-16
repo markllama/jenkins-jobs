@@ -78,7 +78,7 @@ class VersionTest extends GroovyTestCase {
                 actual = (it == clone)
                 assert actual == expected
             } catch (AssertionError e) {
-                env.echo("FAIL: Version.clone() it = ${it}, clone = ${clone} - actual: ${actual}, expected: ${expected}"
+                env.echo("FAIL: Version.clone() it = ${it}, clone = ${clone} - actual: ${actual}, expected: ${expected}")
             }
         }
         
