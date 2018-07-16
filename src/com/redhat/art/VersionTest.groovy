@@ -247,7 +247,7 @@ class VersionTest extends GroovyTestCase {
                 assert actual == expected
                 pass_count++
             } catch (AssertionError e) {
-                error_text << "FAIL: ${input} incrMinor(): actual: ${actual}, expected: {expected}"
+                error_text << "FAIL: ${input} incrMinor(): actual: ${actual}, expected: ${expected}"
                 fail_count++
             }
             env.echo "END testing incrMinor"
