@@ -240,6 +240,7 @@ class VersionTest extends GroovyTestCase {
                 pass_count++
             } catch (AssertionError e) {
                 error_text << "FAIL: ${it.input} incrMajor(): actual: ${actual}, expected: ${expected}"
+                env.echo error_text[-1]
                 fail_count++
             }
             env.echo "END testing incrMajor"
@@ -255,6 +256,7 @@ class VersionTest extends GroovyTestCase {
                 pass_count++
             } catch (AssertionError e) {
                 error_text << "FAIL: ${it.input} incrMinor(): actual: ${actual}, expected: ${expected}"
+                env.echo error_text[-1]
                 fail_count++
             }
             env.echo "END testing incrMinor"
@@ -270,6 +272,7 @@ class VersionTest extends GroovyTestCase {
                 pass_count++
             } catch (AssertionError e) {
                 error_text << "FAIL: ${it.input} incrRevision(): actual: ${actual}, expected: ${expected}"
+                env.echo error_text[-1]
                 fail_count++
             }
             env.echo "END testing incrRevision"
