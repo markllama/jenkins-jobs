@@ -39,6 +39,12 @@ class VersionTest extends GroovyTestCase {
         // clone constructor
         def v1 = new Version(v0)
 
+        try {
+            assert !v1.is(v0) 
+        } catch {
+            env.echo("FAIL: cloned Version is identical to the original")
+        }
+
         actual = v1.v_array
         try {
             assert actual == expected
