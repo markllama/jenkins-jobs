@@ -90,7 +90,6 @@ class Version implements Comparable<Version>{
     
     Version incrMinor() {
         this.v_array[1]++
-        this.v_array[2] = 0
         if (this.v_array.size() > 2) {
             this.v_array[2] = 0
         }
