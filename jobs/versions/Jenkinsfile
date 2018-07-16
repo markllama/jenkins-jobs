@@ -46,6 +46,7 @@ node(TARGET_NODE) {
         vt = new VersionTest(this)
 
         vt.test_constructor()
+        vt.test_clone()
         vt.test_pad()
         vt.test_cmp()
 
