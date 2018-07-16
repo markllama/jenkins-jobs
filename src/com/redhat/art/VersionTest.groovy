@@ -60,7 +60,35 @@ class VersionTest extends GroovyTestCase {
         }
     }
 
-    
+
+    def test_clone() {
+        def pass_count = 0
+        def fail_count = 0
+        def input_values = [
+            new Version("3.2.1")
+        ]
+        def clone 
+        def actual
+        def expected
+        
+        input_values.each {
+            try {
+                clone = it.clone()
+                expected = true
+                actual = (it == clone)
+                assert actual == expected
+            } catch (AssertionError e) {
+                env.echo("FAIL: Version.clone() it = ${it}, clone = ${clone} - actual: ${actual}, expected: ${expected}"
+            }
+        }
+        
+        if (fail_count == 0) {
+           env.echo "PASS: Version() - ${pass_count} tests passed"
+        } else {
+           env.echo "FAIL: Version() - ${pass_count} tests passed, ${fail_count} tests failed"
+        }
+    }
+
     def test_pad() {
 
         def pass_count = 0

@@ -18,6 +18,10 @@ class Version implements Comparable<Version>{
         v_array = [major, minor, revision]
     }
 
+    def clone() {
+        return new Version(this)
+    }
+
     @NonCPS
     def String toString() {
         return v_array.collect { it.toString() }.join('.')
