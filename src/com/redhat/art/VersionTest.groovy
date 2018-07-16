@@ -41,7 +41,7 @@ class VersionTest extends GroovyTestCase {
 
         try {
             assert !v1.is(v0) 
-        } catch {
+        } catch (e) {
             env.echo("FAIL: cloned Version is identical to the original")
         }
 
