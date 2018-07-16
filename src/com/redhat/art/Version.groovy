@@ -84,6 +84,8 @@ class Version implements Comparable<Version>{
         if (this.v_array.size() > 2) {
             this.v_array[2] = 0
         }
+
+        return this
     }
     
     Version incrMinor() {
@@ -92,6 +94,8 @@ class Version implements Comparable<Version>{
         if (this.v_array.size() > 2) {
             this.v_array[2] = 0
         }
+
+        return this
     }
 
     Version incrRevision() {
@@ -100,6 +104,6 @@ class Version implements Comparable<Version>{
         } else {
             this.v_array[2] = 1
         }
-
+        return this
     }
 }
