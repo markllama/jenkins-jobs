@@ -269,8 +269,8 @@ class VersionTest extends GroovyTestCase {
         }
 
         env.echo("TEST incr*() : pass: ${pass_count}, fail: ${fail_count}")
-        env.echo error_text
-        //error_text.each { env.echo(it) }
+        //env.echo error_text
+        error_text.each { env.echo(it) }
             
         if (fail_count == 0) {
            env.echo "PASS: incr*() - ${pass_count} tests passed"
