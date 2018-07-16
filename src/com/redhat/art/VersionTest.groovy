@@ -228,12 +228,12 @@ class VersionTest extends GroovyTestCase {
             def actual = input.incrMajor()
 
             env.echo "BEGIN testing incrMajor"
-            env.echo "comparing actual: ${actual}, expected: ${expected}"
+            env.echo "input: ${it.input}, comparing actual: ${actual}, expected: ${expected}"
             try {
                 assert actual == expected
                 pass_count++
             } catch (AssertionError e) {
-                error_text << "FAIL: ${input} incrMajor(): actual: ${actual}, expected: ${expected}"
+                error_text << "FAIL: ${it.input} incrMajor(): actual: ${actual}, expected: ${expected}"
                 fail_count++
             }
             env.echo "END testing incrMajor"
@@ -247,7 +247,7 @@ class VersionTest extends GroovyTestCase {
                 assert actual == expected
                 pass_count++
             } catch (AssertionError e) {
-                error_text << "FAIL: ${input} incrMinor(): actual: ${actual}, expected: ${expected}"
+                error_text << "FAIL: ${it.input} incrMinor(): actual: ${actual}, expected: ${expected}"
                 fail_count++
             }
             env.echo "END testing incrMinor"
@@ -261,7 +261,7 @@ class VersionTest extends GroovyTestCase {
                 assert actual == expected
                 pass_count++
             } catch (AssertionError e) {
-                error_text << "FAIL: ${input} incrRevision(): actual: ${actual}, expected: ${expected}"
+                error_text << "FAIL: ${it.input} incrRevision(): actual: ${actual}, expected: ${expected}"
                 fail_count++
             }
             env.echo "END testing incrRevision"
