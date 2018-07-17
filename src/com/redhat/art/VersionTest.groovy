@@ -247,6 +247,11 @@ class VersionTest extends GroovyTestCase {
             [v0: new Version("3.2.3"), v1: new Version("3.2.3"), equal: true],
             [v0: new Version("4.2"), v1: new Version("4.2.0"), equal: true],
             [v0: new Version("2.2.0"), v1: new Version("2.2"), equal: true],
+
+            [v0: new Version("1.2.3"), v1: new Version("2.2.3"), equal: false],
+            [v0: new Version("3.2.3"), v1: new Version("3.1.3"), equal: false],
+            [v0: new Version("4.2"), v1: new Version("4.4.0"), equal: false],
+            [v0: new Version("2.2.0"), v1: new Version("2.2.1"), equal: false],
         ]
         // test equal
 
