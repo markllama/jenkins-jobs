@@ -49,6 +49,7 @@ node(TARGET_NODE) {
         vt.test_clone()
         vt.test_pad()
         vt.test_cmp()
+        vt.test_equals()
 
         vt.test_increments()
         
