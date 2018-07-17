@@ -235,6 +235,45 @@ class VersionTest extends GroovyTestCase {
         }
     }
 
+    def test_equals() {
+        def pass_count = 0
+        def fail_count = 0
+
+        def actual
+        def expected
+
+        def samples[
+            [v0: new Version("1.2.3"), v1: new Version("1.2.3"), equal: true],
+            [v0: new Version("3.2.3"), v1: new Version("3.2.3"), equal: true],
+            [v0: new Version("4.2"), v1: new Version("4.2.0"), equal: true],
+            [v0: new Version("2.2.0"), v1: new Version("2.2"), equal: true],
+        ]
+        // test equal
+
+
+        // test not-equal
+
+        samples.each {
+            expected = it.equal
+            actual = it.v0 == it.v1
+
+            try {
+                assert actual == expected
+                pass_count++
+            } catch (AssertionError e) {
+                fail_count++
+                env.echo "FAIL: equals(): input: ${it.v0} == ${it.v1}, expected: ${expected}, actual: ${actual}"
+            }
+        }
+        
+        if (fail_count == 0) {
+           env.echo "PASS: equals() - ${pass_count} tests passed"
+        } else {
+           env.echo "FAIL: equals() - ${pass_count} tests passed, ${fail_count} tests failed"
+        }
+
+    }
+
     def test_increments() {
 
         def pass_count = 0
