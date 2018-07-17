@@ -55,10 +55,16 @@ node(TARGET_NODE) {
         
         echo "END TESTING"
 
-        // echo "START Creating v0"
-        // def v0 = new Version("3.2.1")
-        // echo "END Creating v0"
+        echo "START Creating v0"
+        def v0 = new Version("3.2.1")
+        echo "END Creating v0"
         // echo "inspecting v0: " + v0.inspect()
+
+        echo "START Creating v1"
+        def v1 = new Version("3.2.1")
+        echo "END Creating v1"
+
+        assert v0 == v1 in [true, false]
         
         // echo "hello0: " + v0.toString()
         // echo "hello1: ${v0.toString()}"
