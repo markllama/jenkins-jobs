@@ -64,7 +64,7 @@ node(TARGET_NODE) {
         def v1 = new Version("3.2.1")
         echo "END Creating v1"
 
-        assert v0 == v1 in [true, false] "v0 == v1: ${v0 == v1}"
+        assert (v0 == v1 in [true, false]) "v0 == v1: ${v0 == v1}"
         
         // echo "hello0: " + v0.toString()
         // echo "hello1: ${v0.toString()}"
