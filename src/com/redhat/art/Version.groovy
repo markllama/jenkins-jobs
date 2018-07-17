@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 package com.redhat.art
 
-class Version implements Comparable<Version>{
+class Version implements{
     private v_array
 
     // new
