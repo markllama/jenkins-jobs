@@ -76,13 +76,13 @@ class Version implements Comparable<Version>{
         return 0
     }
 
-    @Override
-    boolean equals(obj) {
-        def cmp = this.compareTo(obj)
-        same = cmp == 0
-        assert (same == true || same == false)
-        return same
-    }
+    //@Override
+    //boolean equals(obj) {
+    //    def cmp = this.compareTo(obj)
+    //    same = cmp == 0
+    //    assert (same == true || same == false)
+    //    return same
+    //}
 
     // When incrementing one field, resets the sub-fields to 0
     Version incrMajor() {
