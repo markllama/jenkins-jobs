@@ -70,7 +70,7 @@ class Version implements Comparable<Version>{
         // if any pair do not match, return the result
         for (field in mmr) {
             if (field[0] != field[1]) {
-                return (field[0] <=> field[1])
+                return field[0] <=> field[1]
             }
         }
         return 0
