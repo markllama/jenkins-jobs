@@ -242,7 +242,7 @@ class VersionTest extends GroovyTestCase {
         def actual
         def expected
 
-        def samples[
+        def samples = [
             [v0: new Version("1.2.3"), v1: new Version("1.2.3"), equal: true],
             [v0: new Version("3.2.3"), v1: new Version("3.2.3"), equal: true],
             [v0: new Version("4.2"), v1: new Version("4.2.0"), equal: true],
