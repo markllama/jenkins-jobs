@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 package com.redhat.art
 
-class Version implements{
+class Version {
     private v_array
 
     // new
