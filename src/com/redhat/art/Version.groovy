@@ -78,7 +78,7 @@ class Version implements Comparable<Version>{
 
     @Override
     boolean equals(obj) {
-        return (this <=> obj) == 0
+        return (this.cmp(obj) == 0)
     }
 
     // When incrementing one field, resets the sub-fields to 0
