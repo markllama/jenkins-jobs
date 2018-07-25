@@ -322,6 +322,7 @@ node(TARGET_NODE) {
 
         stage("tag and push") {
             echo "tag and push"
+            patch_tito(self, package_name)
             dir(package_name) {
                 sh "rpm -q tito"
                 sh(
