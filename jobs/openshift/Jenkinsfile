@@ -141,6 +141,31 @@ def get_releases(repo_url, pattern="enterprise-") {
 //
 //
 // ===========================================================================
+def patch_tito(pipeline, package_name) {
+    def tito_version = pipeline.sh(
+        returnStdout: true,
+        script: "rpm -q --qf "%{VERSION}" tito"
+    )
+
+    if (tito_version == '0.6.11') {
+        pipeline.echo "Patching tito tagger customizations for tito-0.6.11"
+        pipeline.dir(package_name) {
+            pipeline.sh """patch -p0 <<EOF
+--- .tito/lib/origin/tagger/__init__.py
++++ .tito/lib/origin/tagger/__init__.py
+@@ -40,5 +40,5 @@ class OriginTagger(VersionTagger):
+         super(OriginTagger, self)._tag_release()
+ 
+     def _get_tag_for_version(self, version, release=None):
+-        return "v{}".format(version)
++        return "v{}-{}".format(version,release)
+ # vim:expandtab:autoindent:tabstop=4:shiftwidth=4:filetype=python:textwidth=0:
+EOF
+"""
+        }
+    }
+}
+
 
 def tito_release(pipeline, package_name, version, scratch=true)  {
     pipeline.dir(package_name) {
