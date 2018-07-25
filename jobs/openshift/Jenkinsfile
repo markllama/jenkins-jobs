@@ -150,7 +150,7 @@ def patch_tito(pipeline, package_name) {
     if (tito_version == '0.6.11') {
         pipeline.echo "Patching tito tagger customizations for tito-0.6.11"
         pipeline.dir(package_name) {
-            pipeline.sh """patch -p0 <<EOF
+            pipeline.sh '''patch -p0 <<EOF
 --- .tito/lib/origin/tagger/__init__.py
 +++ .tito/lib/origin/tagger/__init__.py
 @@ -40,5 +40,5 @@ class OriginTagger(VersionTagger):
@@ -161,7 +161,7 @@ def patch_tito(pipeline, package_name) {
 +        return "v{}-{}".format(version,release)
  # vim:expandtab:autoindent:tabstop=4:shiftwidth=4:filetype=python:textwidth=0:
 EOF
-"""
+'''
         }
     }
 }
