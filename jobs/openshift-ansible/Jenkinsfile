@@ -1,0 +1,290 @@
+// Build the OpenShift Ansible RPM
+
+@Library('artlib')
+
+import com.redhat.art.*
+
+properties(
+    [
+        buildDiscarder(
+            logRotator(
+                artifactDaysToKeepStr: '',
+                artifactNumToKeepStr: '',
+                daysToKeepStr: '',
+                numToKeepStr: '10'
+            )
+        ),
+        [
+            $class: 'ParametersDefinitionProperty',
+            parameterDefinitions: [
+                [
+                    name: 'TARGET_NODE',
+                    description: 'Jenkins agent node',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: 'container'
+                ],
+                [
+                    name: 'GITHUB_BASE',
+                    description: 'Github base for repos',
+                    $class: 'hudson.model.ChoiceParameterDefinition',
+                    choices: [
+                        "git@github.com:openshift",
+                        "git@github.com:markllama"
+                    ].join("\n"),
+                    defaultValue: 'git@github.com:openshift'
+                ],
+                [
+                    name: 'SSH_KEY_ID',
+                    description: 'SSH credential id to use',
+                    $class: 'hudson.model.ChoiceParameterDefinition',
+                    choices: [
+                        "openshift-bot",
+                        "markllama-aos-cd-bot",
+                        "markllama"
+                    ].join("\n"),
+                    defaultValue: 'markllama'
+                ],
+                [
+                    name: 'BUILD_VERSION',
+                    description: 'OCP Version to build',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: 'master'
+                ],
+                [
+                    name: 'RELEASE',
+                    description: 'build local or release',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: false
+                ],
+                [
+                    name: 'SCRATCH',
+                    description: 'build an unofficial release',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: true
+                ],
+                [
+                    name: 'DEBUG',
+                    description: 'ask commands to print details',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: false
+                ],
+                [
+                    name: 'MOCK',
+                    description: 'dont do anything if true',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: false
+                ],
+            ]
+        ]
+    ]
+)
+
+// convert property strings to proper logical values
+release = RELEASE.toBoolean()
+scratch = SCRATCH.toBoolean()
+mock = MOCK.toBoolean()
+debug = DEBUG.toBoolean()
+
+build_version = new VersionString(BUILD_VERSION)
+
+// ***************************************************************************
+//
+//
+//
+// ***************************************************************************
+
+/**
+ * Retrive the branch list from a remote repository
+ * @param repo_url a git@ repository URL.
+ * @param pattern a matching pattern for the branch list. Only return matching branches
+ *
+ * @return a list of branch names.  Removes the leading ref path
+ *
+ * Requires SSH_AGENT to have set a key for access to the remote repository
+ */
+def get_branches(repo_url, pattern="") {
+
+    branch_text = sh(
+        returnStdout: true,
+        script: [
+            "git ls-remote ${repo_url} ${pattern}",
+            "awk '{print \$2}'",
+            "cut -d/ -f3"
+        ].join(" | ")
+    )
+
+    return branch_text.tokenize("\n")
+}
+
+/**
+ * Retrive a list of release numbers from the OCP remote repository
+ * @param repo_url a git@ repository URL.
+ * @return a list of OSE release numbers.
+ *
+ * Get the branch names beginning with 'enterprise-'.
+ * Extract the release number string from each branch release name
+ * Sort in version order (compare fields as integers, not strings)
+ * Requires SSH_AGENT to have set a key for access to the remote repository
+ */
+def get_releases(repo_url, pattern="enterprise-") {
+    // too clever: chain - get branch names, remove prefix, suffix
+    def r = get_branches(repo_url, pattern + '*')
+        .collect { it - pattern }
+        .findAll { it =~ /^\d+((\.\d+)*)$/ }
+        .collect { new VersionString(it) }
+
+    return r
+}
+
+// ===========================================================================
+//
+//
+//
+// ===========================================================================
+
+def tito_release(pipeline, package_name, version, scratch=true)  {
+    pipeline.dir(package_name) {
+        def tito_output = pipeline.sh(
+            returnStdout: true,
+            script: [
+                'tito release',
+                (debug ? '--debug' : ''),
+                '--yes',
+                '--test',
+                (scratch ? '--scratch' : ''),
+                "aos-${new_version}"
+            ].join(' ')
+        )
+
+        def tito_lines = tito_output.tokenize('\n')
+        def task_line = tito_lines.find{ it =~ /^Created Task: / }
+        def task_matcher = task_line =~ /^Created Task:\s+([0-9]+)/
+        brew_task_id = task_matcher[0][1]
+        brew_task_url = brew_task_url_prefix + brew_task_id
+        pipeline.echo "${package_name} rpm brew task: ${brew_task_id}"
+    
+        try {
+            pipeline.sh "brew watch-task ${brew_task_id}"
+        } catch (build_err) {
+            pipeline.echo "Error in ${package_name} build task: ${brew_task_url}"
+            throw build_err
+        }
+    }
+}
+
+def tito_build(pipeline, package_name)  {
+    def output_root = pipeline.env.WORKSPACE + '/BUILD'
+    pipeline.dir(package_name) {
+        pipeline.sh(
+            //returnStdout: true,
+            script: [
+                'tito build',
+                (debug ? '--debug' : ''),
+                '--offline',
+                '--rpm',
+                '--output', output_root
+            ].join(' ')
+        )
+    }
+}
+
+// ===========================================================================
+//
+//
+//
+// ===========================================================================
+node(TARGET_NODE) {
+
+    if (mock == true) {
+        error "MOCK: just download new copy of pipeline code"
+    }
+
+    sh "rm -rf openshift-ansible"
+
+    checkout scm
+
+    // get the list of release numbers from the branch names
+    package_name = "openshift-ansible"
+    branch_prefix = "release-"
+    brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
+
+    repo_url = GITHUB_BASE + "/${package_name}.git"
+    spec_filename = "${package_name}.spec"
+    spec_path = "${package_name}/${spec_filename}"
+    
+    releases = get_releases(repo_url, branch_prefix)
+    
+    // select the branch to build
+    def branch_name
+    if (BUILD_VERSION in ['master', 'stage']) {
+        branch_name = BUILD_VERSION
+    } else if (releases.find { it == build_version } != -1) {
+        branch_name = branch_prefix + BUILD_VERSION
+    } else {
+        error "invalid build version ${BUILD_VERSION}"
+    }
+
+    if (debug) {
+        echo "build_version: ${build_version}, branch_name: ${branch_name}"
+    }
+    
+    sshagent([SSH_KEY_ID]) {
+        stage("clone ${package_name}") {
+            sh(["git clone",
+                "--branch ${branch_name}",
+                repo_url
+                ].join(' ')
+            )
+        }
+
+        // need new version and new release
+        stage("update build/release numbers") {
+            def rpm_spec = new RpmSpecfile(readFile(spec_path))
+            current_version = rpm_spec.version
+            current_release = rpm_spec.release
+
+            def cv = new VersionString(current_version)
+            def cr = new VersionString(current_release)
+
+            echo "current RPM id: ${current_version}-${current_release}"
+
+            // release builds increment the revision and leave the build
+            // number at 1.  Dunno why
+            //cv.incrRevision()
+            def nv = new VersionString(cv)
+            def nr = cr.incrMajor()
+
+            rpm_spec.version = nv as String
+            rpm_spec.release = nr as String
+
+            new_version = rpm_spec.version
+            new_release = rpm_spec.release
+
+            echo "new RPM id: ${new_version}-${new_release}"
+            
+            //writeFile file: spec_path, text: rpm_spec.body
+
+            //sh "git tag ${new_version}-${new_release}"
+        }
+
+        stage("tag and push") {
+            echo "tag and push"
+            dir(package_name) {
+                sh(
+                    script: [
+                        "tito tag",
+                        (debug ? '--debug' : ''),
+                        '--accept-auto-changelog',
+              //          '--use-version', new_version,
+              //          '--use-release', new_release
+                    ].join(' ')
+                )
+            }
+        }
+
+        stage("build") {
+            //tito_release(this, package_name, new_version, scratch)
+            tito_build(this, package_name)
+        }
+    }
+}
