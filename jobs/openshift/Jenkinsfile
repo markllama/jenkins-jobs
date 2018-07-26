@@ -246,7 +246,7 @@ node(TARGET_NODE) {
     def branch_name
     if (BUILD_VERSION in ['master', 'stage']) {
         branch_name = BUILD_VERSION
-        upstream_branch_name == BUILD_VERSION
+        upstream_branch_name = BUILD_VERSION
     } else {
         build_version = new VersionString(BUILD_VERSION)
         if (releases.find { it == build_version } != -1) {
