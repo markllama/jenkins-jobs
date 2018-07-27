@@ -347,7 +347,7 @@ node(TARGET_NODE) {
         stage("build") {
             //tito_release(this, package_name, new_version, scratch)
             //tito_build(this, package_name)
-            def output_root = pipeline.env.WORKSPACE + '/BUILD'
+            output_root = pipeline.env.WORKSPACE + '/BUILD'
             dir(package_name) {
                 shell(
                     [
