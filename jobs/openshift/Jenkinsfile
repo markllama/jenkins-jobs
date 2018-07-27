@@ -291,7 +291,6 @@ node(TARGET_NODE) {
             upstream_repo_url = GITHUB_BASE + "/${upstream_project}.git"
             dir(package_name) {
                 sh("git remote add upstream ${upstream_repo_url} --no-tags")
-                sh("git fetch upstream ${upstream_branch_name}")
             }
         }
 
@@ -307,7 +306,8 @@ node(TARGET_NODE) {
         stage("merge upstream") {
             if (upstream_branch_name in ['stage', 'master']) {
                 dir(package_name) {
-                    sh "git merge upstream/${upstream_branch_name}"
+                    sh("git fetch upstream ${upstream_branch_name}")
+                    sh("git merge upstream/${upstream_branch_name}")
                 }
             }
         }
