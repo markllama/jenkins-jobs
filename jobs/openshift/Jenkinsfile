@@ -201,7 +201,6 @@ def tito_build(pipeline, package_name)  {
     def output_root = pipeline.env.WORKSPACE + '/BUILD'
     pipeline.dir(package_name) {
         pipeline.sh(
-            //returnStdout: true,
             script: [
                 "scl enable go-toolset-7 'tito build",
                 (debug ? '--debug' : ''),
@@ -212,6 +211,11 @@ def tito_build(pipeline, package_name)  {
             ].join(' ')
         )
     }
+}
+
+def run_script(shell, collection=null) {
+    def wrapper = collection ? "scl enable ${collection}" : ""
+    return { script -> shell.sh("${wrapper} '${script}'") }
 }
 
 // ===========================================================================
@@ -241,6 +245,8 @@ node(TARGET_NODE) {
     // clean up before starting
     sh "rm -rf $package_name"
 
+    shell = run_script(this, "go-toolset-7")
+    
     releases = get_releases(repo_url, branch_prefix)
     
     // select the branch to build
@@ -325,15 +331,14 @@ node(TARGET_NODE) {
             echo "tag and push"
             patch_tito(this)
             dir(package_name) {
-                sh(
-                    script: [
-                        "scl enable go-toolset-7 'tito tag",
+                shell(
+                    [
+                        "tito tag",
                         (debug ? '--debug' : ''),
                         '--accept-auto-changelog',
                         '--keep-version',
                         //'--use-version', new_version,
                         //'--use-release', new_release
-                        "'"
                     ].join(' ')
                 )
             }
@@ -341,7 +346,19 @@ node(TARGET_NODE) {
 
         stage("build") {
             //tito_release(this, package_name, new_version, scratch)
-            tito_build(this, package_name)
+            //tito_build(this, package_name)
+            def output_root = pipeline.env.WORKSPACE + '/BUILD'
+            dir(package_name) {
+                shell(
+                    [
+                        "tito build",
+                        (debug ? '--debug' : ''),
+                        '--offline',
+                        '--rpm',
+                        '--output', output_root,
+                    ].join(' ')
+                )
+            }
         }
     }
 }
