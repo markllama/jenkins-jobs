@@ -245,7 +245,9 @@ node(TARGET_NODE) {
     // clean up before starting
     sh "rm -rf $package_name"
 
-    collection = sh(returnStatus: true, script: "rpm -q --quiet go-toolset-7") ?
+    collection = sh(
+        returnStatus: true,
+        script: "rpm -q --quiet go-toolset-7") == 0 ?
         "go-toolset-7" :
         null
     
