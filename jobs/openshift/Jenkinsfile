@@ -63,6 +63,12 @@ properties(
                     defaultValue: true
                 ],
                 [
+                    name: 'USE_COLLECTIONS',
+                    description: 'enable SCL collection go-toolset-7',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: false
+                ],
+                [
                     name: 'DEBUG',
                     description: 'ask commands to print details',
                     $class: 'hudson.model.BooleanParameterDefinition',
@@ -81,6 +87,7 @@ properties(
 
 // convert property strings to proper logical values
 release = RELEASE.toBoolean()
+use_collections = USE_COLLECTIONS.toBoolean()
 scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
@@ -250,11 +257,16 @@ node(TARGET_NODE) {
     // clean up before starting
     sh "rm -rf $package_name"
 
-    collection = sh(
+    
+    collection_installed = sh(
         returnStatus: true,
-        script: "rpm -q --quiet go-toolset-7") == 0 ?
-        "go-toolset-7" :
-        null
+        script: "rpm -q --quiet go-toolset-7") == 0
+
+    if (use_collections and collection_installed) {
+        collection = 'go-toolset-7'
+    } else {
+        collection = null
+    }
     shell = run_script(this, collection)
     
     releases = get_releases(repo_url, branch_prefix)
