@@ -287,13 +287,6 @@ node(TARGET_NODE) {
             )
         }
 
-        stage("add upstream remote") {
-            upstream_repo_url = GITHUB_BASE + "/${upstream_project}.git"
-            dir(package_name) {
-                sh("git remote add upstream ${upstream_repo_url} --no-tags")
-            }
-        }
-
         stage("configure dummy merge") {
             dir(package_name) {
                 sh "git config merge.ours.driver true"
@@ -301,6 +294,13 @@ node(TARGET_NODE) {
             def gitattributes = package_name + "/.gitattributes"
             sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
             sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
+        }
+
+        stage("add upstream remote") {
+            upstream_repo_url = GITHUB_BASE + "/${upstream_project}.git"
+            dir(package_name) {
+                sh("git remote add upstream ${upstream_repo_url} --no-tags")
+            }
         }
 
         stage("merge upstream") {
