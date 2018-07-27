@@ -203,11 +203,12 @@ def tito_build(pipeline, package_name)  {
         pipeline.sh(
             //returnStdout: true,
             script: [
-                'tito build',
+                "scl go-toolset-7 'tito build",
                 (debug ? '--debug' : ''),
                 '--offline',
                 '--rpm',
-                '--output', output_root
+                '--output', output_root,
+                "'"
             ].join(' ')
         )
     }
