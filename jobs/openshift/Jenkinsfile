@@ -245,7 +245,11 @@ node(TARGET_NODE) {
     // clean up before starting
     sh "rm -rf $package_name"
 
-    shell = run_script(this, "go-toolset-7")
+    collection = sh(returnStatus: true, script: "rpm -q --quiet go-toolset-7") ?
+        "go-toolset-7" :
+        null
+    
+    shell = run_script(this, collection)
     
     releases = get_releases(repo_url, branch_prefix)
     
