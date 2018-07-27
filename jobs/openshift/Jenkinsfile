@@ -271,7 +271,7 @@ node(TARGET_NODE) {
             upstream_branch_name = 'release-' + BUILD_VERSION
         } else {
             error "invalid build version ${BUILD_VERSION}"
-        }
+       }
     }
 
     if (debug) {
@@ -302,7 +302,15 @@ node(TARGET_NODE) {
             def gitattributes = package_name + "/.gitattributes"
             sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
             sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
-       } 
+        }
+
+        stage("merge upstream") {
+            if (upstream_branch_name in ['stage', 'master']) {
+                dir(package_name) {
+                    sh "git merge upstream/${upstream_branch_name}"
+                }
+            }
+        }
         
         // need new version and new release
         stage("update build/release numbers") {
