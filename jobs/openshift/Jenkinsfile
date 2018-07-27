@@ -306,7 +306,7 @@ node(TARGET_NODE) {
         stage("merge upstream") {
             if (upstream_branch_name in ['stage', 'master']) {
                 dir(package_name) {
-                    sh("git fetch upstream ${upstream_branch_name}")
+                    sh("git fetch upstream")
                     sh("git merge upstream/${upstream_branch_name}")
                 }
             }
