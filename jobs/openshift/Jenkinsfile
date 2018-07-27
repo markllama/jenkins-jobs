@@ -255,10 +255,6 @@ node(TARGET_NODE) {
         script: "rpm -q --quiet go-toolset-7") == 0 ?
         "go-toolset-7" :
         null
-
-    if (collection) {
-        echo "running build tools in collection ${collection}"
-    }
     shell = run_script(this, collection)
     
     releases = get_releases(repo_url, branch_prefix)
