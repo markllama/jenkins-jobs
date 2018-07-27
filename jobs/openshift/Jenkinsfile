@@ -306,12 +306,16 @@ node(TARGET_NODE) {
         stage("merge upstream") {
             // when fetching master you have to fetch the whole thing
             def fetch_branch = upstream_branch_name
-            if (upstream_branch_name == 'master']) {
+            if (upstream_branch_name == 'master') {
                 fetch_branch = ""
             }
-            dir(package_name) {
-                sh("git fetch upstream ${fetch_branch}")
-                sh("git merge upstream/${upstream_branch_name}")
+
+            // right now, only merge dev branches on master
+            if (upstream_branch_name == 'master') {
+                dir(package_name) {
+                    sh("git fetch upstream ${fetch_branch}")
+                    sh("git merge upstream/${upstream_branch_name}")
+                }
             }
         }
         
