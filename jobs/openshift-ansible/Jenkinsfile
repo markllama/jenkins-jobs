@@ -85,7 +85,7 @@ scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
 
-build_version = new VersionString(BUILD_VERSION)
+// build_version = new VersionString(BUILD_VERSION)
 
 // ***************************************************************************
 //
