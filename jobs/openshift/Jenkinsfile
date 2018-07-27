@@ -326,12 +326,13 @@ node(TARGET_NODE) {
             dir(package_name) {
                 sh(
                     script: [
-                        "scl enable go-toolset-7 tito tag",
+                        "scl enable go-toolset-7 'tito tag",
                         (debug ? '--debug' : ''),
                         '--accept-auto-changelog',
                         '--keep-version',
                         //'--use-version', new_version,
                         //'--use-release', new_release
+                        "'"
                     ].join(' ')
                 )
             }
