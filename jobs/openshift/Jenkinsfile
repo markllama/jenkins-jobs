@@ -161,14 +161,14 @@ def patch_tito(pipeline) {
             // remove the get_tag_for_version function
             pipeline.sh "sed -i -e '/_get_tag_for_version/,\$d' ${tagger_py}"
             // add the version we want
-            pipeline.sh '''cat >> ${tagger_py} <<EOF
+            pipeline.sh """cat >> ${tagger_py} <<EOF
     def _get_tag_for_version(self, version, release=None):
         if release is None:
           return "v{}".format(version)
         else:
           return "v{}-{}".format(version, release)
 EOF
-'''
+"""
         }
     }
 }
