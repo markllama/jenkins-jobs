@@ -158,8 +158,8 @@ def patch_tito(pipeline) {
         pipeline.echo "Patching tito tagger customizations for tito-0.6.11"
         pipeline.dir(package_name) {
             pipeline.sh '''patch -p0 <<EOF
---- a/.tito/lib/origin/tagger/__init__.py
-+++ b/.tito/lib/origin/tagger/__init__.py
+--- .tito/lib/origin/tagger/__init__.py
++++ .tito/lib/origin/tagger/__init__.py
 @@ -40,7 +40,7 @@ class OriginTagger(VersionTagger):
          super(OriginTagger, self)._tag_release()
  
