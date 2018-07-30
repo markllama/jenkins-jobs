@@ -368,7 +368,7 @@ node(TARGET_NODE) {
 
         stage("tag and push") {
             echo "tag and push"
-            //patch_tito(this)
+            patch_tito(this)
             dir(package_name) {
                 shell(
                     [
