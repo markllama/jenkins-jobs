@@ -156,20 +156,18 @@ def patch_tito(pipeline) {
 
     if (tito_version == '0.6.11') {
         pipeline.echo "Patching tito tagger customizations for tito-0.6.11"
+        def tagger_py = .tito/lib/origin/tagger/__init__.py
         pipeline.dir(package_name) {
-            pipeline.sh '''patch -p0 <<EOF
---- .tito/lib/origin/tagger/__init__.py
-+++ .tito/lib/origin/tagger/__init__.py
-@@ -40,7 +40,7 @@ class OriginTagger(VersionTagger):
-         super(OriginTagger, self)._tag_release()
- 
-     def _get_tag_for_version(self, version, release=None):
--        if release:
-+        if release is None:
-             return "v{}".format(version)
-         else:
-             return "v{}-{}".format(version, release)
-EOF
+            // remove the get_tag_for_version function
+            pipeline.sh "sed -e '/_get_tag_for_version/,\$d' ${tagger_py}"
+            // add the version we want
+            pipeline.sh '''cat >> ${tagger_py} <<EOF
+    def _get_tag_for_version(self, version, release=None):
+        if release is None:
+          return "v{}".format(version)
+        else:
+          return "v{}-{}".format(version, release)
+EOF 
 '''
         }
     }
