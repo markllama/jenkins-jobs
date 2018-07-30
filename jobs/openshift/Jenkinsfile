@@ -158,15 +158,17 @@ def patch_tito(pipeline) {
         pipeline.echo "Patching tito tagger customizations for tito-0.6.11"
         pipeline.dir(package_name) {
             pipeline.sh '''patch -p0 <<EOF
---- .tito/lib/origin/tagger/__init__.py
-+++ .tito/lib/origin/tagger/__init__.py
-@@ -40,5 +40,5 @@ class OriginTagger(VersionTagger):
+--- a/.tito/lib/origin/tagger/__init__.py
++++ b/.tito/lib/origin/tagger/__init__.py
+@@ -40,7 +40,7 @@ class OriginTagger(VersionTagger):
          super(OriginTagger, self)._tag_release()
  
      def _get_tag_for_version(self, version, release=None):
--        return "v{}".format(version)
-+        return "v{}-{}".format(version,release)
- # vim:expandtab:autoindent:tabstop=4:shiftwidth=4:filetype=python:textwidth=0:
+-        if release:
++        if release is None:
+             return "v{}".format(version)
+         else:
+             return "v{}-{}".format(version, release)
 EOF
 '''
         }
