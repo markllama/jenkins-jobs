@@ -17,11 +17,126 @@ properties(
                     $class: 'hudson.model.StringParameterDefinition',
                     defaultValue: 'openshift-build-1'
                 ],
+                                [
+                    name: 'GITHUB_BASE',
+                    description: 'Github base for repos',
+                    $class: 'hudson.model.ChoiceParameterDefinition',
+                    choices: [
+                        "git@github.com:openshift",
+                        "git@github.com:markllama"
+                    ].join("\n"),
+                    defaultValue: 'git@github.com:openshift'
+                ],
+                [
+                    name: 'SSH_KEY_ID',
+                    description: 'SSH credential id to use',
+                    $class: 'hudson.model.ChoiceParameterDefinition',
+                    choices: [
+                        "openshift-bot",
+                        "markllama-aos-cd-bot",
+                        "markllama"
+                    ].join("\n"),
+                    defaultValue: 'markllama'
+                ],
+                [
+                    name: 'BUILD_VERSION',
+                    description: 'OCP Version to build',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: 'master'
+                ],
+                [
+                    name: 'RELEASE',
+                    description: 'build local or release',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: false
+                ],
+                [
+                    name: 'SCRATCH',
+                    description: 'build an unofficial release',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: true
+                ],
+                [
+                    name: 'USE_COLLECTIONS',
+                    description: 'enable SCL collection go-toolset-7',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: false
+                ],
+                [
+                    name: 'DEBUG',
+                    description: 'ask commands to print details',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: false
+                ],
+                [
+                    name: 'MOCK',
+                    description: 'dont do anything if true',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: false
+                ],
             ]
         ],
         disableConcurrentBuilds()
     ]
 )
+
+// convert property strings to proper logical values
+release = RELEASE.toBoolean()
+use_collections = USE_COLLECTIONS.toBoolean()
+scratch = SCRATCH.toBoolean()
+mock = MOCK.toBoolean()
+debug = DEBUG.toBoolean()
+
+
+// ***************************************************************************
+//
+//
+//
+// ***************************************************************************
+
+/**
+ * Retrive the branch list from a remote repository
+ * @param repo_url a git@ repository URL.
+ * @param pattern a matching pattern for the branch list. Only return matching branches
+ *
+ * @return a list of branch names.  Removes the leading ref path
+ *
+ * Requires SSH_AGENT to have set a key for access to the remote repository
+ */
+def get_branches(repo_url, pattern="") {
+
+    branch_text = sh(
+        returnStdout: true,
+        script: [
+            "git ls-remote ${repo_url} ${pattern}",
+            "awk '{print \$2}'",
+            "cut -d/ -f3"
+        ].join(" | ")
+    )
+
+    return branch_text.tokenize("\n")
+}
+
+/**
+ * Retrive a list of release numbers from the OCP remote repository
+ * @param repo_url a git@ repository URL.
+ * @return a list of OSE release numbers.
+ *
+ * Get the branch names beginning with 'enterprise-'.
+ * Extract the release number string from each branch release name
+ * Sort in version order (compare fields as integers, not strings)
+ * Requires SSH_AGENT to have set a key for access to the remote repository
+ */
+def get_releases(repo_url, pattern="enterprise-") {
+    // too clever: chain - get branch names, remove prefix, suffix
+    def r = get_branches(repo_url, pattern + '*')
+        .collect { it - pattern }
+        .findAll { it =~ /^\d+((\.\d+)*)$/ }
+        .collect { new VersionString(it) }
+
+    return r
+}
+
 
 node(TARGET_NODE) {
     checkout scm
@@ -30,7 +145,27 @@ node(TARGET_NODE) {
         script: "git rev-parse HEAD",
     ).trim()
 
-    stage("testing") {
-        echo "Testing"
+    package_name = "origin-web-console-server"
+    upstream_project = "origin-web-console"
+    branch_prefix = "enterprise-"
+    brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
+
+    repo_url = GITHUB_BASE + "/${package_name}.git"
+    //spec_filename = "${package_name}.spec"
+    spec_filename = "origin-web-console-server.spec"
+    spec_path = "${package_name}/${spec_filename}"
+
+    // clean up before starting
+    sh "rm -rf $package_name"
+
+    sshagent([SSH_KEY_ID]) {
+
+        stage("clone ${package_name}") {
+            sh(["git clone",
+                "--branch ${branch_name}",
+                repo_url
+                ].join(' ')
+            )
+        }
     }
 }
