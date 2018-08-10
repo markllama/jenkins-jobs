@@ -216,7 +216,7 @@ node(TARGET_NODE) {
 
         stage("merge master to build branch") {
             dir(package_name) {
-                sh "git merge master --no-commit --no-ff"
+                sh "git merge origin/master --no-commit --no-ff"
                 sh """git commit -m "Merge master into ${branch_name}" --allow-empty"""
                 sh "git reset --hard HEAD"
             }
