@@ -203,5 +203,13 @@ node(TARGET_NODE) {
                 ].join(' ')
             )
         }
-}
+
+        stage("configure dummy merge") {
+            dir(package_name) {
+                sh "git config merge.ours.driver true"
+            }
+            def gitattributes = package_name + "/.gitattributes"
+            sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
+            sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
+        }
 }
