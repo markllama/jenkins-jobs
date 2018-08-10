@@ -161,6 +161,7 @@ node(TARGET_NODE) {
 
     // clean up before starting
     sh "rm -rf $package_name"
+    sh "rm -rf $upstream_project"
 
     releases = get_releases(repo_url, branch_prefix)
     
@@ -193,5 +194,13 @@ node(TARGET_NODE) {
                 ].join(' ')
             )
         }
-    }
+
+        stage("clone ${upstream_project}") {
+            sh(["git clone",
+                "--branch ${branch_name}",
+                repo_url
+                ].join(' ')
+            )
+        }
+}
 }
