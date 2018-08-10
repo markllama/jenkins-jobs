@@ -155,6 +155,7 @@ node(TARGET_NODE) {
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
 
     repo_url = GITHUB_BASE + "/${package_name}.git"
+    upstream_repo_url = GITHUB_BASE + "/${upstream_project}.git"
     //spec_filename = "${package_name}.spec"
     spec_filename = "origin-web-console-server.spec"
     spec_path = "${package_name}/${spec_filename}"
@@ -198,7 +199,7 @@ node(TARGET_NODE) {
         stage("clone ${upstream_project}") {
             sh(["git clone",
                 "--branch ${branch_name}",
-                repo_url
+                upstream_repo_url
                 ].join(' ')
             )
         }
