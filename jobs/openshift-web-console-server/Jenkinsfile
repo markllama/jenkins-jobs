@@ -189,8 +189,6 @@ node(TARGET_NODE) {
         echo "build_version: ${BUILD_VERSION}, branch_name: ${branch_name}"
     }
 
-
-    sh mkdir -p go/src/github.com/markllama
     sshagent([SSH_KEY_ID]) {
 
         stage("clone ${package_name}") {
