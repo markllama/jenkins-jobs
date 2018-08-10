@@ -1,4 +1,8 @@
 #!/usr/bin/env groovy
+
+@Library('artlib')
+import com.redhat.art.*
+
 // Expose properties for a parameterized build
 properties(
     [
