@@ -22,14 +22,14 @@ properties(
                     defaultValue: 'openshift-build-1'
                 ],
                                 [
-                    name: 'GITHUB_BASE',
-                    description: 'Github base for repos',
+                    name: 'GITHUB_USER',
+                    description: 'Github user for source repos',
                     $class: 'hudson.model.ChoiceParameterDefinition',
                     choices: [
-                        "git@github.com:openshift",
-                        "git@github.com:markllama"
+                        "openshift",
+                        "markllama"
                     ].join("\n"),
-                    defaultValue: 'git@github.com:openshift'
+                    defaultValue: 'openshift'
                 ],
                 [
                     name: 'SSH_KEY_ID',
@@ -150,22 +150,24 @@ node(TARGET_NODE) {
     ).trim()
 
     package_name = "origin-web-console-server"
-    upstream_project = "origin-web-console"
+    upstream_project_name = "origin-web-console"
     branch_prefix = "enterprise-"
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
 
-    repo_url = GITHUB_BASE + "/${package_name}.git"
-    upstream_repo_url = GITHUB_BASE + "/${upstream_project}.git"
+    repo_url = "git@github.com:${GITHUB_USER}/${package_name}.git"
+    upstream_repo_url = "git@github.com:${GITHUB_USER}/${upstream_project_name}.git"
     //spec_filename = "${package_name}.spec"
     spec_filename = "origin-web-console-server.spec"
     spec_path = "${package_name}/${spec_filename}"
 
+    go_source_dir = "go/src/github.com/${GITHUB_USER}"
+    package_path = go_source_dir + "/" + package_name
+    upstream_project_path = go_source_dir + "/" + upstream_project_name
     // clean up before starting
-    sh "rm -rf $package_name"
-    sh "rm -rf $upstream_project"
+    sh "rm -rf ${go_source_dir}"
+    sh "mkdir -p ${go_source_dir}"
 
     releases = get_releases(repo_url, branch_prefix)
-    
 
     // select the branch to build
     // NOTE: Valid build versions are only those in the releases.
@@ -186,13 +188,16 @@ node(TARGET_NODE) {
     if (debug) {
         echo "build_version: ${BUILD_VERSION}, branch_name: ${branch_name}"
     }
-    
+
+
+    sh mkdir -p go/src/github.com/markllama
     sshagent([SSH_KEY_ID]) {
 
         stage("clone ${package_name}") {
             sh(["git clone",
                 "--branch ${branch_name}",
-                repo_url
+                repo_url,
+                package_path,
                 ].join(' ')
             )
         }
@@ -200,13 +205,14 @@ node(TARGET_NODE) {
         stage("clone ${upstream_project}") {
             sh(["git clone",
                 "--branch ${branch_name}",
-                upstream_repo_url
+                upstream_repo_url,
+                upstream_project_path
                 ].join(' ')
             )
         }
 
         stage("configure dummy merge") {
-            dir(package_name) {
+            dir(package_path) {
                 sh "git config merge.ours.driver true"
             }
             def gitattributes = package_name + "/.gitattributes"
@@ -215,7 +221,7 @@ node(TARGET_NODE) {
         }
 
         stage("merge master to build branch") {
-            dir(package_name) {
+            dir(package_path) {
                 sh "git merge origin/master --no-commit --no-ff"
                 sh """git commit -m "Merge master into ${branch_name}" --allow-empty"""
                 sh "git reset --hard HEAD"
