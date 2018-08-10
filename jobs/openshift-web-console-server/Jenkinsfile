@@ -225,6 +225,11 @@ node(TARGET_NODE) {
                 sh "git reset --hard HEAD"
             }
         }
-        
+
+        stage("merge upstream ${upstream_project_name}") {
+            dir(package_path) {
+                sh "GIT_REF=${branch_name} bash -x hack/vendor-console.sh"
+            }
+        }
     }
 }
