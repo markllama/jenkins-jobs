@@ -200,7 +200,7 @@ node(TARGET_NODE) {
             )
         }
 
-        stage("clone ${upstream_project}") {
+        stage("clone ${upstream_project_name}") {
             sh(["git clone",
                 "--branch ${branch_name}",
                 upstream_repo_url,
