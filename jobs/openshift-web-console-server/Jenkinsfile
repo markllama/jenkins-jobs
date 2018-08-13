@@ -189,6 +189,11 @@ node(TARGET_NODE) {
         echo "build_version: ${BUILD_VERSION}, branch_name: ${branch_name}"
     }
 
+    // remote existing stuff if needed
+    // origin-web-console
+    // origin-web-console-server
+    // go
+    
     sshagent([SSH_KEY_ID]) {
 
         stage("clone ${package_name}") {
@@ -226,6 +231,13 @@ node(TARGET_NODE) {
             }
         }
 
+        stage("prepare go-bindata") {
+            sh "mkdir -p ~/go"
+            sh "go get github.com/jteeuwen/go-bindata"
+            sh "go build github.com/jteeuwen/go-bindata"
+            sh "go install github.com/jteeuwen/go-bindata"
+        }
+        
         stage("merge upstream ${upstream_project_name}") {
             dir(package_path) {
                 VC_RESULT =  sh(
