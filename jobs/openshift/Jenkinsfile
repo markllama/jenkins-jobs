@@ -100,6 +100,16 @@ debug = DEBUG.toBoolean()
 //
 // ***************************************************************************
 
+def gopath_setup() {
+    echo "Adding git managed script directories to PATH"
+ 
+    GOPATH = "${env.WORKSPACE}/go"
+    env.GOPATH = GOPATH
+    sh "rm -rf ${GOPATH}"  // Remove any cruft
+    sh "mkdir -p ${GOPATH}"
+    echo "Initialized env.GOPATH: ${env.GOPATH}"
+}
+
 /**
  * Retrive the branch list from a remote repository
  * @param repo_url a git@ repository URL.
@@ -258,6 +268,7 @@ node(TARGET_NODE) {
     // clean up before starting
     sh "rm -rf $package_name"
 
+    gopath_setup()
     
     collection_installed = sh(
         returnStatus: true,

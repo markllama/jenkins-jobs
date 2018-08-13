@@ -93,7 +93,7 @@ debug = DEBUG.toBoolean()
 
 
 // Initialize $PATH and $GOPATH
-def path_setup() {
+def gopath_setup() {
     echo "Adding git managed script directories to PATH"
 
     GOPATH = "${env.WORKSPACE}/go"
@@ -178,7 +178,7 @@ node(TARGET_NODE) {
     sh "rm -rf ${go_source_dir}"
     sh "mkdir -p ${go_source_dir}"
 
-    path_setup()
+    gopath_setup()
     
     releases = get_releases(repo_url, branch_prefix)
 
