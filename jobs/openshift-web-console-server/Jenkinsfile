@@ -238,7 +238,12 @@ node(TARGET_NODE) {
                 ).trim()
 
                 echo "VC_RESULT: '${VC_RESULT}'"
-            
+
+                if (VC_RESULT == "") {
+                    sh(
+                        "GIT_REF=${branch_name} bash -x hack/vendor-console.sh"
+                    )
+                }
             }
         }
     }
