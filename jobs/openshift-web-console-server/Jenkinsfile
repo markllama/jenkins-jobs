@@ -92,6 +92,17 @@ mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
 
 
+// Initialize $PATH and $GOPATH
+def path_setup() {
+    echo "Adding git managed script directories to PATH"
+
+    GOPATH = "${env.WORKSPACE}/go"
+    env.GOPATH = GOPATH
+    sh "rm -rf ${GOPATH}"  // Remove any cruft
+    sh "mkdir -p ${GOPATH}"
+    echo "Initialized env.GOPATH: ${env.GOPATH}"
+}
+
 // ***************************************************************************
 //
 //
@@ -148,7 +159,7 @@ node(TARGET_NODE) {
         returnStdout: true,
         script: "git rev-parse HEAD",
     ).trim()
-
+    
     package_name = "origin-web-console-server"
     upstream_project_name = "origin-web-console"
     branch_prefix = "enterprise-"
@@ -167,6 +178,8 @@ node(TARGET_NODE) {
     sh "rm -rf ${go_source_dir}"
     sh "mkdir -p ${go_source_dir}"
 
+    path_setup()
+    
     releases = get_releases(repo_url, branch_prefix)
 
     // select the branch to build
