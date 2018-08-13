@@ -228,7 +228,7 @@ node(TARGET_NODE) {
 
         stage("merge upstream ${upstream_project_name}") {
             dir(package_path) {
-                sh "GIT_REF=${branch_name} bash -x hack/vendor-console.sh"
+                sh "GIT_REF=${branch_name} bash -x hack/vendor-console.sh 2>/dev/null | grep 'Vendoring origin-web-console' | awk '{print \$4}'"
             }
         }
     }
