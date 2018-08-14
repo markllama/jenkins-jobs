@@ -260,6 +260,9 @@ node(TARGET_NODE) {
         stage("merge master to build branch") {
             dir(package_path) {
                 sh "git merge origin/master --no-commit --no-ff"
+                sh "./hack/install-deps.sh"
+                sh "grunt build"
+                sh "git add dist"
                 sh """git commit -m "Merge master into ${branch_name}" --allow-empty"""
                 sh "git reset --hard HEAD"
             }
