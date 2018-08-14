@@ -268,12 +268,12 @@ node(TARGET_NODE) {
             }
         }
 
-        stage("prepare go-bindata") {
-            sh "mkdir -p ~/go"
-            sh "go get github.com/jteeuwen/go-bindata"
-            sh "go build github.com/jteeuwen/go-bindata"
-            sh "go install github.com/jteeuwen/go-bindata"
-        }
+//        stage("prepare go-bindata") {
+//            sh "mkdir -p ~/go"
+//            sh "go get github.com/jteeuwen/go-bindata"
+//            sh "go build github.com/jteeuwen/go-bindata"
+//            sh "go install github.com/jteeuwen/go-bindata"
+//        }
         
         stage("merge upstream ${upstream_project_name}") {
             dir(package_path) {
@@ -308,9 +308,8 @@ node(TARGET_NODE) {
                         "tito tag",
                         (debug ? '--debug' : ''),
                         '--accept-auto-changelog',
-                        '--keep-version',
-                        //'--use-version', new_version,
-                        //'--use-release', new_release
+                        '--use-version', BUILD_VERSION + ".1",
+                        '--use-release', '1'
                     ].join(' ')
                 )
             }
