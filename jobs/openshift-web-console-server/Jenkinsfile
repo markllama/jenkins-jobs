@@ -248,7 +248,7 @@ node(TARGET_NODE) {
         stage("merge upstream ${upstream_project_name}") {
             dir(package_path) {
                 // the resulting commit is used in the downstream merge message
-                VC_RESULT =  sh(
+                VC_COMMIT =  sh(
                     script: [
                         "GIT_REF=${branch_name} bash -x hack/vendor-console.sh 2>/dev/null",
                         "grep 'Vendoring origin-web-console'",
@@ -257,7 +257,7 @@ node(TARGET_NODE) {
                     returnStdout: true
                 ).trim()
 
-                echo "VC_RESULT - Commit =: '${VC_RESULT}'"
+                echo "VC_COMMIT - Commit = '${VC_COMMIT}'"
 
                 if (VC_RESULT == "") {
                     sh(
