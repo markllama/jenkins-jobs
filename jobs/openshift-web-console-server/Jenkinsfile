@@ -269,5 +269,40 @@ node(TARGET_NODE) {
                 sh "git commit -m 'bump origin-web-console ${VC_COMMIT}' --allow-empty"
             }
         }
+
+        stage("tag and push") {
+            echo "tag and push"
+            patch_tito(this)
+            dir(package_path) {
+                shell(
+                    [
+                        "tito tag",
+                        (debug ? '--debug' : ''),
+                        '--accept-auto-changelog',
+                        '--keep-version',
+                        //'--use-version', new_version,
+                        //'--use-release', new_release
+                    ].join(' ')
+                )
+            }
+        }
+
+        stage("build") {
+            //tito_release(this, package_name, new_version, scratch)
+            //tito_build(this, package_name)
+            def output_root = env.WORKSPACE + '/BUILD'
+            dir(package_path) {
+                shell(
+                    [
+                        "tito build",
+                        (debug ? '--debug' : ''),
+                        '--offline',
+                        '--rpm',
+                        '--output', output_root,
+                    ].join(' ')
+                )
+            }
+        }
+
     }
 }
