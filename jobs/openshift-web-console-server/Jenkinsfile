@@ -259,7 +259,7 @@ node(TARGET_NODE) {
 
                 echo "VC_COMMIT - Commit = '${VC_COMMIT}'"
 
-                if (VC_RESULT == "") {
+                if (VC_COMMIT == "") {
                     sh(
                         "GIT_REF=${branch_name} bash -x hack/vendor-console.sh"
                     )
