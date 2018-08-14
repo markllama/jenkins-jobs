@@ -49,6 +49,12 @@ properties(
                     defaultValue: 'master'
                 ],
                 [
+                    name: 'USE_COLLECTIONS',
+                    description: 'enable SCL collection go-toolset-7',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: false
+                ],
+                [
                     name: 'RELEASE',
                     description: 'build local or release',
                     $class: 'hudson.model.BooleanParameterDefinition',
@@ -79,6 +85,7 @@ properties(
 )
 
 // convert property strings to proper logical values
+use_collections = USE_COLLECTIONS.toBoolean()
 release = RELEASE.toBoolean()
 scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
@@ -145,6 +152,15 @@ def get_releases(repo_url, pattern="enterprise-") {
     return r
 }
 
+def run_script(shell, collection=null) {
+    if (collection) {
+        echo "running build tools in collection ${collection}"
+        wrapper = "scl enable ${collection}"
+        return { script -> shell.sh("${wrapper} '${script}'") }
+    }
+
+    return { script -> shell.sh script }
+}
 
 node(TARGET_NODE) {
     checkout scm
@@ -170,6 +186,17 @@ node(TARGET_NODE) {
     // clean up before starting
     sh "rm -rf ${go_source_dir}"
     sh "mkdir -p ${go_source_dir}"
+
+    collection_installed = sh(
+        returnStatus: true,
+        script: "rpm -q --quiet go-toolset-7") == 0
+    
+    if (use_collections && collection_installed) {
+        collection = 'go-toolset-7'
+    } else {
+        collection = null
+    }
+    shell = run_script(this, collection)
 
     gopath_setup()
     
@@ -273,7 +300,7 @@ node(TARGET_NODE) {
         stage("tag and push") {
             echo "tag and push"
             dir(package_path) {
-                sh(
+                shell(
                     [
                         "tito tag",
                         (debug ? '--debug' : ''),
@@ -291,7 +318,7 @@ node(TARGET_NODE) {
             //tito_build(this, package_name)
             def output_root = env.WORKSPACE + '/BUILD'
             dir(package_path) {
-                sh(
+                shell(
                     [
                         "tito build",
                         (debug ? '--debug' : ''),
@@ -305,5 +332,5 @@ node(TARGET_NODE) {
 
     }
 
-    archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/*"
+    archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/**"
 }
