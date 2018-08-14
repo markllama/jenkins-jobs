@@ -265,7 +265,7 @@ node(TARGET_NODE) {
                     )
                 }
                 sh "git add pkg/assets/bindata.go"
-                sh "git add pkg/assets/bindata.go"
+                sh "git add pkg/assets/java/bindata.go"
                 sh "git commit -m 'bump origin-web-console ${VC_COMMIT}' --allow-empty"
             }
         }
