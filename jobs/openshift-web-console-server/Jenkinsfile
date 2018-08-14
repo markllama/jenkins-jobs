@@ -96,6 +96,32 @@ def gopath_setup() {
     echo "Initialized env.GOPATH: ${env.GOPATH}"
 }
 
+def patch_tito(pipeline) {
+    def tito_version = pipeline.sh(
+        returnStdout: true,
+        script: 'rpm -q --qf "%{VERSION}" tito'
+    )
+
+    def tagger_py = ".tito/lib/origin/tagger/__init__.py"
+    patched = sh returnStatus: true, script: "grep -q 'release is None' ${tagger_py}"
+    if (tito_version == '0.6.11' && patched != 0) {
+        pipeline.echo "Patching tito tagger customizations for tito-0.6.11"
+        pipeline.dir(package_name) {
+            // remove the get_tag_for_version function
+            pipeline.sh "sed -i -e '/_get_tag_for_version/,\$d' ${tagger_py}"
+            // add the version we want
+            pipeline.sh """cat >> ${tagger_py} <<EOF
+    def _get_tag_for_version(self, version, release=None):
+        if release is None:
+          return "v{}".format(version)
+        else:
+          return "v{}-{}".format(version, release)
+EOF
+"""
+        }
+    }
+}
+
 // ***************************************************************************
 //
 //
