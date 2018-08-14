@@ -273,7 +273,7 @@ node(TARGET_NODE) {
         stage("tag and push") {
             echo "tag and push"
             dir(package_path) {
-                shell(
+                sh(
                     [
                         "tito tag",
                         (debug ? '--debug' : ''),
@@ -291,7 +291,7 @@ node(TARGET_NODE) {
             //tito_build(this, package_name)
             def output_root = env.WORKSPACE + '/BUILD'
             dir(package_path) {
-                shell(
+                sh(
                     [
                         "tito build",
                         (debug ? '--debug' : ''),
