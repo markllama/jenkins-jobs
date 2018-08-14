@@ -257,8 +257,8 @@ node(TARGET_NODE) {
             sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
         }
 
-        stage("merge master to build branch") {
-            dir(package_path) {
+        stage("build upstream") {
+            dir(upstream_project_path) {
                 sh "git merge origin/master --no-commit --no-ff"
                 sh "bash -x ./hack/install-deps.sh"
                 sh "grunt build"
