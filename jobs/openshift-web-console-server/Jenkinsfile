@@ -247,6 +247,7 @@ node(TARGET_NODE) {
         
         stage("merge upstream ${upstream_project_name}") {
             dir(package_path) {
+                // the resulting commit is used in the downstream merge message
                 VC_RESULT =  sh(
                     script: [
                         "GIT_REF=${branch_name} bash -x hack/vendor-console.sh 2>/dev/null",
@@ -256,13 +257,16 @@ node(TARGET_NODE) {
                     returnStdout: true
                 ).trim()
 
-                echo "VC_RESULT: '${VC_RESULT}'"
+                echo "VC_RESULT - Commit =: '${VC_RESULT}'"
 
                 if (VC_RESULT == "") {
                     sh(
                         "GIT_REF=${branch_name} bash -x hack/vendor-console.sh"
                     )
                 }
+                sh "git add pkg/assets/bindata.go"
+                sh "git add pkg/assets/bindata.go"
+                sh "git commit -m 'bump origin-web-console ${VC_COMMIT}' --allow-empty"
             }
         }
     }
