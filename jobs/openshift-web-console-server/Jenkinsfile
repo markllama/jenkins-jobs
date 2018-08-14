@@ -61,12 +61,6 @@ properties(
                     defaultValue: true
                 ],
                 [
-                    name: 'USE_COLLECTIONS',
-                    description: 'enable SCL collection go-toolset-7',
-                    $class: 'hudson.model.BooleanParameterDefinition',
-                    defaultValue: false
-                ],
-                [
                     name: 'DEBUG',
                     description: 'ask commands to print details',
                     $class: 'hudson.model.BooleanParameterDefinition',
@@ -86,7 +80,6 @@ properties(
 
 // convert property strings to proper logical values
 release = RELEASE.toBoolean()
-use_collections = USE_COLLECTIONS.toBoolean()
 scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
@@ -231,7 +224,8 @@ node(TARGET_NODE) {
             dir(package_path) {
                 sh "git config merge.ours.driver true"
             }
-            def gitattributes = package_name + "/.gitattributes"
+            //def gitattributes = package_name + "/.gitattributes"
+            def gitattributes = ".gitattributes"
             sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
             sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
         }
