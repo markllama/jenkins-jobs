@@ -90,7 +90,7 @@ release = RELEASE.toBoolean()
 scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
-
+debug_shell = debug ? "-x" : "" 
 
 // Initialize $PATH and $GOPATH
 def gopath_setup() {
@@ -186,6 +186,7 @@ node(TARGET_NODE) {
     // clean up before starting
     sh "rm -rf ${go_source_dir}"
     sh "mkdir -p ${go_source_dir}"
+    sh "rm -rf BUILD"
 
     collection_installed = sh(
         returnStatus: true,
@@ -260,7 +261,7 @@ node(TARGET_NODE) {
         stage("build upstream") {
             dir(upstream_project_path) {
                 sh "git merge origin/master --no-commit --no-ff"
-                sh "bash -x ./hack/install-deps.sh"
+                sh "bash ${debug_shell} ./hack/install-deps.sh"
                 sh "grunt build"
                 sh "git add dist"
                 sh """git commit -m "Merge master into ${branch_name}" --allow-empty"""
@@ -280,7 +281,7 @@ node(TARGET_NODE) {
                 // the resulting commit is used in the downstream merge message
                 VC_COMMIT =  sh(
                     script: [
-                        "GIT_REF=${branch_name} bash -x hack/vendor-console.sh 2>/dev/null",
+                        "GIT_REF=${branch_name} bash ${debug_shell} hack/vendor-console.sh 2>/dev/null",
                         "grep 'Vendoring origin-web-console'",
                         "awk '{print \$4}'"
                     ].join(" | "),
@@ -291,7 +292,7 @@ node(TARGET_NODE) {
 
                 if (VC_COMMIT == "") {
                     sh(
-                        "GIT_REF=${branch_name} bash -x hack/vendor-console.sh"
+                        "GIT_REF=${branch_name} bash ${debug_shell} hack/vendor-console.sh"
                     )
                 }
                 sh "git add pkg/assets/bindata.go"
