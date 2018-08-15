@@ -45,7 +45,7 @@ class VersionString implements Comparable<VersionString>{
         return 0
     }
 
-    @NonCPS
+    //@NonCPS
     String toString() {
         return v_array.collect{ it as String }.join('.')
     }
