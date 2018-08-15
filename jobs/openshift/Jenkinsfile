@@ -303,21 +303,6 @@ node(TARGET_NODE) {
                 ].join(' ')
             )
         }
-
-        // determine if go-toolset-7 SCL is required
-        def rpm_spec = new RpmSpecfile(readFile(spec_path))
-        def version = new VersionString(rpm_spec.version)
-        def scl_version = new VersionString("3.11")
-        if (version >= scl_version) {
-            if (collection_installed) {
-                collection = "go-toolset-7"
-            } else {
-                error("OCP versions >= 3.11 require go-toolset-7 SCL collection")
-            }
-        } else {
-            collection = null
-        }
-        shell = run_script(this, collection)
         
         stage("configure dummy merge") {
             dir(package_name) {
@@ -382,7 +367,21 @@ node(TARGET_NODE) {
                 sh "git commit --allow-empty -m 'updated version to ${new_version}-${new_release}' ${spec_filename}"
                 //sh "git tag ${new_version}-${new_release}"
             }
+
         }
+
+        // versions >= 3.11 require go-toolset-7 software collection to build
+        def scl_version = new VersionString("3.11")
+        if (nv >= scl_version) {
+            if (collection_installed) {
+                collection = "go-toolset-7"
+            } else {
+                error("OCP versions >= 3.11 require go-toolset-7 SCL collection")
+            }
+        } else {
+            collection = null
+        }
+        shell = run_script(this, collection)
 
         stage("tag and push") {
             echo "tag and push"
