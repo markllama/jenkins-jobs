@@ -187,7 +187,7 @@ node(TARGET_NODE) {
     if (BUILD_VERSION == 'master') {
         build_version = releases[-1]
         echo "detected version: ${build_version}"
-    else if (BUILD_VERSION == 'stage') {
+    } else if (BUILD_VERSION == 'stage') {
         error("Not implemented: build should be most recent numbered branch")
     } else {
         build_version = new VersionString(BUILD_VERSION)
