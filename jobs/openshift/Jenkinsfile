@@ -92,8 +92,6 @@ scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
 
-//build_version = new VersionString(BUILD_VERSION)
-
 // ***************************************************************************
 //
 //
@@ -279,20 +277,21 @@ node(TARGET_NODE) {
     // select the branch to build
     def branch_name
     if (BUILD_VERSION in ['master', 'stage']) {
+        build_version = BUILD_VERSION
         branch_name = BUILD_VERSION
         upstream_branch_name = BUILD_VERSION
     } else {
         build_version = new VersionString(BUILD_VERSION)
         if (releases.find { it == build_version } != -1) {
-            branch_name = branch_prefix + BUILD_VERSION
-            upstream_branch_name = 'release-' + BUILD_VERSION
+            branch_name = branch_prefix + build_version
+            upstream_branch_name = 'release-' + build_version
         } else {
             error "invalid build version ${BUILD_VERSION}"
        }
     }
 
     if (debug) {
-        echo "build_version: ${BUILD_VERSION}, branch_name: ${branch_name}"
+        echo "build_version: ${build_version}, branch_name: ${branch_name}"
     }
     
     sshagent([SSH_KEY_ID]) {
@@ -303,6 +302,25 @@ node(TARGET_NODE) {
                 ].join(' ')
             )
         }
+
+        // re-read the new spec
+        def rpm_spec = new RpmSpecfile(readFile(spec_path))
+        if (build_version == 'master') {
+            build_version = new VersionString(rpm_spec.version).getMajorMinor()
+        }
+
+        // versions >= 3.11 require go-toolset-7 software collection to build
+        def scl_version = new VersionString("3.11")
+        if ( build_version >= scl_version) {
+            if (collection_installed) {
+                collection = "go-toolset-7"
+            } else {
+                error("OCP versions >= 3.11 require go-toolset-7 SCL collection")
+            }
+        } else {
+            collection = null
+        }
+        shell = run_script(this, collection)
 
         stage("configure dummy merge") {
             dir(package_name) {
@@ -338,8 +356,6 @@ node(TARGET_NODE) {
         
         // need new version and new release
         stage("update build/release numbers") {
-            def rpm_spec = new RpmSpecfile(readFile(spec_path))
-
             def cv = new VersionString(rpm_spec.version)
             def cr = new VersionString(rpm_spec.release)
 
@@ -367,22 +383,6 @@ node(TARGET_NODE) {
             }
 
         }
-
-        // re-read the new spec
-        def rpm_spec = new RpmSpecfile(readFile(spec_path))
-        def new_verson = new VersionString(rpm_spec.version)
-        // versions >= 3.11 require go-toolset-7 software collection to build
-        def scl_version = new VersionString("3.11")
-        if ( new_version >= scl_version) {
-            if (collection_installed) {
-                collection = "go-toolset-7"
-            } else {
-                error("OCP versions >= 3.11 require go-toolset-7 SCL collection")
-            }
-        } else {
-            collection = null
-        }
-        shell = run_script(this, collection)
 
         stage("tag and push") {
             echo "tag and push"
