@@ -132,7 +132,7 @@ def get_releases(repo_url, pattern="enterprise-") {
     def r = get_branches(repo_url, pattern + '*')
         .collect { it - pattern }
         .findAll { it =~ /^\d+((\.\d+)*)$/ }
-        .collect { new VersionString(it) }
+        .collect { new Version(it) }
 
     return r
 }
@@ -244,15 +244,15 @@ node(TARGET_NODE) {
             current_version = rpm_spec.version
             current_release = rpm_spec.release
 
-            def cv = new VersionString(current_version)
-            def cr = new VersionString(current_release)
+            def cv = new Version(current_version)
+            def cr = new Version(current_release)
 
             echo "current RPM id: ${current_version}-${current_release}"
 
             // release builds increment the revision and leave the build
             // number at 1.  Dunno why
             //cv.incrRevision()
-            def nv = new VersionString(cv)
+            def nv = new Version(cv)
             def nr = cr.incrMajor()
 
             rpm_spec.version = nv as String

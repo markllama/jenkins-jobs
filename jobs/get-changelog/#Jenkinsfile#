@@ -1,0 +1,98 @@
+properties(
+    [
+        buildDiscarder(
+            logRotator(
+                artifactDaysToKeepStr: '',
+                artifactNumToKeepStr: '',
+                daysToKeepStr: '',
+                numToKeepStr: '1000')),
+        [
+            $class: 'ParametersDefinitionProperty',
+            parameterDefinitions: [
+                [
+                    name: 'TARGET_NODE',
+                    description: 'Jenkins agent node',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: 'container'
+                ],
+                [
+                    name: 'TASK_ID',
+                    description: 'the task to examine for a build',
+                    $class: 'hudson.model.StringParameterDefinition',
+                ],
+            ]            
+        ]
+    ]
+)
+
+def get_changelog(rpm_name, record_log) {
+    //
+    // INPUTS:
+    //   rpm_name - the name of an RPM build previously
+    //   record_log - an array of build records with | separated fields
+    
+    rpm_builds = record_log['build_rpm']
+    if (rpm_builds == null || rpm_builds.size() == 0) {
+        return ""
+    }
+
+    // filter for the desired RPM using name
+    build_record_index = rpm_builds.findIndexOf {
+        it['rpm'] == rpm_name
+    }
+    if (build_record_index == -1) {
+        return ""
+    }
+    build_record = rpm_builds[build_record_index]
+
+    // then get the task_id and task_url out of it
+    // task_id = build_record['task_id']
+    task_url = build_record['task_url']
+    task_page = new URL(task_url)
+
+    // get the build ID from the web page
+    // there must be an API way to do this MAL 20180622
+    build_id = sh(
+        returnStdout: true,
+        script: "curl --silent --insecure https://brewweb.engineering.redhat.com/brew/taskinfo?taskID=16825181 | sed -n -e 's/.*buildID=\\([0-9]*\\).*/\\1/p'"
+    ).trim()
+
+    // buildinfo can return the changelog.  Return just the text after
+    // the Changelog: line
+    try {
+        changelog = sh(
+            returnStdout: true,
+            script: "brew buildinfo ${build_id} --changelog | sed -n '/Changelog/,\$p'"
+        ).trim()
+    } catch (err) {
+        error "failed to get build info and changelog for build ${build_id}"
+        changelog = ""
+    }
+
+    return changelog
+}
+
+def record_log = [
+    'build_rpm': [
+        [
+            'rpm': 'openshift-enterprise-autoheal',
+            'task_url': 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskID=16825180'
+        ],
+        [
+            'rpm': 'openshift-ansible',
+            'task_url': 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskID=16825181'
+        ],
+        [
+            'rpm': 'atomic-openshift-dockerregistry',
+            'task_url': 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskID=16825211'
+        ]
+    ]     
+]
+
+node(TARGET_NODE) {
+
+    stage("test") {
+        get_changelog("openshift-ansible", record_log)
+        echo changelog
+    }
+}

@@ -147,7 +147,7 @@ def get_releases(repo_url, pattern="enterprise-") {
     def r = get_branches(repo_url, pattern + '*')
         .collect { it - pattern }
         .findAll { it =~ /^\d+((\.\d+)*)$/ }
-        .collect { new VersionString(it) }
+        .collect { new Version(it) }
 
     return r
 }
@@ -282,7 +282,7 @@ node(TARGET_NODE) {
         branch_name = BUILD_VERSION
         upstream_branch_name = BUILD_VERSION
     } else {
-        build_version = new VersionString(BUILD_VERSION)
+        build_version = new Version(BUILD_VERSION)
         if (releases.find { it == build_version } != -1) {
             branch_name = branch_prefix + build_version
             upstream_branch_name = 'release-' + build_version

@@ -1,0 +1,51 @@
+//
+// Pull and create the repositories used to build OpenShift Enterprise and the
+// related images.
+//
+
+properties(
+    [
+        buildDiscarder(
+            logRotator(
+                artifactDaysToKeepStr: '',
+                artifactNumToKeepStr: '',
+                daysToKeepStr: '',
+                numToKeepStr: '1000')),
+        [
+            $class: 'ParametersDefinitionProperty',
+            parameterDefinitions: [
+                [
+                    name: 'TARGET_NODE',
+                    description: 'The node to assign this job',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: 'container'
+                ],
+            ]
+        ],
+        disableConcurrentBuilds()
+    ]
+)
+
+
+// initialize the location variables and environment
+env.GOPATH = "${env.WORKSPACE}/go"
+GIT_ID = "github.com/openshift"
+
+DB_REPO_DIR = "{env.GOPATH}}/${GIT_ID}/enterprise-images"
+OCP_REPO_DIR = "${env.GOPATH}/${GIT_ID}/ocp"
+
+node(TARGET_NODE) {
+
+    // Update the local copy of the git repo for the job and save the values
+    def scmVars = checkout scm
+
+
+    // get tools (currently enterprise-images/tools
+
+    // get build database (currently enterprise-images/groups)
+    
+    
+    stage("ose repository") {
+        openshift_dir = "${GOPATH}/src/github.com/openshift"
+    }
+}
