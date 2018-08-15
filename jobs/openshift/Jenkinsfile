@@ -308,7 +308,7 @@ node(TARGET_NODE) {
         if (build_version == 'master') {
             def version_string = rpm_spec.version
             def version = new VersionString(version_string)
-            build_version = version.getMajorMinor()
+            build_version = version.getMajorMinor
         }
 
         // versions >= 3.11 require go-toolset-7 software collection to build
