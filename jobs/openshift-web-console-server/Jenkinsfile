@@ -212,15 +212,14 @@ node(TARGET_NODE) {
         error("Not implemented: build should be most recent numbered branch")
     }
     
-    build_version = new VersionString(BUILD_VERSION)
     if (releases.find { it == build_version } != -1) {
-        branch_name = branch_prefix + BUILD_VERSION
+        branch_name = branch_prefix + build_version
     } else {
-        error "invalid build version ${BUILD_VERSION}"
+        error "invalid build version ${build_version}"
     }
 
     if (debug) {
-        echo "build_version: ${BUILD_VERSION}, branch_name: ${branch_name}"
+        echo "build_version: ${build_version}, branch_name: ${branch_name}"
     }
 
     // remote existing stuff if needed
@@ -309,7 +308,7 @@ node(TARGET_NODE) {
                         "tito tag",
                         (debug ? '--debug' : ''),
                         '--accept-auto-changelog',
-                        '--use-version', BUILD_VERSION + ".1",
+                        '--use-version', build_version + ".1",
                         '--use-release', '1'
                     ].join(' ')
                 )
