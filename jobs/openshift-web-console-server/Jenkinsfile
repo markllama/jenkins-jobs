@@ -197,11 +197,11 @@ node(TARGET_NODE) {
         returnStatus: true,
         script: "rpm -q --quiet go-toolset-7") == 0
     
-    if (collection_installed && build_version >= new VersionString("3.11")) {
-        collection = 'go-toolset-7'
-    } else {
+    //if (collection_installed && build_version >= new VersionString("3.11")) {
+    //    collection = 'go-toolset-7'
+    //} else {
         collection = null
-    }
+    //}
     shell = run_script(this, collection)
 
     gopath_setup()
