@@ -306,7 +306,9 @@ node(TARGET_NODE) {
         // re-read the new spec
         def rpm_spec = new RpmSpecfile(readFile(spec_path))
         if (build_version == 'master') {
-            build_version = new VersionString(rpm_spec.version).getMajorMinor()
+            def version_string = rpm.spec.version
+            def version = new VersionString(version_string)
+            build_version = version.getMajorMinor()
         }
 
         // versions >= 3.11 require go-toolset-7 software collection to build
