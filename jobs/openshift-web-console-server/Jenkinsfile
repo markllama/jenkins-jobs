@@ -188,6 +188,9 @@ node(TARGET_NODE) {
     sh "mkdir -p ${go_source_dir}"
     sh "rm -rf BUILD"
 
+    if (BUILD_VERSION == 'master') {
+        releases = get_releases(repo_url, branch_prefix)
+
     collection_installed = sh(
         returnStatus: true,
         script: "rpm -q --quiet go-toolset-7") == 0
@@ -208,8 +211,8 @@ node(TARGET_NODE) {
     // master should not be used, but can default to the most recent release
     def branch_name
 
-    if (BUILD_VERSION in ['master', 'stage']) {
-        error("Not implemented: master build should be most recent numbered branch")
+    if (BUILD_VERSION == 'stage') {
+        error("Not implemented: build should be most recent numbered branch")
     }
     
     build_version = new VersionString(BUILD_VERSION)
