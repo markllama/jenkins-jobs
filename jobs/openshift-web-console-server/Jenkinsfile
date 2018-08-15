@@ -186,10 +186,13 @@ node(TARGET_NODE) {
 
     if (BUILD_VERSION == 'master') {
         build_version = releases[-1]
+        echo "detected version: ${build_version}"
+    else if (BUILD_VERSION == 'stage') {
+        error("Not implemented: build should be most recent numbered branch")
     } else {
         build_version = new VersionString(BUILD_VERSION)
     }
-    
+
     collection_installed = sh(
         returnStatus: true,
         script: "rpm -q --quiet go-toolset-7") == 0
@@ -208,10 +211,6 @@ node(TARGET_NODE) {
     // master should not be used, but can default to the most recent release
     def branch_name
 
-    if (BUILD_VERSION == 'stage') {
-        error("Not implemented: build should be most recent numbered branch")
-    }
-    
     if (releases.find { it == build_version } != -1) {
         branch_name = branch_prefix + build_version
     } else {
