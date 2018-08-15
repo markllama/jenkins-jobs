@@ -343,7 +343,7 @@ node(TARGET_NODE) {
             def cv = new VersionString(rpm_spec.version)
             def cr = new VersionString(rpm_spec.release)
 
-            echo "current RPM id: ${current_version}-${current_release}"
+            echo "current RPM id: ${cv}-${cr}"
 
             // release builds increment the revision and leave the build
             // number at 1.  Dunno why
