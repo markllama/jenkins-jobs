@@ -300,7 +300,7 @@ node(TARGET_NODE) {
                         "tito tag",
                         (debug ? '--debug' : ''),
                         '--accept-auto-changelog',
-                        '--use-version', build_version + ".1",
+                        '--use-version', "${build_version}.1",
                         '--use-release', '1'
                     ].join(' ')
                 )
