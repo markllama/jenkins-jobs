@@ -62,12 +62,12 @@ properties(
                     $class: 'hudson.model.BooleanParameterDefinition',
                     defaultValue: true
                 ],
-                [
-                    name: 'USE_COLLECTIONS',
-                    description: 'enable SCL collection go-toolset-7',
-                    $class: 'hudson.model.BooleanParameterDefinition',
-                    defaultValue: false
-                ],
+//                [
+//                    name: 'USE_COLLECTIONS',
+//                    description: 'enable SCL collection go-toolset-7',
+//                    $class: 'hudson.model.BooleanParameterDefinition',
+//                    defaultValue: false
+//                ],
                 [
                     name: 'DEBUG',
                     description: 'ask commands to print details',
@@ -87,7 +87,7 @@ properties(
 
 // convert property strings to proper logical values
 release = RELEASE.toBoolean()
-use_collections = USE_COLLECTIONS.toBoolean()
+//use_collections = USE_COLLECTIONS.toBoolean()
 scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
@@ -273,13 +273,6 @@ node(TARGET_NODE) {
     collection_installed = sh(
         returnStatus: true,
         script: "rpm -q --quiet go-toolset-7") == 0
-
-    if (use_collections && collection_installed) {
-        collection = 'go-toolset-7'
-    } else {
-        collection = null
-    }
-    shell = run_script(this, collection)
     
     releases = get_releases(repo_url, branch_prefix)
     
@@ -311,6 +304,21 @@ node(TARGET_NODE) {
             )
         }
 
+        // determine if go-toolset-7 SCL is required
+        def rpm_spec = new RpmSpecfile(readFile(spec_path))
+        def version = new VersionString(rpm_spec.version)
+        def scl_version = new VersionString("3.11")
+        if (version >= scl_version) {
+            if (collection_installed) {
+                collection = "go-toolset-7"
+            } else {
+                error("OCP versions >= 3.11 require go-toolset-7 SCL collection")
+            }
+        } else {
+            collection = null
+        }
+        shell = run_script(this, collection)
+        
         stage("configure dummy merge") {
             dir(package_name) {
                 sh "git config merge.ours.driver true"
