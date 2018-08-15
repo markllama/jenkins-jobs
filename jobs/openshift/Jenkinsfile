@@ -303,7 +303,7 @@ node(TARGET_NODE) {
                 ].join(' ')
             )
         }
-        
+
         stage("configure dummy merge") {
             dir(package_name) {
                 sh "git config merge.ours.driver true"

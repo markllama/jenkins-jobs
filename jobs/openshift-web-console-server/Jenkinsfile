@@ -91,7 +91,6 @@ scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
 
-
 // Initialize $PATH and $GOPATH
 def gopath_setup() {
     echo "Adding git managed script directories to PATH"
@@ -268,12 +267,12 @@ node(TARGET_NODE) {
             }
         }
 
-        stage("prepare go-bindata") {
-            sh "mkdir -p ~/go"
-            sh "go get github.com/jteeuwen/go-bindata"
-            sh "go build github.com/jteeuwen/go-bindata"
-            sh "go install github.com/jteeuwen/go-bindata"
-        }
+//        stage("prepare go-bindata") {
+//            sh "mkdir -p ~/go"
+//            sh "go get github.com/jteeuwen/go-bindata"
+//            sh "go build github.com/jteeuwen/go-bindata"
+//            sh "go install github.com/jteeuwen/go-bindata"
+//        }
         
         stage("merge upstream ${upstream_project_name}") {
             dir(package_path) {
