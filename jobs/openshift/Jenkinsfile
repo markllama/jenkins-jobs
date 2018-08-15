@@ -306,7 +306,7 @@ node(TARGET_NODE) {
         // re-read the new spec
         def rpm_spec = new RpmSpecfile(readFile(spec_path))
         if (build_version == 'master') {
-            def version_string = rpm.spec.version
+            def version_string = rpm_spec.version
             def version = new VersionString(version_string)
             build_version = version.getMajorMinor()
         }
