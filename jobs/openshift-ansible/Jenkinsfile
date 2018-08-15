@@ -288,4 +288,6 @@ node(TARGET_NODE) {
             tito_build(this, package_name)
         }
     }
+
+    archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/**"
 }
