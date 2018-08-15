@@ -213,6 +213,9 @@ node(TARGET_NODE) {
 
     if (releases.find { it == build_version } != -1) {
         branch_name = branch_prefix + build_version
+        if (debug) {
+            echo("branch_name: ${branch_name}")
+        }
     } else {
         error "invalid build version ${build_version}"
     }
