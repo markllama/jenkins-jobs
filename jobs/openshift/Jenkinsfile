@@ -339,11 +339,9 @@ node(TARGET_NODE) {
         // need new version and new release
         stage("update build/release numbers") {
             def rpm_spec = new RpmSpecfile(readFile(spec_path))
-            current_version = rpm_spec.version
-            current_release = rpm_spec.release
 
-            def cv = new VersionString(current_version)
-            def cr = new VersionString(current_release)
+            def cv = new VersionString(rpm_spec.version)
+            def cr = new VersionString(rpm_spec.release)
 
             echo "current RPM id: ${current_version}-${current_release}"
 
@@ -370,9 +368,12 @@ node(TARGET_NODE) {
 
         }
 
+        // re-read the new spec
+        def rpm_spec = new RpmSpecfile(readFile(spec_path))
+        def new_verson = new VersionString(rpm_spec.version)
         // versions >= 3.11 require go-toolset-7 software collection to build
         def scl_version = new VersionString("3.11")
-        if (nv >= scl_version) {
+        if ( new_version >= scl_version) {
             if (collection_installed) {
                 collection = "go-toolset-7"
             } else {

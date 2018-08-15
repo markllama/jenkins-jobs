@@ -49,12 +49,6 @@ properties(
                     defaultValue: 'master'
                 ],
                 [
-                    name: 'USE_COLLECTIONS',
-                    description: 'enable SCL collection go-toolset-7',
-                    $class: 'hudson.model.BooleanParameterDefinition',
-                    defaultValue: false
-                ],
-                [
                     name: 'RELEASE',
                     description: 'build local or release',
                     $class: 'hudson.model.BooleanParameterDefinition',
@@ -85,7 +79,6 @@ properties(
 )
 
 // convert property strings to proper logical values
-use_collections = USE_COLLECTIONS.toBoolean()
 release = RELEASE.toBoolean()
 scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
@@ -148,6 +141,7 @@ def get_releases(repo_url, pattern="enterprise-") {
         .collect { it - pattern }
         .findAll { it =~ /^\d+((\.\d+)*)$/ }
         .collect { new VersionString(it) }
+        .sort()
 
     return r
 }
@@ -188,14 +182,19 @@ node(TARGET_NODE) {
     sh "mkdir -p ${go_source_dir}"
     sh "rm -rf BUILD"
 
-    if (BUILD_VERSION == 'master') {
-        releases = get_releases(repo_url, branch_prefix)
+    releases = get_releases(repo_url, branch_prefix)
 
+    if (BUILD_VERSION == 'master') {
+        build_version = releases[-1]
+    } else {
+        build_version = new VersionString(BUILD_VERSION)
+    }
+    
     collection_installed = sh(
         returnStatus: true,
         script: "rpm -q --quiet go-toolset-7") == 0
     
-    if (use_collections && collection_installed) {
+    if (use_collections && build_version >= new VersionString("3.11")) {
         collection = 'go-toolset-7'
     } else {
         collection = null
@@ -203,9 +202,7 @@ node(TARGET_NODE) {
     shell = run_script(this, collection)
 
     gopath_setup()
-    
-    releases = get_releases(repo_url, branch_prefix)
-
+ 
     // select the branch to build
     // NOTE: Valid build versions are only those in the releases.
     // master should not be used, but can default to the most recent release
