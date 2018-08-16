@@ -268,7 +268,7 @@ node(TARGET_NODE) {
     // clean up before starting
     sh "rm -rf $repo_name"
 
-    package_repo = new GitHubRepository(owner=GITHUB_OWNER, project=repo_name, package_name="origin")
+    package_repo = new GitHubRepository(owner: GITHUB_OWNER, project: repo_name, package_name: "origin")
     package_repo.pipeline = this
 
     // re-read the new spec
