@@ -340,8 +340,8 @@ node(TARGET_NODE) {
 
         stage("tag and push") {
             echo "tag and push"
-            patch_tito(this)
             dir(repo_name) {
+                patch_tito(this)
                 shell(
                     [
                         "tito tag",
