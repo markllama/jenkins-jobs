@@ -39,7 +39,7 @@ class GitHubRepository {
         return [path, this.specfile].join('/')
     }
 
-    @NonCPS
+    //@NonCPS
     def clone(p=null) {
         p = p ? p : pipeline
         p.echo("Cloning repo ${remote}")
