@@ -15,15 +15,20 @@ class GitHubRepository {
     String password
     def pipeline
 
-    GitHubRepository(owner, project, branch="", path=null, package_name=null, password="", pipeline=null) {
+    GitHubRepository(String owner, String project, String branch = null) {
         this.owner = owner
         this.project = project
         this.branch = branch
-        this.path = path ? path : project
-        this.package_name = package_name ? package_name : project
-        this.password = password
+        this.path = project
+        this.package_name = project
+        this.password = null
         this.pipeline = pipeline
     }
+
+    //GitHubRepository(Map init) {
+    //    owner = init.owner
+    //}
+    
 
     def getRemote() {
         return "git@github.com:${this.owner}/${this.project}.git"
