@@ -247,7 +247,7 @@ node(TARGET_NODE) {
         branch_name = BUILD_VERSION
         upstream_branch_name = BUILD_VERSION
     } else {
-        build_version = new Version(BUILD_VERSION)
+        build_version = new VersionString(BUILD_VERSION)
         if (releases.find { it == build_version } != -1) {
             branch_name = branch_prefix + build_version
             upstream_branch_name = 'release-' + build_version
@@ -271,14 +271,14 @@ node(TARGET_NODE) {
         if (build_version == 'master') {
             echo("detecting master version")
             def version_string = rpm_spec.version
-            def version = new Version(version_string)
+            def version = new VersionString(version_string)
             echo "version: ${version}"
             echo "MajorMinor: ${version.majorminor}"
-            build_version = new Version(version.majorminor)
+            build_version = new VersionString(version.majorminor)
         }
 
         // versions >= 3.11 require go-toolset-7 software collection to build
-        def scl_version = new Version("3.11")
+        def scl_version = new VersionString("3.11")
         if (build_version >= scl_version) {
             echo "using go-toolset-7 Software Collection to build"
             if (collection_installed) {
@@ -312,15 +312,15 @@ node(TARGET_NODE) {
         
         // need new version and new release
         stage("update build/release numbers") {
-            def cv = new Version(rpm_spec.version)
-            def cr = new Version(rpm_spec.release)
+            def cv = new VersionString(rpm_spec.version)
+            def cr = new VersionString(rpm_spec.release)
 
             echo "current RPM id: ${cv}-${cr}"
 
             // release builds increment the revision and leave the build
             // number at 1.  Dunno why
             //cv.incrRevision()
-            def nv = new Version(cv)
+            def nv = new VersionString(cv)
             def nr = cr.incrMajor()
 
             rpm_spec.version = nv as String

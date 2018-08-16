@@ -93,10 +93,10 @@ node(TARGET_NODE) {
     }
     //echo "v0 = ${v0_string}"
 
-    stage("test VersionString") {
-        echo "Begin TESTING VersionString"
-        def vst = new VersionStringTest(this)
-        vst.testCompareTo()
-        echo "End TESTING VersionString"
-    }
+//    stage("test VersionString") {
+//        echo "Begin TESTING VersionString"
+//        def vst = new VersionStringTest(this)
+//        vst.testCompareTo()
+//        echo "End TESTING VersionString"
+//    }
 }
