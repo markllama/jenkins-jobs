@@ -40,10 +40,6 @@ class GitHubRepository {
     }
 
     def clone() {
-        if (this.pipeline == null) {
-            return null
-        }
-
         this.pipeline.sh(
             returnStdout: true,
             script: [
@@ -65,10 +61,6 @@ class GitHubRepository {
      * Requires SSH_AGENT to have set a key for access to the remote repository
      */
     def branches(pattern="") {
-
-        if (this.pipeline == null) {
-            return null
-        }
 
         branch_text = this.pipeline.sh(
             returnStdout: true,
