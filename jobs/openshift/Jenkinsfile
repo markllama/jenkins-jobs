@@ -167,7 +167,7 @@ def patch_tito(pipeline) {
     patched = sh returnStatus: true, script: "grep -q 'release is None' ${tagger_py}"
     if (tito_version == '0.6.11' && patched != 0) {
         pipeline.echo "Patching tito tagger customizations for tito-0.6.11"
-        pipeline.dir(package_name) {
+        pipeline.dir(repo_name) {
             // remove the get_tag_for_version function
             pipeline.sh "sed -i -e '/_get_tag_for_version/,\$d' ${tagger_py}"
             // add the version we want
@@ -184,8 +184,8 @@ EOF
 }
 
 
-def tito_release(pipeline, package_name, version, scratch=true)  {
-    pipeline.dir(package_name) {
+def tito_release(pipeline, repo_name, version, scratch=true)  {
+    pipeline.dir(repo_name) {
         def tito_output = pipeline.sh(
             returnStdout: true,
             script: [
@@ -214,9 +214,9 @@ def tito_release(pipeline, package_name, version, scratch=true)  {
     }
 }
 
-def tito_build(pipeline, package_name)  {
+def tito_build(pipeline, repo_name)  {
     def output_root = pipeline.env.WORKSPACE + '/BUILD'
-    pipeline.dir(package_name) {
+    pipeline.dir(repo_name) {
         pipeline.sh(
             script: [
                 "scl enable go-toolset-7 'tito build",
@@ -266,7 +266,7 @@ node(TARGET_NODE) {
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
 
     // clean up before starting
-    sh "rm -rf $package_name"
+    sh "rm -rf $repo_name"
 
     package_repo = new GitHubRepository(GITHUB_OWNER, repo_name, package_name="origin")
     package_repo.pipeline = this
@@ -300,7 +300,7 @@ node(TARGET_NODE) {
     package_repo.branch = branch_name
     
     sshagent([SSH_KEY_ID]) {
-        stage("clone ${package_name}") {
+        stage("clone ${repo_name}") {
             package_repo.clone()
         }
 
@@ -329,10 +329,10 @@ node(TARGET_NODE) {
         shell = run_script(this, collection)
 
         stage("configure dummy merge") {
-            dir(package_name) {
+            dir(repo_name) {
                 sh "git config merge.ours.driver true"
             }
-            def gitattributes = package_name + "/.gitattributes"
+            def gitattributes = repo_name + "/.gitattributes"
             sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
             sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
         }
@@ -354,7 +354,7 @@ node(TARGET_NODE) {
 
             // right now, only merge dev branches on master
             if (upstream_branch_name == 'master') {
-                dir(package_name) {
+                dir(repo_name) {
                     sh("git fetch upstream ${fetch_branch}")
                     sh("git merge upstream/${upstream_branch_name}")
                 }
@@ -384,7 +384,7 @@ node(TARGET_NODE) {
             
             writeFile file: spec_path, text: rpm_spec.body
 
-            dir(package_name) {
+            dir(repo_name) {
                 sh "git commit --allow-empty -m 'updated version to ${new_version}-${new_release}' ${spec_filename}"
                 //sh "git tag ${new_version}-${new_release}"
             }
@@ -394,7 +394,7 @@ node(TARGET_NODE) {
         stage("tag and push") {
             echo "tag and push"
             patch_tito(this)
-            dir(package_name) {
+            dir(repo_name) {
                 shell(
                     [
                         "tito tag",
@@ -409,10 +409,10 @@ node(TARGET_NODE) {
         }
 
         stage("build") {
-            //tito_release(this, package_name, new_version, scratch)
-            //tito_build(this, package_name)
+            //tito_release(this, repo_name, new_version, scratch)
+            //tito_build(this, repo_name)
             def output_root = env.WORKSPACE + '/BUILD'
-            dir(package_name) {
+            dir(repo_name) {
                 shell(
                     [
                         "tito build",
