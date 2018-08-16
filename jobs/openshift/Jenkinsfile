@@ -305,7 +305,7 @@ node(TARGET_NODE) {
         }
 
         // re-read the new spec
-        def rpm_spec = new RpmSpecfile(readFile(packge_repo.specpath))
+        def rpm_spec = new RpmSpecfile(readFile(package_repo.specpath))
         if (build_version == 'master') {
             echo("detecting master version")
             def version_string = rpm_spec.version
