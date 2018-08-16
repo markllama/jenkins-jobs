@@ -340,7 +340,7 @@ node(TARGET_NODE) {
         }
 
         stage("add upstream remote") {
-            project_repo.addRemote("upstream", upstream_project)
+            package_repo.addRemote("upstream", upstream_project)
             //upstream_repo_url = GITHUB_BASE + "/${upstream_project}.git"
             //dir(package_name) {
             //    sh("git remote add upstream ${upstream_repo_url} --no-tags")
