@@ -280,12 +280,14 @@ node(TARGET_NODE) {
         // versions >= 3.11 require go-toolset-7 software collection to build
         def scl_version = new Version("3.11")
         if (build_version >= scl_version) {
+            echo "using go-toolset-7 Software Collection to build"
             if (collection_installed) {
                 collection = "go-toolset-7"
             } else {
                 error("OCP versions >= 3.11 require go-toolset-7 SCL collection")
             }
         } else {
+            echo "go-toolset-7 software collection disabled"
             collection = null
         }
         def shell = run_script(this, collection)
