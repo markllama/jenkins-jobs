@@ -15,12 +15,12 @@ class GitHubRepository {
     String password
     def pipeline
 
-    GitHubRepository(String owner, String project, String branch = null) {
+    GitHubRepository(String owner, String project, String branch=null, String package_name=null) {
         this.owner = owner
         this.project = project
         this.branch = branch
         this.path = project
-        this.package_name = project
+        this.package_name = package_name ? package_name : project
         this.password = null
         this.pipeline = pipeline
     }
