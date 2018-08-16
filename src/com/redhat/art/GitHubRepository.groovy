@@ -51,21 +51,6 @@ class GitHubRepository {
         return [path, specfile].join('/')
     }
 
-    //@NonCPS
-    def clone() {
-        pipeline.echo("Cloning repo ${remote}")
-        pipeline.sh(
-            returnStdout: false,
-            script: [
-                "git clone",
-                branch ? "--branch ${branch}" : "",
-                remote,
-                path
-            ].join(' ')
-        )
-        pipeline.echo("Cloning repo ${remote}")
-    }
-    
     /*
      * Retrive the branch list from a remote repository
      * @param repo_url a git@ repository URL.
@@ -112,16 +97,45 @@ class GitHubRepository {
         return r
     }
 
+    def clone() {
+        pipeline.echo("Cloning repo ${remote}")
+        pipeline.sh(
+            returnStdout: false,
+            script: [
+                "git clone",
+                branch ? "--branch ${branch}" : "",
+                remote,
+                path
+            ].join(' ')
+        )
+        pipeline.echo("Cloning repo ${remote}")
+    }
+    
     /*
      *
      */
-    @NonCPS
     def addRemote(remote_name, remote_project) {
         // git remote add ${remote_name} ${remote_spec}
         def remote_spec = "git@github.com:${owner}/${remote_project}.git"
         pipeline.dir(path) {
             pipeline.sh(
                 script: "git remote add ${remote_name} ${remote_spec} --no-tags"
+            )
+        }
+    }
+
+    def fetch(remote_name) {
+        pipeline.dir(path) {
+            pipeline.sh(
+                script: "git fetch ${remote_name}"
+            )
+        }
+    }
+
+    def merge(remote_name, remote_branch) {
+        pipeline.dir(path) {
+            pipeline.sh(
+                script: "git merge ${remote_name}/${remote_branch}"
             )
         }
     }

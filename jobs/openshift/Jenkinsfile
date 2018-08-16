@@ -348,19 +348,8 @@ node(TARGET_NODE) {
         }
 
         stage("merge upstream") {
-            // when fetching master you have to fetch the whole thing
-            def fetch_branch = upstream_branch_name
-            if (upstream_branch_name == 'master') {
-                fetch_branch = ""
-            }
-
-            // right now, only merge dev branches on master
-            if (upstream_branch_name == 'master') {
-                dir(repo_name) {
-                    sh("git fetch upstream ${fetch_branch}")
-                    sh("git merge upstream/${upstream_branch_name}")
-                }
-            }
+            package_repo.fetch('upstream')
+            package_repo.merge("upstream/${upstream_branch_name}")
         }
         
         // need new version and new release
