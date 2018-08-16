@@ -209,20 +209,11 @@ node(TARGET_NODE) {
     branch_prefix = "release-"
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
 
-    package_repo = new GitHubRepository(GITHUB_OWNER, package_name, pipeline=this)
-
-    if (package_repo.pipeline == null) {
-        echo "repo object did not store pipeline"
-        package_repo.pipeline=this
-        //error "repo object did not store pipeline"
-    }
-    if (package_repo.pipeline == null) {
-        error "repo object did not store pipeline"
-    }
-    //spec_filename = "${package_name}.spec"
-    //spec_path = "${package_repo.path}/${spec_filename}"
+    package_repo = new GitHubRepository(GITHUB_OWNER, package_name)
+    // the pipeline isn't persistent when set in the constructor
+    package_repo.pipeline=this
     
-    releases = package_repo.releases(branch_prefix, pipeline=this)
+    releases = package_repo.releases(branch_prefix)
     
     // select the branch to build
     def branch_name
