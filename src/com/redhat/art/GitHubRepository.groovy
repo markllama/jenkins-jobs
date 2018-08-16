@@ -90,7 +90,7 @@ class GitHubRepository {
      */
     def releases(pattern="enterprise-") {
         // too clever: chain - get branch names, remove prefix, suffix
-        def r = this.branches(repo_url, pattern + '*')
+        def r = this.branches(this.remote, pattern + '*')
             .collect { it - pattern }
             .findAll { it =~ /^\d+((\.\d+)*)$/ }
             .collect { new Version(it) }
