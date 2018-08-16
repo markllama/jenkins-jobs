@@ -60,10 +60,9 @@ class GitHubRepository {
      *
      * Requires SSH_AGENT to have set a key for access to the remote repository
      */
-    def branches(pattern="", pipeline=null) {
+    def branches(pattern="", newpipe=null) {
 
-        p = pipeline ? pipeline : this.pipeline
-        branch_text = p.sh(
+        branch_text = pipeline.sh(
             returnStdout: true,
             script: [
                 "git ls-remote ${this.remote} ${pattern}",
@@ -85,12 +84,10 @@ class GitHubRepository {
      * Sort in version order (compare fields as integers, not strings)
      * Requires SSH_AGENT to have set a key for access to the remote repository
      */
-    def releases(pattern="enterprise-", pipeline=null) {
-
-        p = pipeline ? pipeline : this.pipeline
+    def releases(pattern="enterprise-", newpipe=null) {
 
         // too clever: chain - get branch names, remove prefix, suffix
-        def r = this.branches(pattern + '*', pipeline=p)
+        def r = this.branches(pattern + '*')
             .collect { it - pattern }
             .findAll { it =~ /^\d+((\.\d+)*)$/ }
             .collect { new Version(it) }
