@@ -39,6 +39,7 @@ class GitHubRepository {
         return [path, this.specfile].join('/')
     }
 
+    @NonCPS
     def clone() {
         this.pipeline.sh(
             returnStdout: true,
@@ -60,6 +61,7 @@ class GitHubRepository {
      *
      * Requires SSH_AGENT to have set a key for access to the remote repository
      */
+    @NonCPS
     def branches(pattern="", newpipe=null) {
 
         branch_text = pipeline.sh(
@@ -84,6 +86,7 @@ class GitHubRepository {
      * Sort in version order (compare fields as integers, not strings)
      * Requires SSH_AGENT to have set a key for access to the remote repository
      */
+    @NonCPS
     def releases(pattern="enterprise-", newpipe=null) {
 
         // too clever: chain - get branch names, remove prefix, suffix
