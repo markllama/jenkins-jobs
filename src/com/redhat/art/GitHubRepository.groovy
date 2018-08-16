@@ -18,7 +18,7 @@ class GitHubRepository {
         this.owner = owner
         this.project = project
         this.branch = branch
-        this.path = path ? path : project
+        this.path = (path ? path : project)
         this.password = password
         this.pipeline = pipeline
     }
