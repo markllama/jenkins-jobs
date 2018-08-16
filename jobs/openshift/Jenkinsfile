@@ -268,9 +268,10 @@ node(TARGET_NODE) {
     // clean up before starting
     sh "rm -rf $repo_name"
 
-    package_repo = new GitHubRepository(GITHUB_OWNER, repo_name)
-    package_repo.package_name = "origin"
-    package_repo.pipeline = this
+    //package_repo = new GitHubRepository(GITHUB_OWNER, repo_name)
+    //package_repo.package_name = "origin"
+    //package_repo.pipeline = this
+    package_repo = GitHubRepository(owner: GITHUB_OWNER, project: "ose", package_name: "origin", pipeline: this)
 
     // re-read the new spec
     //package_repo.package_name = 'origin'
@@ -323,8 +324,8 @@ node(TARGET_NODE) {
             def version_string = rpm_spec.version
             def version = new Version(version_string)
             echo "version: ${version}"
-            echo "MajorMinor: ${version.getMajorMinor}"
-            build_version = new Version(version.getMajorMinor)
+            echo "MajorMinor: ${version.maj_min}"
+            build_version = new Version(version.maj_min)
         }
 
         // versions >= 3.11 require go-toolset-7 software collection to build
