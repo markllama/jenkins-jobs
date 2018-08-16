@@ -41,13 +41,14 @@ class GitHubRepository {
 
     @NonCPS
     def clone() {
-        this.pipeline.sh(
+        pipeline.echo("Cloning repo ${remote}")
+        pipeline.sh(
             returnStdout: false,
             script: [
                 "git clone",
-                this.branch ? "--branch ${this.branch}" : "",
-                this.remote,
-                this.path
+                branch ? "--branch ${branch}" : "",
+                remote,
+                path
             ].join(' ')
         )
     }
