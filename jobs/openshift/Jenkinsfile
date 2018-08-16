@@ -279,7 +279,7 @@ node(TARGET_NODE) {
 
         // versions >= 3.11 require go-toolset-7 software collection to build
         def scl_version = new Version("3.11")
-        if ( build_version >= scl_version) {
+        if (build_version >= scl_version) {
             if (collection_installed) {
                 collection = "go-toolset-7"
             } else {
@@ -288,7 +288,7 @@ node(TARGET_NODE) {
         } else {
             collection = null
         }
-        shell = run_script(this, collection)
+        def shell = run_script(this, collection)
 
         stage("configure dummy merge") {
             dir(repo_name) {
