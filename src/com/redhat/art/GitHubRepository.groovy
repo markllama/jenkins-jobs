@@ -15,7 +15,7 @@ class GitHubRepository {
     String password
     def pipeline
 
-    GitHubRepository(owner, project, branch="", path=null, package_name=null, password="", pipeline=null) {
+    GitHubRepository(owner, project, branch="", path=null, package_name=, password="", pipeline=null) {
         this.owner = owner
         this.project = project
         this.branch = branch
@@ -38,7 +38,7 @@ class GitHubRepository {
     }
 
     def getSpecpath() {
-        return [path, this.specfile].join('/')
+        return [path, specfile].join('/')
     }
 
     //@NonCPS
