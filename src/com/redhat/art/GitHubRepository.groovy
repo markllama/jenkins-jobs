@@ -5,20 +5,20 @@ import com.redhat.art.Version
 
 class GitHubRepository {
 
-    def owner
-    def project
-    def branch
-    def path
+    String owner
+    Stringproject
+    String branch
+    Sgring path
     def pipeline
     
-    GitHubRepository(owner, project, branch=null, path=null, password=null, pipeline=null) {
-        this.owner = owner
-        this.project = project
-        this.branch = branch
-        this.path = path
-        this.password = password
-        this.pipeline = pipeline
-    }
+    //GitHubRepository(owner, project, branch=null, path=null, password=null, pipeline=null) {
+    //    this.owner = owner
+    //    this.project = project
+    //    this.branch = branch
+    //    this.path = path
+    //    this.password = password
+    //    this.pipeline = pipeline
+    //}
 
     def getRemote() {
         return "git@github.com:${this.owner}/${this.project}.git"
