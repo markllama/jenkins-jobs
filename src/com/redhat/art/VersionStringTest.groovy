@@ -4,7 +4,8 @@
 import com.redhat.art.VersionString
 
 class VersionStringTest extends GroovyTestCase {
-
+    def env
+    
     def VersionTest(pipeline_env=null) {
         env = pipeline_env
     }
