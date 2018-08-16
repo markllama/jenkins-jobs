@@ -270,6 +270,13 @@ node(TARGET_NODE) {
 
     package_repo = new GitHubRepository(GITHUB_OWNER, repo_name, package_name="origin")
     package_repo.pipeline = this
+
+    // re-read the new spec
+    if (package_repo.package_name != 'origin') {
+        error("package repo name is incorrect: ${package_repo.package_name} resulting in incorrect spec path: ${package_repo.specpath}")
+    }
+    spec_path = package_repo.specpath
+
     //repo_url = GITHUB_BASE + "/${package_name}.git"
     //spec_filename = "${package_name}.spec"
     //spec_filename = "origin.spec"
@@ -303,12 +310,6 @@ node(TARGET_NODE) {
         stage("clone ${repo_name}") {
             package_repo.clone()
         }
-
-        // re-read the new spec
-        if (package_repo.package_name != 'origin') {
-            error("package repo name is incorrect: ${package_repo.package_name} resulting in incorrect spec path: ${package_repo.specpath}")
-        }
-        spec_path = package_repo.specpath
         
         def rpm_spec = new RpmSpecfile(readFile(package_repo.specpath))
         if (build_version == 'master') {
