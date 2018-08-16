@@ -3,7 +3,7 @@
 //
 package com.redhat.art
 
-import Version
+import com.redhat.art.Version
 
 class GitHubRepository {
 
