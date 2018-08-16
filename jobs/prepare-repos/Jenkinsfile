@@ -80,16 +80,6 @@ public class Script {
     public static environment
 }
 
-class VersionString {
-
-    VersionString(version, release) {
-        this.version = version
-        this.release = release
-    }gg
-}
-
-
-
 class GitRepository {
     String owner
     String project

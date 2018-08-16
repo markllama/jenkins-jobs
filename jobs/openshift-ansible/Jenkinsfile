@@ -24,14 +24,14 @@ properties(
                     defaultValue: 'container'
                 ],
                 [
-                    name: 'GITHUB_BASE',
-                    description: 'Github base for repos',
+                    name: 'GITHUB_OWNER',
+                    description: 'Github project owner for repos',
                     $class: 'hudson.model.ChoiceParameterDefinition',
                     choices: [
-                        "git@github.com:openshift",
-                        "git@github.com:markllama"
+                        "openshift",
+                        "markllama"
                     ].join("\n"),
-                    defaultValue: 'git@github.com:openshift'
+                    defaultValue: 'openshift'
                 ],
                 [
                     name: 'SSH_KEY_ID',
@@ -86,7 +86,7 @@ scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
 
-// build_version = new VersionString(BUILD_VERSION)
+// build_version = new Version(BUILD_VERSION)
 
 // ***************************************************************************
 //
@@ -209,11 +209,11 @@ node(TARGET_NODE) {
     branch_prefix = "release-"
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
 
-    repo_url = GITHUB_BASE + "/${package_name}.git"
-    spec_filename = "${package_name}.spec"
-    spec_path = "${package_name}/${spec_filename}"
+    package_repo = new GitHubRepository(GITHUB_OWNER, package_name, pipeline=this)
+    //spec_filename = "${package_name}.spec"
+    //spec_path = "${package_repo.path}/${spec_filename}"
     
-    releases = get_releases(repo_url, branch_prefix)
+    releases = package_repo.releases(branch_prefix)
     
     // select the branch to build
     def branch_name
@@ -224,18 +224,15 @@ node(TARGET_NODE) {
     } else {
         error "invalid build version ${BUILD_VERSION}"
     }
-
+    package_repo.branch = branch_name
+    
     if (debug) {
         echo "build_version: ${build_version}, branch_name: ${branch_name}"
     }
     
     sshagent([SSH_KEY_ID]) {
         stage("clone ${package_name}") {
-            sh(["git clone",
-                "--branch ${branch_name}",
-                repo_url
-                ].join(' ')
-            )
+            package_repo.clone()
         }
 
         // need new version and new release
