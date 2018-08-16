@@ -324,8 +324,8 @@ node(TARGET_NODE) {
             def version_string = rpm_spec.version
             def version = new Version(version_string)
             echo "version: ${version}"
-            echo "MajorMinor: ${version.majmin}"
-            build_version = new Version(version.majmin)
+            echo "MajorMinor: ${version.majorminor}"
+            build_version = new Version(version.majorminor)
         }
 
         // versions >= 3.11 require go-toolset-7 software collection to build

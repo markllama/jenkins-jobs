@@ -40,7 +40,7 @@ class Version {
     }
 
     @NonCPS
-    def String getMajMin() {
+    def String getMajorminor() {
         return v_array[0..1].collect { it.toString() }.join('.')
     }
 
