@@ -13,7 +13,8 @@ class GitHubRepository {
     String path
     String password
     def pipeline
-    
+
+    @NonCPS
     GitHubRepository(owner, project, branch="", path=null, password="", pipeline=null) {
         this.owner = owner
         this.project = project
