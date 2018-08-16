@@ -15,7 +15,7 @@ class GitHubRepository {
     String password
     def pipeline
 
-    GitHubRepository(owner, project, branch="", path=null, package_name=, password="", pipeline=null) {
+    GitHubRepository(owner, project, branch="", path=null, package_name=null, password="", pipeline=null) {
         this.owner = owner
         this.project = project
         this.branch = branch
