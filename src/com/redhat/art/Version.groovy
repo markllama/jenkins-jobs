@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 package com.redhat.art
 
-class Version {
+class Version implements Comparable<Version>{
     private v_array
 
     // new
@@ -52,6 +52,7 @@ class Version {
         return this
     }
 
+    @Override
     int compareTo(Version obj) {
         // compare two version strings.
         // return:
