@@ -40,10 +40,9 @@ class GitHubRepository {
     }
 
     //@NonCPS
-    def clone(p=null) {
-        p = p ? p : pipeline
-        p.echo("Cloning repo ${remote}")
-        p.sh(
+    def clone() {
+        pipeline.echo("Cloning repo ${remote}")
+        pipeline.sh(
             returnStdout: false,
             script: [
                 "git clone",
@@ -52,7 +51,7 @@ class GitHubRepository {
                 path
             ].join(' ')
         )
-        p.echo("Cloning repo ${remote}")
+        pipeline.echo("Cloning repo ${remote}")
     }
     
     /*
@@ -65,8 +64,7 @@ class GitHubRepository {
      * Requires SSH_AGENT to have set a key for access to the remote repository
      */
     @NonCPS
-    def branches(pattern="", newpipe=null) {
-
+    def branches(pattern="") {
         branch_text = pipeline.sh(
             returnStdout: true,
             script: [
@@ -90,7 +88,7 @@ class GitHubRepository {
      * Requires SSH_AGENT to have set a key for access to the remote repository
      */
     @NonCPS
-    def releases(pattern="enterprise-", newpipe=null) {
+    def releases(pattern="enterprise-") {
 
         // too clever: chain - get branch names, remove prefix, suffix
         def r = this.branches(pattern + '*')
@@ -100,5 +98,19 @@ class GitHubRepository {
             .sort()
 
         return r
+    }
+
+    /*
+     *
+     */
+    @NonCPS
+    def addRemote(remote_name, remote_project) {
+        // git remote add ${remote_name} ${remote_spec}
+        def remote_spec = "git@github.com:${owner}/${remote_project}.git"
+        pipeline.dir(path) {
+            pipeline.sh(
+                script: "git remote add ${remote_name} ${remote_spec} --no-tags"
+            )
+        }
     }
 }

@@ -24,14 +24,14 @@ properties(
                     defaultValue: 'container'
                 ],
                 [
-                    name: 'GITHUB_BASE',
-                    description: 'Github base for repos',
+                    name: 'GITHUB_OWNER',
+                    description: 'Github ownerfor repos',
                     $class: 'hudson.model.ChoiceParameterDefinition',
                     choices: [
-                        "git@github.com:openshift",
-                        "git@github.com:markllama"
+                        "openshift",
+                        "markllama"
                     ].join("\n"),
-                    defaultValue: 'git@github.com:openshift'
+                    defaultValue: 'openshift'
                 ],
                 [
                     name: 'SSH_KEY_ID',
@@ -253,27 +253,29 @@ node(TARGET_NODE) {
 
     checkout scm
 
+    gopath_setup()
+    
+    collection_installed = sh(
+        returnStatus: true,
+        script: "rpm -q --quiet go-toolset-7") == 0
+
     // get the list of release numbers from the branch names
     package_name = "ose"
     upstream_project = "origin"
     branch_prefix = "enterprise-"
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
 
-    repo_url = GITHUB_BASE + "/${package_name}.git"
-    //spec_filename = "${package_name}.spec"
-    spec_filename = "origin.spec"
-    spec_path = "${package_name}/${spec_filename}"
-
     // clean up before starting
     sh "rm -rf $package_name"
 
-    gopath_setup()
-    
-    collection_installed = sh(
-        returnStatus: true,
-        script: "rpm -q --quiet go-toolset-7") == 0
-    
-    releases = get_releases(repo_url, branch_prefix)
+    package_repo = new GitHubRepository(GITHUB_OWNER, package_name)
+    package_repo.pipeline = this
+    //repo_url = GITHUB_BASE + "/${package_name}.git"
+    //spec_filename = "${package_name}.spec"
+    //spec_filename = "origin.spec"
+    //spec_path = "${package_name}/${spec_filename}"
+
+    releases = package_repo.releases(branch_prefix)
     
     // select the branch to build
     def branch_name
@@ -338,10 +340,11 @@ node(TARGET_NODE) {
         }
 
         stage("add upstream remote") {
-            upstream_repo_url = GITHUB_BASE + "/${upstream_project}.git"
-            dir(package_name) {
-                sh("git remote add upstream ${upstream_repo_url} --no-tags")
-            }
+            project_repo.addRemote("upstream", upstream_project)
+            //upstream_repo_url = GITHUB_BASE + "/${upstream_project}.git"
+            //dir(package_name) {
+            //    sh("git remote add upstream ${upstream_repo_url} --no-tags")
+            //}
         }
 
         stage("merge upstream") {
