@@ -25,9 +25,15 @@ class GitHubRepository {
         this.pipeline = pipeline
     }
 
-    //GitHubRepository(Map init) {
-    //    owner = init.owner
-    //}
+    GitHubRepository(Map init) {
+        this.owner = init.owner
+        this.project = init.project
+        this.branch = init.branch 
+        this.path = init.path ? init.path : this.project
+        this.package_name = init.package_name ? init.package_name : this.project
+        this.password = init.password
+        this.pipeline = init.pipeline
+    }
     
 
     def getRemote() {
