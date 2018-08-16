@@ -6,7 +6,7 @@ import com.redhat.art.Version
 class GitHubRepository {
 
     String owner
-    Stringproject
+    String project
     String branch
     Sgring path
     def pipeline
