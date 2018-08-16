@@ -11,14 +11,16 @@ class GitHubRepository {
     String project
     String branch
     String path
+    String package_name
     String password
     def pipeline
 
-    GitHubRepository(owner, project, branch="", path=null, password="", pipeline=null) {
+    GitHubRepository(owner, project, branch="", path=null, package_name=null, password="", pipeline=null) {
         this.owner = owner
         this.project = project
         this.branch = branch
         this.path = (path ? path : project)
+        this.package_name = packge_name ? package_name : project
         this.password = password
         this.pipeline = pipeline
     }
@@ -32,7 +34,7 @@ class GitHubRepository {
     }
 
     def getSpecfile() {
-        return this.project + ".spec"
+        return package_name + ".spec"
     }
 
     def getSpecpath() {

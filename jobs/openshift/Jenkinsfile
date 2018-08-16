@@ -260,7 +260,7 @@ node(TARGET_NODE) {
         script: "rpm -q --quiet go-toolset-7") == 0
 
     // get the list of release numbers from the branch names
-    package_name = "ose"
+    repo_name = "ose"
     upstream_project = "origin"
     branch_prefix = "enterprise-"
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
@@ -268,7 +268,7 @@ node(TARGET_NODE) {
     // clean up before starting
     sh "rm -rf $package_name"
 
-    package_repo = new GitHubRepository(GITHUB_OWNER, package_name)
+    package_repo = new GitHubRepository(GITHUB_OWNER, repo_name, package_name="origin")
     package_repo.pipeline = this
     //repo_url = GITHUB_BASE + "/${package_name}.git"
     //spec_filename = "${package_name}.spec"
