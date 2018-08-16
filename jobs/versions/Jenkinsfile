@@ -1,4 +1,4 @@
-@Library('art')
+@Library('artlib')
 import com.redhat.art.Version
 import com.redhat.art.VersionTest
 
