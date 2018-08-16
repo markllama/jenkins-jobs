@@ -20,29 +20,26 @@ class GitHubRepository {
         this.pipeline = pipeline
     }
 
-    @Property
-    def remote() {
+    def getRemote() {
         return "git@github.com:{this.owner}/{$this.project}.git"
     }
 
-    @Property
-    def url() {
+    def getUrl() {
         return "https://github.com/{this.owner}/{$this.project}.git"
     }
 
-    @Property
-    def spec_file() {
+    def getSpecfile() {
         return this.project + ".spec"
     }
 
-    @Property
-    def spec_path() {
-        return [path, this.spec_file].join('/')
+    def getSpecpath() {
+        return [path, this.specfile].join('/')
     }
 
     def clone() {
         
     }
+    
     /*
      * Retrive the branch list from a remote repository
      * @param repo_url a git@ repository URL.
