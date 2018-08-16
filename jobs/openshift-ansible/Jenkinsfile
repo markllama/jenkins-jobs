@@ -237,7 +237,9 @@ node(TARGET_NODE) {
 
         // need new version and new release
         stage("update build/release numbers") {
-            def rpm_spec = new RpmSpecfile(readFile(package_repo.specpath))
+            def spec_file = package_repo.specpath
+            echo "looking up spec_file: ${spec_file}"
+            def rpm_spec = new RpmSpecfile(readFile(spec_file))
             current_version = rpm_spec.version
             current_release = rpm_spec.release
 
