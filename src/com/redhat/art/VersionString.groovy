@@ -63,8 +63,8 @@ class VersionString implements Comparable<VersionString>{
     int getRevision() { return v_array[2] }
 
     // Major/Minor number string
-    @NonCPS
-    String getMajorMinor() {
+
+    String getMajorminor() {
         return v_array[0..1].collect { it as String }.join('.')
     }
 
