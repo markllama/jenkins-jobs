@@ -41,8 +41,9 @@ class GitHubRepository {
             returnStdout: true,
             script: [
                 "git clone",
+                this.branch ? "--branch ${this.branch}" : "",
                 this.remote,
-                
+                this.path
             ].join(' ')
         )
     }
