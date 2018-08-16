@@ -34,7 +34,6 @@ class GitHubRepository {
         this.password = init.password
         this.pipeline = init.pipeline
     }
-    
 
     def getRemote() {
         return "git@github.com:${this.owner}/${this.project}.git"
