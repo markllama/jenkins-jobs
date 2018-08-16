@@ -341,15 +341,11 @@ node(TARGET_NODE) {
 
         stage("add upstream remote") {
             package_repo.addRemote("upstream", upstream_project)
-            //upstream_repo_url = GITHUB_BASE + "/${upstream_project}.git"
-            //dir(package_name) {
-            //    sh("git remote add upstream ${upstream_repo_url} --no-tags")
-            //}
         }
 
         stage("merge upstream") {
             package_repo.fetch('upstream')
-            package_repo.merge("upstream/${upstream_branch_name}")
+            package_repo.merge("upstream", upstream_branch_name)
         }
         
         // need new version and new release

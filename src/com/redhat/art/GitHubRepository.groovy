@@ -132,7 +132,7 @@ class GitHubRepository {
         }
     }
 
-    def merge(remote_name, remote_branch) {
+    def merge(String remote_name, String remote_branch) {
         pipeline.dir(path) {
             pipeline.sh(
                 script: "git merge ${remote_name}/${remote_branch}"
