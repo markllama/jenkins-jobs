@@ -29,9 +29,9 @@ class Version {
 
     def size() { return v_array.size() }
     
-    def major() { return v_array[0] }
-    def minor() { return v_array[1] }
-    def revision() {
+    def getMajor() { return v_array[0] }
+    def getMinor() { return v_array[1] }
+    def getRevision() {
         if (v_array.size() > 2) {
             return v_array[2]
         }
@@ -40,7 +40,7 @@ class Version {
     }
 
     @NonCPS
-    def maj_min() {
+    def String getMajMin() {
         return v_array[0..1].collect { it.toString() }.join('.')
     }
 
