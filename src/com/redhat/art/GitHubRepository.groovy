@@ -12,13 +12,14 @@ class GitHubRepository {
     def pipeline
     
     //GitHubRepository(owner, project, branch=null, path=null, password=null, pipeline=null) {
-    //    this.owner = owner
-    //    this.project = project
-    //    this.branch = branch
-    //    this.path = path
-    //    this.password = password
-    //    this.pipeline = pipeline
-    //}
+    GitHubRepository(owner, project) {
+        this.owner = owner
+        this.project = project
+        this.branch = branch
+        this.path = path
+        this.password = password
+        this.pipeline = pipeline
+    }
 
     def getRemote() {
         return "git@github.com:${this.owner}/${this.project}.git"
