@@ -40,7 +40,11 @@ class GitHubRepository {
     }
 
     def clone() {
-        pipeline.sh(
+        if (this.pipeline == null) {
+            return null
+        }
+
+        this.pipeline.sh(
             returnStdout: true,
             script: [
                 "git clone",
@@ -66,7 +70,7 @@ class GitHubRepository {
             return null
         }
 
-        branch_text = pipeline.sh(
+        branch_text = this.pipeline.sh(
             returnStdout: true,
             script: [
                 "git ls-remote ${this.remote} ${pattern}",
