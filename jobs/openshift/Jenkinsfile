@@ -109,47 +109,18 @@ def gopath_setup() {
     echo "Initialized env.GOPATH: ${env.GOPATH}"
 }
 
-/**
- * Retrive the branch list from a remote repository
- * @param repo_url a git@ repository URL.
- * @param pattern a matching pattern for the branch list. Only return matching branches
- *
- * @return a list of branch names.  Removes the leading ref path
- *
- * Requires SSH_AGENT to have set a key for access to the remote repository
- */
-def get_branches(repo_url, pattern="") {
+def run_script(shell, collection=null) {
+    if (collection) {
+        echo "running build tools in collection ${collection}"
+        wrapper = "scl enable ${collection}"
+        return { script -> shell.sh("${wrapper} '${script}'") }
+    }
 
-    branch_text = sh(
-        returnStdout: true,
-        script: [
-            "git ls-remote ${repo_url} ${pattern}",
-            "awk '{print \$2}'",
-            "cut -d/ -f3"
-        ].join(" | ")
-    )
-
-    return branch_text.tokenize("\n")
+    return { script -> shell.sh script }
 }
 
-/**
- * Retrive a list of release numbers from the OCP remote repository
- * @param repo_url a git@ repository URL.
- * @return a list of OSE release numbers.
- *
- * Get the branch names beginning with 'enterprise-'.
- * Extract the release number string from each branch release name
- * Sort in version order (compare fields as integers, not strings)
- * Requires SSH_AGENT to have set a key for access to the remote repository
- */
-def get_releases(repo_url, pattern="enterprise-") {
-    // too clever: chain - get branch names, remove prefix, suffix
-    def r = get_branches(repo_url, pattern + '*')
-        .collect { it - pattern }
-        .findAll { it =~ /^\d+((\.\d+)*)$/ }
-        .collect { new Version(it) }
-
-    return r
+def Boolean package_installed(String package_name) {
+    return sh(returnStatus: true, script: "rpm -q --quiet ${package_name}") == 0
 }
 
 // ===========================================================================
@@ -230,15 +201,6 @@ def tito_build(pipeline, repo_name)  {
     }
 }
 
-def run_script(shell, collection=null) {
-    if (collection) {
-        echo "running build tools in collection ${collection}"
-        wrapper = "scl enable ${collection}"
-        return { script -> shell.sh("${wrapper} '${script}'") }
-    }
-
-    return { script -> shell.sh script }
-}
 
 // ===========================================================================
 //
@@ -254,10 +216,8 @@ node(TARGET_NODE) {
     checkout scm
 
     gopath_setup()
-    
-    collection_installed = sh(
-        returnStatus: true,
-        script: "rpm -q --quiet go-toolset-7") == 0
+
+    collection_installed = package_installed('go-toolset-7')
 
     // get the list of release numbers from the branch names
     repo_name = "ose"
