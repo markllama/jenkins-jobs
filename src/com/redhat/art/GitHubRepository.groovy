@@ -40,9 +40,10 @@ class GitHubRepository {
     }
 
     @NonCPS
-    def clone() {
-        pipeline.echo("Cloning repo ${remote}")
-        pipeline.sh(
+    def clone(p=null) {
+        p = p ? p : pipeline
+        p.echo("Cloning repo ${remote}")
+        p.sh(
             returnStdout: false,
             script: [
                 "git clone",
@@ -51,7 +52,7 @@ class GitHubRepository {
                 path
             ].join(' ')
         )
-        pipeline.echo("Cloning repo ${remote}")
+        p.echo("Cloning repo ${remote}")
     }
     
     /*

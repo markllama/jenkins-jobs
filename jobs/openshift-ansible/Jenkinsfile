@@ -233,7 +233,7 @@ node(TARGET_NODE) {
     sshagent([SSH_KEY_ID]) {
         stage("clone ${package_name}") {
             echo "cloning to ${package_name}"
-            package_repo.clone()
+            package_repo.clone(this)
             echo "cloning complete"
             
         }
