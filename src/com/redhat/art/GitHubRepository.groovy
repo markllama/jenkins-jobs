@@ -51,6 +51,7 @@ class GitHubRepository {
                 path
             ].join(' ')
         )
+        pipeline.echo("Cloning repo ${remote}")
     }
     
     /*
