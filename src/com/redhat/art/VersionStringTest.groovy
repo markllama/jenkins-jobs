@@ -5,6 +5,10 @@ import com.redhat.art.VersionString
 
 class VersionStringTest extends GroovyTestCase {
 
+    def VersionTest(pipeline_env=null) {
+        env = pipeline_env
+    }
+
     //protected VersionString v0
     //protected VersionString v1
     
