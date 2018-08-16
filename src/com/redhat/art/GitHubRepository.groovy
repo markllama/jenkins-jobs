@@ -20,7 +20,7 @@ class GitHubRepository {
         this.project = project
         this.branch = branch
         this.path = (path ? path : project)
-        this.package_name = packge_name ? package_name : project
+        this.package_name = package_name ? package_name : project
         this.password = password
         this.pipeline = pipeline
     }
