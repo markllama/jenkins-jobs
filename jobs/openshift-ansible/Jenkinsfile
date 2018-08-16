@@ -212,6 +212,11 @@ node(TARGET_NODE) {
     package_repo = new GitHubRepository(GITHUB_OWNER, package_name, pipeline=this)
 
     if (package_repo.pipeline == null) {
+        echo "repo object did not store pipeline"
+        package_repo.pipeline=this
+        //error "repo object did not store pipeline"
+    }
+    if (package_repo.pipeline == null) {
         error "repo object did not store pipeline"
     }
     //spec_filename = "${package_name}.spec"
