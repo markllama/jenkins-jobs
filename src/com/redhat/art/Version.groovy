@@ -53,6 +53,7 @@ class Version implements Comparable<Version>{
     }
 
     @Override
+    @NonCPS
     int compareTo(Version obj) {
         // compare two version strings.
         // return:
