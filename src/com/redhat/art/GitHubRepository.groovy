@@ -11,7 +11,7 @@ class GitHubRepository {
     def path
     def pipeline
     
-    def GitHubRepository(owner, project, branch=null, path=null, password=null, pipeline=null) {
+    GitHubRepository(owner, project, branch=null, path=null, password=null, pipeline=null) {
         this.owner = owner
         this.project = project
         this.branch = branch
@@ -37,7 +37,14 @@ class GitHubRepository {
     }
 
     def clone() {
-        
+        pipeline.sh(
+            returnStdout: true,
+            script: [
+                "git clone",
+                this.remote,
+                
+            ].join(' ')
+        )
     }
     
     /*
