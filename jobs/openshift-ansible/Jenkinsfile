@@ -213,7 +213,7 @@ node(TARGET_NODE) {
     //spec_filename = "${package_name}.spec"
     //spec_path = "${package_repo.path}/${spec_filename}"
     
-    releases = package_repo.releases(branch_prefix)
+    releases = package_repo.releases(branch_prefix, pipeline=this)
     
     // select the branch to build
     def branch_name
