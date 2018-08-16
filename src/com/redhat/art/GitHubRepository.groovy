@@ -21,11 +21,11 @@ class GitHubRepository {
     }
 
     def getRemote() {
-        return "git@github.com:{this.owner}/{$this.project}.git"
+        return "git@github.com:${this.owner}/${this.project}.git"
     }
 
     def getUrl() {
-        return "https://github.com/{this.owner}/{$this.project}.git"
+        return "https://github.com/${this.owner}/${this.project}.git"
     }
 
     def getSpecfile() {
