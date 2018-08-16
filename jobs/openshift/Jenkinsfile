@@ -271,7 +271,7 @@ node(TARGET_NODE) {
     //package_repo = new GitHubRepository(GITHUB_OWNER, repo_name)
     //package_repo.package_name = "origin"
     //package_repo.pipeline = this
-    package_repo = GitHubRepository(owner: GITHUB_OWNER, project: "ose", package_name: "origin", pipeline: this)
+    package_repo = GitHubRepository([owner: GITHUB_OWNER, project: "ose", package_name: "origin", pipeline: this])
 
     // re-read the new spec
     //package_repo.package_name = 'origin'
