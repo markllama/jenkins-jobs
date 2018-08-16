@@ -8,7 +8,7 @@ class GitHubRepository {
     String owner
     String project
     String branch
-    Sgring path
+    String path
     def pipeline
     
     //GitHubRepository(owner, project, branch=null, path=null, password=null, pipeline=null) {
