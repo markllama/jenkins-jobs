@@ -2,6 +2,9 @@
 import com.redhat.art.Version
 import com.redhat.art.VersionTest
 
+import com.redhat.art.VersionString
+import com.redhat.art.VersionStringTest
+
 import groovy.util.GroovyTestSuite 
 import junit.framework.Test 
 import junit.textui.TestRunner
@@ -40,10 +43,10 @@ node(TARGET_NODE) {
     //echo "Loading version library tests"
     //def tests = load("jobs/versions/version_test.groovy")
     
-    stage("test versions") {
-        echo "BEGIN TESTING"
+    stage("test version") {
+        echo "BEGIN TESTING Version"
 
-        vt = new VersionTest(this)
+        def vt = new VersionTest(this)
 
         vt.test_constructor()
         vt.test_clone()
@@ -53,7 +56,7 @@ node(TARGET_NODE) {
 
         vt.test_increments()
         
-        echo "END TESTING"
+        echo "END TESTING Version"
 
         echo "START Creating v0"
         def v0 = new Version("3.2.1")
@@ -89,4 +92,11 @@ node(TARGET_NODE) {
 
     }
     //echo "v0 = ${v0_string}"
+
+    stage("test VersionString") {
+        echo "Begin TESTING VersionString"
+        def vst = new VersionStringTest(this)
+        vst.testCompareTo()
+        echo "End TESTING VersionString"
+    }
 }
