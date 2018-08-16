@@ -296,14 +296,12 @@ node(TARGET_NODE) {
     if (debug) {
         echo "build_version: ${build_version}, branch_name: ${branch_name}"
     }
+
+    package_repo.branch = branch_name
     
     sshagent([SSH_KEY_ID]) {
         stage("clone ${package_name}") {
-            sh(["git clone",
-                "--branch ${branch_name}",
-                repo_url
-                ].join(' ')
-            )
+            package_repo.clone()
         }
 
         // re-read the new spec
