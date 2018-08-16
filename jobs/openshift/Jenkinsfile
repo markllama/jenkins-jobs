@@ -272,6 +272,7 @@ node(TARGET_NODE) {
     package_repo.pipeline = this
 
     // re-read the new spec
+    package_repo.package_name = 'origin'
     if (package_repo.package_name != 'origin') {
         error("package repo name is incorrect: ${package_repo.package_name} resulting in incorrect spec path: ${package_repo.specpath}")
     }
