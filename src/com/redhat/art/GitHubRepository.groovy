@@ -11,6 +11,7 @@ class GitHubRepository {
     String project
     String branch
     String path
+    String password
     def pipeline
     
     GitHubRepository(owner, project, branch=null, path=null, password=null, pipeline=null) {
