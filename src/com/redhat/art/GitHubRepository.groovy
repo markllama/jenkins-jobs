@@ -1,7 +1,9 @@
 //
 // Model a remote git repository
 //
-import com.redhat.art.Version
+package com.redhat.art
+
+import Version
 
 class GitHubRepository {
 
@@ -11,8 +13,7 @@ class GitHubRepository {
     String path
     def pipeline
     
-    //GitHubRepository(owner, project, branch=null, path=null, password=null, pipeline=null) {
-    GitHubRepository(owner, project) {
+    GitHubRepository(owner, project, branch=null, path=null, password=null, pipeline=null) {
         this.owner = owner
         this.project = project
         this.branch = branch

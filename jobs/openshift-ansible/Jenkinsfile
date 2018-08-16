@@ -209,7 +209,7 @@ node(TARGET_NODE) {
     branch_prefix = "release-"
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
 
-    package_repo = new GitHubRepository(GITHUB_OWNER, package_name)
+    package_repo = new GithubRepository(GITHUB_OWNER, package_name, pipeline=this)
     //spec_filename = "${package_name}.spec"
     //spec_path = "${package_repo.path}/${spec_filename}"
     
