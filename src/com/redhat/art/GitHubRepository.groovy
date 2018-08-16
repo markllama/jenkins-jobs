@@ -42,7 +42,7 @@ class GitHubRepository {
     @NonCPS
     def clone() {
         this.pipeline.sh(
-            returnStdout: true,
+            returnStdout: false,
             script: [
                 "git clone",
                 this.branch ? "--branch ${this.branch}" : "",
