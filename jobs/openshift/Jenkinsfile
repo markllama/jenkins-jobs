@@ -273,13 +273,13 @@ node(TARGET_NODE) {
 
     // re-read the new spec
     //package_repo.package_name = 'origin'
+    echo """package_repo contents:\n
+  origin: ${package_repo.origin}
+"""
     if (package_repo.package_name != 'origin') {
         error("package repo name is incorrect: ${package_repo.package_name} resulting in incorrect spec path: ${package_repo.specpath}")
     }
 
-    echo """package_repo contents:\n
-  origin: ${package_repo.origin}
-"""
     spec_path = package_repo.specpath
 
     //repo_url = GITHUB_BASE + "/${package_name}.git"
