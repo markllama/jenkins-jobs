@@ -153,6 +153,14 @@ node(TARGET_NODE) {
             pipeline: this
         ])
 
+    if (debug) {
+        echo """
+package_repo:
+  owner: ${package_repo.owner}
+  project: ${package_repo.project}
+"""
+    }
+    
     upstream_repo = new GitHubRepository(
         [
             owner: GITHUB_OWNER,
