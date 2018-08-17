@@ -22,8 +22,8 @@ properties(
                     defaultValue: 'container'
                 ],
                                 [
-                    name: 'GITHUB_USER',
-                    description: 'Github user for source repos',
+                    name: 'GITHUB_OWNER',
+                    description: 'Github owner for source repos',
                     $class: 'hudson.model.ChoiceParameterDefinition',
                     choices: [
                         "openshift",
@@ -134,7 +134,7 @@ node(TARGET_NODE) {
     branch_prefix = "enterprise-"
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
 
-    go_source_dir = "go/src/github.com/${GITHUB_USER}"
+    go_source_dir = "go/src/github.com/${GITHUB_OWNER}"
 
     // clean up before starting
     sh "rm -rf ${go_source_dir}"
