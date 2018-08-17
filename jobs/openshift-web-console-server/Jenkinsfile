@@ -183,6 +183,8 @@ package_repo:
         def releases = package_repo.releases(branch_prefix)
 
         echo "releases: ${releases}"
+
+        package_repo.clone()
     }
 
     archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/**"
