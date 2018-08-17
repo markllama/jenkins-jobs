@@ -162,6 +162,11 @@ package_repo:
   path: ${package_repo.path}
   package_name: ${package_repo.package_name}
   password: ${package_repo.password}
+
+  remote: ${package_repo.remote}
+  url: ${package_repo.url}
+  specfile: ${package_repo.specfile}
+  specpath: ${package_repo.specpath}
 """
     }
     
