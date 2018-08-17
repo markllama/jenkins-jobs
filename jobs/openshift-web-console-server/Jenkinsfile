@@ -162,6 +162,8 @@ node(TARGET_NODE) {
 
     releases = package_repo.releases(branch_prefix)
 
+    echo "releases: ${releases}"
+    
     if (BUILD_VERSION == 'master') {
         build_version = new Version(releases[-1])
         echo "detected version: ${build_version}"
