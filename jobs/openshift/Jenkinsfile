@@ -62,12 +62,6 @@ properties(
                     $class: 'hudson.model.BooleanParameterDefinition',
                     defaultValue: true
                 ],
-//                [
-//                    name: 'USE_COLLECTIONS',
-//                    description: 'enable SCL collection go-toolset-7',
-//                    $class: 'hudson.model.BooleanParameterDefinition',
-//                    defaultValue: false
-//                ],
                 [
                     name: 'DEBUG',
                     description: 'ask commands to print details',
@@ -88,7 +82,6 @@ properties(
 
 // convert property strings to proper logical values
 release = RELEASE.toBoolean()
-//use_collections = USE_COLLECTIONS.toBoolean()
 scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()

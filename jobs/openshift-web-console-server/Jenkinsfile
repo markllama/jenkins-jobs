@@ -85,6 +85,12 @@ mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
 debug_shell = debug ? "-x" : "" 
 
+// ***************************************************************************
+//
+//
+//
+// ***************************************************************************
+
 // Initialize $PATH and $GOPATH
 def gopath_setup() {
     echo "Adding git managed script directories to PATH"
@@ -94,56 +100,6 @@ def gopath_setup() {
     sh "rm -rf ${GOPATH}"  // Remove any cruft
     sh "mkdir -p ${GOPATH}"
     echo "Initialized env.GOPATH: ${env.GOPATH}"
-}
-
-// ***************************************************************************
-//
-//
-//
-// ***************************************************************************
-
-/**
- * Retrive the branch list from a remote repository
- * @param repo_url a git@ repository URL.
- * @param pattern a matching pattern for the branch list. Only return matching branches
- *
- * @return a list of branch names.  Removes the leading ref path
- *
- * Requires SSH_AGENT to have set a key for access to the remote repository
- */
-def get_branches(repo_url, pattern="") {
-
-    branch_text = sh(
-        returnStdout: true,
-        script: [
-            "git ls-remote ${repo_url} ${pattern}",
-            "awk '{print \$2}'",
-            "cut -d/ -f3"
-        ].join(" | ")
-    )
-
-    return branch_text.tokenize("\n")
-}
-
-/**
- * Retrive a list of release numbers from the OCP remote repository
- * @param repo_url a git@ repository URL.
- * @return a list of OSE release numbers.
- *
- * Get the branch names beginning with 'enterprise-'.
- * Extract the release number string from each branch release name
- * Sort in version order (compare fields as integers, not strings)
- * Requires SSH_AGENT to have set a key for access to the remote repository
- */
-def get_releases(repo_url, pattern="enterprise-") {
-    // too clever: chain - get branch names, remove prefix, suffix
-    def r = get_branches(repo_url, pattern + '*')
-        .collect { it - pattern }
-        .findAll { it =~ /^\d+((\.\d+)*)$/ }
-        .collect { new Version(it) }
-        .sort()
-
-    return r
 }
 
 def run_script(shell, collection=null) {
@@ -156,6 +112,16 @@ def run_script(shell, collection=null) {
     return { script -> shell.sh script }
 }
 
+def Boolean package_installed(String package_name) {
+    return sh(returnStatus: true, script: "rpm -q --quiet ${package_name}") == 0
+}
+
+// ***************************************************************************
+//
+//
+//
+// ***************************************************************************
+
 node(TARGET_NODE) {
     checkout scm
     AOS_CD_JOBS_COMMIT_SHA = sh(
@@ -164,28 +130,40 @@ node(TARGET_NODE) {
     ).trim()
     
     package_name = "origin-web-console-server"
-    upstream_project_name = "origin-web-console"
+    upstream_name = "origin-web-console"
     branch_prefix = "enterprise-"
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
 
-    repo_url = "git@github.com:${GITHUB_USER}/${package_name}.git"
-    upstream_repo_url = "git@github.com:${GITHUB_USER}/${upstream_project_name}.git"
-    //spec_filename = "${package_name}.spec"
-    spec_filename = "origin-web-console-server.spec"
-    spec_path = "${package_name}/${spec_filename}"
-
     go_source_dir = "go/src/github.com/${GITHUB_USER}"
-    package_path = go_source_dir + "/" + package_name
-    upstream_project_path = go_source_dir + "/" + upstream_project_name
+
     // clean up before starting
     sh "rm -rf ${go_source_dir}"
     sh "mkdir -p ${go_source_dir}"
     sh "rm -rf BUILD"
 
-    releases = get_releases(repo_url, branch_prefix)
+    package_path = go_source_dir + "/" + package_name
+    upstream_path = go_source_dir + "/" + upstream_name
+
+    package_repo = new GitHubRepository(
+        [
+            owner: GITHUB_OWNER,
+            project: package_name,
+            path: package_path,
+            pipeline: this
+        ])
+
+    upstream_repo = new GitHubRepository(
+        [
+            owner: GITHUB_OWNER,
+            project: upstream_name,
+            path: upstream_path,
+            pipeline: this
+        ])
+
+    releases = package_repo.releases(branch_prefix)
 
     if (BUILD_VERSION == 'master') {
-        build_version = releases[-1]
+        build_version = new Version(releases[-1])
         echo "detected version: ${build_version}"
     } else if (BUILD_VERSION == 'stage') {
         error("Not implemented: build should be most recent numbered branch")
@@ -193,16 +171,16 @@ node(TARGET_NODE) {
         build_version = new Version(BUILD_VERSION)
     }
 
-    collection_installed = sh(
-        returnStatus: true,
-        script: "rpm -q --quiet go-toolset-7") == 0
-    
-    //if (collection_installed && build_version >= new Version("3.11")) {
-    //    collection = 'go-toolset-7'
-    //} else {
+    if (build_version >= new Version("3.11")) {
+        if (package_installed("go-toolset-7")) {   
+            collection = 'go-toolset-7'
+        } else {
+            error("missing package go-toolset-7 is required for version $build_version")
+        }
+    } else {
         collection = null
-    //}
-    shell = run_script(this, collection)
+    }
+    def shell = run_script(this, collection)
 
     gopath_setup()
  
@@ -223,34 +201,19 @@ node(TARGET_NODE) {
     if (debug) {
         echo "build_version: ${build_version}, branch_name: ${branch_name}"
     }
-
-    // remote existing stuff if needed
-    // origin-web-console
-    // origin-web-console-server
-    // go
     
     sshagent([SSH_KEY_ID]) {
 
         stage("clone ${package_name}") {
-            sh(["git clone",
-                "--branch ${branch_name}",
-                repo_url,
-                package_path,
-                ].join(' ')
-            )
+            package_repo.clone()
         }
 
         stage("clone ${upstream_project_name}") {
-            sh(["git clone",
-                "--branch ${branch_name}",
-                upstream_repo_url,
-                upstream_project_path
-                ].join(' ')
-            )
+            upstream_repo.clone()
         }
 
         stage("configure dummy merge") {
-            dir(package_path) {
+            dir(package_repo.path) {
                 sh "git config merge.ours.driver true"
             }
             //def gitattributes = package_name + "/.gitattributes"
@@ -260,7 +223,7 @@ node(TARGET_NODE) {
         }
 
         stage("build upstream") {
-            dir(upstream_project_path) {
+            dir(upstream_repo.path) {
                 sh "git merge origin/master --no-commit --no-ff"
                 sh "bash ${debug_shell} ./hack/install-deps.sh"
                 sh "grunt build"
@@ -270,8 +233,8 @@ node(TARGET_NODE) {
             }
         }
         
-        stage("merge upstream ${upstream_project_name}") {
-            dir(package_path) {
+        stage("merge upstream into ${upstream_repo.project}") {
+            dir(package_repo.path) {
                 // the resulting commit is used in the downstream merge message
                 VC_COMMIT =  sh(
                     script: [
@@ -297,7 +260,7 @@ node(TARGET_NODE) {
 
         stage("tag and push") {
             echo "tag and push"
-            dir(package_path) {
+            dir(package_repo.path) {
                 shell(
                     [
                         "tito tag",
@@ -314,7 +277,7 @@ node(TARGET_NODE) {
             //tito_release(this, package_name, new_version, scratch)
             //tito_build(this, package_name)
             def output_root = env.WORKSPACE + '/BUILD'
-            dir(package_path) {
+            dir(package_repo.path) {
                 shell(
                     [
                         "tito build",
