@@ -102,7 +102,7 @@ def gopath_setup() {
     echo "Initialized env.GOPATH: ${env.GOPATH}"
 }
 
-def run_script(shell, collection=null) {
+def wrap_script(shell, collection=null) {
     if (collection) {
         echo "running build tools in collection ${collection}"
         wrapper = "scl enable ${collection}"
@@ -180,7 +180,7 @@ node(TARGET_NODE) {
     } else {
         collection = null
     }
-    def shell = run_script(this, collection)
+    def shell = wrap_script(this, collection)
 
     gopath_setup()
  
