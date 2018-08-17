@@ -134,4 +134,17 @@ class GitHubRepository {
             )
         }
     }
+
+    def config(String key, String value) {
+        dir(path) {
+            sh "git config ${key} ${value}"
+        }
+    }
+
+    def set_attribute(String filepath, String attrname, String attrvalue) {
+        // check if the attribute is already set some day
+        def gitattributes = path + "/.gitattributes"
+        sh "echo '${filepath} ${attrname}=${attrvalue}' >> ${gitattributes}"
+    }
+    
 }

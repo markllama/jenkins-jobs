@@ -215,13 +215,13 @@ node(TARGET_NODE) {
         }
 
         stage("configure dummy merge") {
-            dir(package_repo.path) {
-                sh "git config merge.ours.driver true"
-            }
+            package_repo.config("merge.ours.driver", "true")
+            package_repo.add_attribute("pkg/assets/bindata.go", "merge", "ours")
+            package_repo.add_attribute("pkg/assets/java/bindata.go", "merge", "ours")
             //def gitattributes = package_name + "/.gitattributes"
-            def gitattributes = ".gitattributes"
-            sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
-            sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
+            //def gitattributes = ".gitattributes"
+            //sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
+            //sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
         }
 
         stage("build upstream") {
