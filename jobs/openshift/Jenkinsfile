@@ -1,7 +1,6 @@
 // Build the OpenShift Ansible RPM
 
 @Library('artlib')
-
 import com.redhat.art.*
 
 properties(
@@ -10,7 +9,7 @@ properties(
             logRotator(
                 artifactDaysToKeepStr: '',
                 artifactNumToKeepStr: '',
-                daysToKeepStr: '',
+                daysToKeepStr: '5',
                 numToKeepStr: '10'
             )
         ),
@@ -85,6 +84,7 @@ release = RELEASE.toBoolean()
 scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
+debug_shell = debug ? "-x" : ""
 
 // ***************************************************************************
 //
