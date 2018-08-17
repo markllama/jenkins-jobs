@@ -3,7 +3,7 @@
 //
 package com.redhat.art
 
-import com.redhat.art.VersionString
+import com.redhat.art.Version
 
 class GitHubRepository {
 
@@ -91,7 +91,7 @@ class GitHubRepository {
         def r = this.branches(pattern + '*')
             .collect { it - pattern }
             .findAll { it =~ /^\d+((\.\d+)*)$/ }
-            .collect { new VersionString(it) }
+            .collect { new Version(it) }
             .sort()
 
         return r

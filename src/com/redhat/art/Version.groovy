@@ -7,23 +7,23 @@ package com.redhat.art
 //
 // ===========================================================================
 
-class VersionString implements Comparable<VersionString>{
+class Version implements Comparable<Version>{
     def v_array
 
-    def VersionString(String v_in) {
+    def Version(String v_in) {
         v_array = v_in.tokenize('.').collect { it as int }
     }
 
-    def VersionString(VersionString model) {
+    def Version(Version model) {
         v_array = model.v_array.collect()
     }
 
-    def VersionString(o_array) {
+    def Version(o_array) {
         v_array = o_array.collect()
     }
 
     @NonCPS
-    int compareTo(VersionString other) {
+    int compareTo(Version other) {
 
         // make a copy so you can change it safely
         def a = v_array.collect()
@@ -69,7 +69,7 @@ class VersionString implements Comparable<VersionString>{
     }
 
     @NonCPS
-    VersionString incrMajor() {
+    Version incrMajor() {
         assert v_array.size() >= 1 :
             "version string must have >= 1 fields. actual: ${v_array.size()}"
         def new_v_array = v_array.collect()
@@ -81,11 +81,11 @@ class VersionString implements Comparable<VersionString>{
                 new_v_array[i] = 0
             }
         }
-        return new VersionString(new_v_array)
+        return new Version(new_v_array)
     }
 
     @NonCPS
-    VersionString incrMinor() {
+    Version incrMinor() {
         assert v_array.size() >= 2 :
             "version string must have >= 2 fields. actual: ${v_array.size()}"
         def new_v_array = v_array.collect()
@@ -96,11 +96,11 @@ class VersionString implements Comparable<VersionString>{
             }
         }
         
-        return new VersionString(new_v_array)
+        return new Version(new_v_array)
     }
 
     @NonCPS
-    VersionString incrRevision() {
+    Version incrRevision() {
         assert v_array.size() >= 3 :
             "version string must have >= 3 fields. actual: ${v_array.size()}"
         def new_v_array = v_array.collect()
@@ -110,6 +110,6 @@ class VersionString implements Comparable<VersionString>{
                 new_v_array[i] = 0
             }
         }
-        return new VersionString(new_v_array)
+        return new Version(new_v_array)
     }
 }

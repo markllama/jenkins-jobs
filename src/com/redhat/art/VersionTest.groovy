@@ -1,24 +1,24 @@
 #!/usr/bin/groovy
 //package com.redhat.art
 
-import com.redhat.art.VersionString
+import com.redhat.art.Version
 
-class VersionStringTest extends GroovyTestCase {
+class VersionTest extends GroovyTestCase {
     def env
     
     def VersionTest(pipeline_env=null) {
         env = pipeline_env
     }
 
-    //protected VersionString v0
-    //protected VersionString v1
+    //protected Version v0
+    //protected Version v1
     
     //protected void setUp() {
 
     //}
     
     void testConstructorString() {
-        def vs = new VersionString('3.2.1')
+        def vs = new Version('3.2.1')
 
         def expected = [3, 2, 1]
         def actual = vs.v_array
@@ -26,9 +26,9 @@ class VersionStringTest extends GroovyTestCase {
         assertEquals(actual, expected)
     }
 
-    void testConstructorVersionString() {
-        def vs0 = new VersionString('3.2.1')
-        def vs1 = new VersionString(vs0)
+    void testConstructorVersion() {
+        def vs0 = new Version('3.2.1')
+        def vs1 = new Version(vs0)
 
         def expected = [3, 2, 1]
         def actual = vs1.v_array
@@ -38,7 +38,7 @@ class VersionStringTest extends GroovyTestCase {
     
     void testConstructorVersionStrin() {
         def v_array = [3, 2, 1]
-        def vs1 = new VersionString(v_array)
+        def vs1 = new Version(v_array)
 
         def expected = [3, 2, 1]
         def actual = vs1.v_array
@@ -50,28 +50,28 @@ class VersionStringTest extends GroovyTestCase {
 
         def inputs = [
             [
-                testValue: new VersionString('3.2.1'),
+                testValue: new Version('3.2.1'),
                 greater: [
-                    new VersionString('3.2.1.1'),
-                    new VersionString('3.2.2'),
-                    new VersionString('3.3.0'),
-                    new VersionString('3.3'),
-                    new VersionString('4.0.0'),
-                    new VersionString('4.0'),
-                    new VersionString('4'),
+                    new Version('3.2.1.1'),
+                    new Version('3.2.2'),
+                    new Version('3.3.0'),
+                    new Version('3.3'),
+                    new Version('4.0.0'),
+                    new Version('4.0'),
+                    new Version('4'),
                 ],
                 less: [
-                    new VersionString('3.2.0'),
-                    new VersionString('3.1.9.1'),
-                    new VersionString('2.3.0'),
-                    new VersionString('1.0.0'),
-                    new VersionString('3.2'),
-                    new VersionString('2.9'),
-                    new VersionString('2'),                    
+                    new Version('3.2.0'),
+                    new Version('3.1.9.1'),
+                    new Version('2.3.0'),
+                    new Version('1.0.0'),
+                    new Version('3.2'),
+                    new Version('2.9'),
+                    new Version('2'),                    
                 ],
                 equal: [
-                    new VersionString('3.2.1'),
-                    new VersionString('3.2.1.0'),
+                    new Version('3.2.1'),
+                    new Version('3.2.1.0'),
                 ]
             ]
         ]
