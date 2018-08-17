@@ -178,6 +178,10 @@ package_repo:
             pipeline: this
         ])
 
+    def branches = package_repo.branches("enterprise-*")
+
+    echo "Branches: ${branches}"
+    
     def releases = package_repo.releases(branch_prefix)
 
     echo "releases: ${releases}"
