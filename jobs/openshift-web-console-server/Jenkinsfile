@@ -129,7 +129,7 @@ node(TARGET_NODE) {
         script: "git rev-parse HEAD",
     ).trim()
     
-    package_name = "origin-web-console-server"
+    repo_name = "origin-web-console-server"
     upstream_name = "origin-web-console"
     branch_prefix = "enterprise-"
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
@@ -147,7 +147,8 @@ node(TARGET_NODE) {
     package_repo = new GitHubRepository(
         [
             owner: GITHUB_OWNER,
-            project: package_name,
+            project: repo_name,
+            package_name: upstream_name,
             path: package_path,
             pipeline: this
         ])
