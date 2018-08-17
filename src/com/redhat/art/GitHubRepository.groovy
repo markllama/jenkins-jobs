@@ -60,7 +60,6 @@ class GitHubRepository {
      *
      * Requires SSH_AGENT to have set a key for access to the remote repository
      */
-    @NonCPS
     def branches(pattern="") {
         branch_text = pipeline.sh(
             returnStdout: true,
@@ -85,9 +84,7 @@ class GitHubRepository {
      * Sort in version order (compare fields as integers, not strings)
      * Requires SSH_AGENT to have set a key for access to the remote repository
      */
-    @NonCPS
     def releases(pattern="enterprise-") {
-
         
         // too clever: chain - get branch names, remove prefix, suffix
         def r = this.branches(pattern + '*')

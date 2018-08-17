@@ -176,15 +176,17 @@ package_repo:
     }
 
     sshagent([SSH_KEY_ID]) {
-        def branches = package_repo.branches("enterprise-*")
+        stage("clone package: ${package_repo.project}") {
+            def branches = package_repo.branches("enterprise-*")
 
-        echo "Branches: ${branches}"
+            echo "Branches: ${branches}"
     
-        def releases = package_repo.releases(branch_prefix)
-
-        echo "releases: ${releases}"
-
-        package_repo.clone()
+            def releases = package_repo.releases(branch_prefix)
+            
+            echo "releases: ${releases}"
+            
+            package_repo.clone()
+        }
     }
 
     archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/**"
