@@ -2,8 +2,8 @@
 import com.redhat.art.Version
 import com.redhat.art.VersionTest
 
-import com.redhat.art.VersionString
-import com.redhat.art.VersionStringTest
+import com.redhat.art.Version
+import com.redhat.art.VersionTest
 
 import groovy.util.GroovyTestSuite 
 import junit.framework.Test 
@@ -93,10 +93,10 @@ node(TARGET_NODE) {
     }
     //echo "v0 = ${v0_string}"
 
-//    stage("test VersionString") {
-//        echo "Begin TESTING VersionString"
-//        def vst = new VersionStringTest(this)
+//    stage("test Version") {
+//        echo "Begin TESTING Version"
+//        def vst = new VersionTest(this)
 //        vst.testCompareTo()
-//        echo "End TESTING VersionString"
+//        echo "End TESTING Version"
 //    }
 }
