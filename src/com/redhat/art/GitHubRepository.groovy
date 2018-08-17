@@ -61,7 +61,7 @@ class GitHubRepository {
      * Requires SSH_AGENT to have set a key for access to the remote repository
      */
     def branches(pattern="") {
-        branch_text = pipeline.sh(
+        def branch_text = pipeline.sh(
             returnStdout: true,
             script: [
                 "git ls-remote ${this.remote} ${pattern}",
@@ -85,7 +85,6 @@ class GitHubRepository {
      * Requires SSH_AGENT to have set a key for access to the remote repository
      */
     def releases(pattern="enterprise-") {
-        
         // too clever: chain - get branch names, remove prefix, suffix
         def r = this.branches(pattern + '*')
             .collect { it - pattern }
@@ -97,7 +96,6 @@ class GitHubRepository {
     }
 
     def clone() {
-        pipeline.echo("Cloning repo ${remote}")
         pipeline.sh(
             returnStdout: false,
             script: [
