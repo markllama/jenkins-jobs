@@ -7,11 +7,11 @@ package com.redhat.art
 //
 // ===========================================================================
 
-class RpmSpecfile {
+class RpmSpec {
     
     def lines
     
-    def RpmSpecfile(content) {
+    def RpmSpec(content) {
         lines = content.tokenize("\n")
     }
 

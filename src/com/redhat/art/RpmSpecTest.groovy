@@ -1,8 +1,8 @@
 #!/usr/bin/groovy
 
-import com.redhat.art.RpmSpecfile
+import com.redhat.art.RpmSpec
 
-class RpmSpecfileTest extends GroovyTestCase {
+class RpmSpecTest extends GroovyTestCase {
 
     String samples
 

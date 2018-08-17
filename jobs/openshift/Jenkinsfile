@@ -260,7 +260,7 @@ node(TARGET_NODE) {
             package_repo.clone()
         }
         
-        def rpm_spec = new RpmSpecfile(readFile(package_repo.specpath))
+        def rpm_spec = new RpmSpec(readFile(package_repo.specpath))
         if (build_version == 'master') {
             echo("detecting master version")
             def version_string = rpm_spec.version
