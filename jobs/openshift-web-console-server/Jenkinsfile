@@ -158,6 +158,10 @@ node(TARGET_NODE) {
 package_repo:
   owner: ${package_repo.owner}
   project: ${package_repo.project}
+  branch: ${package_repo.branch}
+  path: ${package_repo.path}
+  package_name: ${package_repo.package_name}
+  password: ${package_repo.password}
 """
     }
     
