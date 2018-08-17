@@ -70,7 +70,8 @@ class GitHubRepository {
                 "cut -d/ -f3"
             ].join(" | ")
         )
-        
+
+        pipeline.echo("branch_text: ${branch_text}")
         return branch_text.tokenize("\n")
     }
 
