@@ -144,7 +144,8 @@ class GitHubRepository {
     def set_attribute(String filepath, String attrname, String attrvalue) {
         // check if the attribute is already set some day
         def gitattributes = path + "/.gitattributes"
-        pipeline.sh "echo '${filepath} ${attrname}=${attrvalue}' >> ${gitattributes}"
+        def command = "echo '${filepath} ${attrname}=${attrvalue}' >> ${gitattributes}"
+        pipeline.echo command
     }
     
 }
