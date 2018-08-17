@@ -175,11 +175,12 @@ package_repo:
 """
     }
 
+    def branches = package_repo.branches("enterprise-*")
+    
+    echo "Branches: ${branches}"
+    
     sshagent([SSH_KEY_ID]) {
         stage("clone package: ${package_repo.project}") {
-            def branches = package_repo.branches("enterprise-*")
-
-            echo "Branches: ${branches}"
     
             def releases = package_repo.releases(branch_prefix)
             
