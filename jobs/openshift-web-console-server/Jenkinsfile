@@ -141,7 +141,7 @@ node(TARGET_NODE) {
     sh "mkdir -p ${go_source_dir}"
     sh "rm -rf BUILD"
 
-    package_path = go_source_dir + "/" + package_name
+    repo_path = go_source_dir + "/" + repo_name
     upstream_path = go_source_dir + "/" + upstream_name
 
     package_repo = new GitHubRepository(
@@ -149,7 +149,7 @@ node(TARGET_NODE) {
             owner: GITHUB_OWNER,
             project: repo_name,
             package_name: upstream_name,
-            path: package_path,
+            path: repo_path,
             pipeline: this
         ])
 
@@ -207,7 +207,7 @@ node(TARGET_NODE) {
     
     sshagent([SSH_KEY_ID]) {
 
-        stage("clone ${package_name}") {
+        stage("clone ${repo_name}") {
             package_repo.clone()
         }
 
@@ -219,7 +219,6 @@ node(TARGET_NODE) {
             dir(package_repo.path) {
                 sh "git config merge.ours.driver true"
             }
-            //def gitattributes = package_name + "/.gitattributes"
             def gitattributes = ".gitattributes"
             sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
             sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
@@ -277,8 +276,8 @@ node(TARGET_NODE) {
         }
 
         stage("build") {
-            //tito_release(this, package_name, new_version, scratch)
-            //tito_build(this, package_name)
+            //tito_release(this, repo_name, new_version, scratch)
+            //tito_build(this, repo_name)
             def output_root = env.WORKSPACE + '/BUILD'
             dir(package_repo.path) {
                 shell(
