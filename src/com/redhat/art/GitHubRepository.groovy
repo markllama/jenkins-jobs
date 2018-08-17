@@ -145,7 +145,7 @@ class GitHubRepository {
         // check if the attribute is already set some day
         def gitattributes = path + "/.gitattributes"
         def command = "echo '${filepath} ${attrname}=${attrvalue}' >> ${gitattributes}"
-        pipeline.echo command
+        //pipeline.echo command
     }
     
 }
