@@ -375,5 +375,7 @@ node(TARGET_NODE) {
         }
     }
 
-    archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/**"
+    archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/*.src.rpm"
+    archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/x86_64/*.rpm"
+    archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/noarch/*.rpm"
 }
