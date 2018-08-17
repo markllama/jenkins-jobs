@@ -216,9 +216,9 @@ node(TARGET_NODE) {
 
         stage("configure dummy merge") {
             package_repo.config("merge.ours.driver", "true")
-            package_repo.add_attribute("pkg/assets/bindata.go", "merge", "ours")
             //package_repo.add_attribute("pkg/assets/java/bindata.go", "merge", "ours")
             dir(package_repo.path) {
+                package_repo.add_attribute("pkg/assets/bindata.go", "merge", "ours")
                 def gitattributes = ".gitattributes"
 //                sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
                 sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
