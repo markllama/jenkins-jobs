@@ -231,7 +231,9 @@ node(TARGET_NODE) {
 
     spec_path = package_repo.specpath
 
-    releases = package_repo.releases(branch_prefix)
+    sshagent([SSH_KEY_ID]) {
+        releases = package_repo.releases(branch_prefix)
+    }
     
     // select the branch to build
     def branch_name

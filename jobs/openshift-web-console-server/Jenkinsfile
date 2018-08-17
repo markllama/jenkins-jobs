@@ -1,4 +1,4 @@
-// Build something
+#!/usr/bin/env groovy
 
 @Library('artlib')
 import com.redhat.art.*
@@ -10,8 +10,8 @@ properties(
             logRotator(
                 artifactDaysToKeepStr: '',
                 artifactNumToKeepStr: '',
-                daysToKeepStr: '5',
-                numToKeepStr: '10')),
+                daysToKeepStr: '',
+                numToKeepStr: '1000')),
         [
             $class: 'ParametersDefinitionProperty',
             parameterDefinitions: [
@@ -83,7 +83,7 @@ release = RELEASE.toBoolean()
 scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
-debug_shell = debug ? "-x" : ""
+debug_shell = debug ? "-x" : "" 
 
 // ***************************************************************************
 //
@@ -123,18 +123,13 @@ def Boolean package_installed(String package_name) {
 // ***************************************************************************
 
 node(TARGET_NODE) {
-
-    if (mock == true) {
-        error "MOCK: just download new copy of pipeline code"
-    }
-
     checkout scm
     AOS_CD_JOBS_COMMIT_SHA = sh(
         returnStdout: true,
         script: "git rev-parse HEAD",
     ).trim()
-
-    repo_name = "origin-web-console-server"
+    
+    package_name = "origin-web-console-server"
     upstream_name = "origin-web-console"
     branch_prefix = "enterprise-"
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
@@ -146,48 +141,155 @@ node(TARGET_NODE) {
     sh "mkdir -p ${go_source_dir}"
     sh "rm -rf BUILD"
 
-    repo_path = go_source_dir + "/" + repo_name
+    package_path = go_source_dir + "/" + package_name
     upstream_path = go_source_dir + "/" + upstream_name
 
     package_repo = new GitHubRepository(
         [
             owner: GITHUB_OWNER,
-            project: "origin-web-console-server",
-            package_name: "origin-web-console",
-            //path: repo_path,
+            project: package_name,
+            path: package_path,
             pipeline: this
         ])
 
-    if (debug) {
-        echo """
-package_repo:
-  owner: ${package_repo.owner}
-  project: ${package_repo.project}
-  branch: ${package_repo.branch}
-  path: ${package_repo.path}
-  package_name: ${package_repo.package_name}
-  password: ${package_repo.password}
+    upstream_repo = new GitHubRepository(
+        [
+            owner: GITHUB_OWNER,
+            project: upstream_name,
+            path: upstream_path,
+            pipeline: this
+        ])
 
-  remote: ${package_repo.remote}
-  url: ${package_repo.url}
-  specfile: ${package_repo.specfile}
-  specpath: ${package_repo.specpath}
-"""
+    releases = package_repo.releases(branch_prefix)
+
+    if (BUILD_VERSION == 'master') {
+        build_version = new Version(releases[-1])
+        echo "detected version: ${build_version}"
+    } else if (BUILD_VERSION == 'stage') {
+        error("Not implemented: build should be most recent numbered branch")
+    } else {
+        build_version = new Version(BUILD_VERSION)
     }
 
-    def branches = package_repo.branches("enterprise-*")
-    
-    echo "Branches: ${branches}"
+    if (build_version >= new Version("3.11")) {
+        if (package_installed("go-toolset-7")) {   
+            collection = 'go-toolset-7'
+        } else {
+            error("missing package go-toolset-7 is required for version $build_version")
+        }
+    } else {
+        collection = null
+    }
+    def shell = wrap_script(this, collection)
+
+    gopath_setup()
+ 
+    // select the branch to build
+    // NOTE: Valid build versions are only those in the releases.
+    // master should not be used, but can default to the most recent release
+    def branch_name
+
+    if (releases.find { it == build_version } != -1) {
+        branch_name = branch_prefix + build_version
+        if (debug) {
+            echo("branch_name: ${branch_name}")
+        }
+    } else {
+        error "invalid build version ${build_version}"
+    }
+
+    if (debug) {
+        echo "build_version: ${build_version}, branch_name: ${branch_name}"
+    }
     
     sshagent([SSH_KEY_ID]) {
-        stage("clone package: ${package_repo.project}") {
-    
-            def releases = package_repo.releases(branch_prefix)
-            
-            echo "releases: ${releases}"
-            
+
+        stage("clone ${package_name}") {
             package_repo.clone()
         }
+
+        stage("clone ${upstream_project_name}") {
+            upstream_repo.clone()
+        }
+
+        stage("configure dummy merge") {
+            dir(package_repo.path) {
+                sh "git config merge.ours.driver true"
+            }
+            //def gitattributes = package_name + "/.gitattributes"
+            def gitattributes = ".gitattributes"
+            sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
+            sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
+        }
+
+        stage("build upstream") {
+            dir(upstream_repo.path) {
+                sh "git merge origin/master --no-commit --no-ff"
+                sh "bash ${debug_shell} ./hack/install-deps.sh"
+                sh "grunt build"
+                sh "git add dist"
+                sh """git commit -m "Merge master into ${branch_name}" --allow-empty"""
+                sh "git reset --hard HEAD"
+            }
+        }
+        
+        stage("merge upstream into ${upstream_repo.project}") {
+            dir(package_repo.path) {
+                // the resulting commit is used in the downstream merge message
+                VC_COMMIT =  sh(
+                    script: [
+                        "GIT_REF=${branch_name} bash ${debug_shell} hack/vendor-console.sh 2>/dev/null",
+                        "grep 'Vendoring origin-web-console'",
+                        "awk '{print \$4}'"
+                    ].join(" | "),
+                    returnStdout: true
+                ).trim()
+
+                echo "VC_COMMIT - Commit = '${VC_COMMIT}'"
+
+                if (VC_COMMIT == "") {
+                    sh(
+                        "GIT_REF=${branch_name} bash ${debug_shell} hack/vendor-console.sh"
+                    )
+                }
+                sh "git add pkg/assets/bindata.go"
+                sh "git add pkg/assets/java/bindata.go"
+                sh "git commit -m 'bump origin-web-console ${VC_COMMIT}' --allow-empty"
+            }
+        }
+
+        stage("tag and push") {
+            echo "tag and push"
+            dir(package_repo.path) {
+                shell(
+                    [
+                        "tito tag",
+                        (debug ? '--debug' : ''),
+                        '--accept-auto-changelog',
+                        '--use-version', "${build_version}.1",
+                        '--use-release', '1'
+                    ].join(' ')
+                )
+            }
+        }
+
+        stage("build") {
+            //tito_release(this, package_name, new_version, scratch)
+            //tito_build(this, package_name)
+            def output_root = env.WORKSPACE + '/BUILD'
+            dir(package_repo.path) {
+                shell(
+                    [
+                        "tito build",
+                        (debug ? '--debug' : ''),
+                        '--offline',
+                        '--rpm',
+                        '--output', output_root,
+                    ].join(' ')
+                )
+            }
+        }
+
     }
 
     archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/**"
