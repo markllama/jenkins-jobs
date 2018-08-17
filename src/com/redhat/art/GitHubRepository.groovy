@@ -88,6 +88,7 @@ class GitHubRepository {
     @NonCPS
     def releases(pattern="enterprise-") {
 
+        
         // too clever: chain - get branch names, remove prefix, suffix
         def r = this.branches(pattern + '*')
             .collect { it - pattern }

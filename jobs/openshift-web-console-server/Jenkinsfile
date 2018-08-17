@@ -174,15 +174,16 @@ package_repo:
   specpath: ${package_repo.specpath}
 """
     }
-    
-    def branches = package_repo.branches("enterprise-*")
 
-    echo "Branches: ${branches}"
-    
-    def releases = package_repo.releases(branch_prefix)
+    SSHKEY([SSH_KEY_ID]) {
+        def branches = package_repo.branches("enterprise-*")
 
-    echo "releases: ${releases}"
+        echo "Branches: ${branches}"
     
+        def releases = package_repo.releases(branch_prefix)
+
+        echo "releases: ${releases}"
+    }
 
     archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/**"
 }
