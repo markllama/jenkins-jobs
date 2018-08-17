@@ -147,8 +147,8 @@ node(TARGET_NODE) {
     package_repo = new GitHubRepository(
         [
             owner: GITHUB_OWNER,
-            project: repo_name,
-            package_name: upstream_name,
+            project: "origin-web-console-server",
+            package_name: "origin-web-console",
             path: repo_path,
             pipeline: this
         ])
@@ -161,7 +161,7 @@ node(TARGET_NODE) {
             pipeline: this
         ])
 
-    releases = package_repo.releases(branch_prefix)
+    def releases = package_repo.releases(branch_prefix)
 
     echo "releases: ${releases}"
     
