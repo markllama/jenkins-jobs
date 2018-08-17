@@ -173,7 +173,7 @@ node(TARGET_NODE) {
         build_version = new Version(BUILD_VERSION)
     }
 
-    if (build_version >= new Version("3.11")) {
+    if (build_version > new Version("3.11")) {
         if (package_installed("go-toolset-7")) {   
             collection = 'go-toolset-7'
         } else {
