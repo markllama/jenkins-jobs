@@ -160,7 +160,9 @@ node(TARGET_NODE) {
             pipeline: this
         ])
 
-    releases = package_repo.releases(branch_prefix)
+    sshagent([SSH_KEY_ID]) {
+        releases = package_repo.releases(branch_prefix)
+    }
 
     if (BUILD_VERSION == 'master') {
         build_version = new Version(releases[-1])
