@@ -175,7 +175,7 @@ package_repo:
 """
     }
 
-    SSHKEY([SSH_KEY_ID]) {
+    sshagent([SSH_KEY_ID]) {
         def branches = package_repo.branches("enterprise-*")
 
         echo "Branches: ${branches}"
