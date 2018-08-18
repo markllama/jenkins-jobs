@@ -32,7 +32,7 @@ class Rpm {
             version_spec = "--keep-version"
        }
 
-        if (debug) {
+        if (args.debug) {
             pipeline.echo("Tagging with ${version_spec}")
         }
         
@@ -47,7 +47,7 @@ class Rpm {
             build_cmd = "scl enable ${collection} '${build_cmd}'"
         }
 
-        if (debug) {
+        if (args.debug) {
             pipeline.echo("tagging with cli: ${build_cmd}")
         }
         
