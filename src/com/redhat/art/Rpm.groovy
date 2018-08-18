@@ -24,7 +24,8 @@ class Rpm {
     //}
 
     def tag(Map args) {
-        
+
+        String version_spec
         if (args.version && args.release) {
             version_spec = "--use-version ${version} --use-release ${release}"
         } else {
