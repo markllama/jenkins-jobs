@@ -44,7 +44,7 @@ class Rpm {
     }
 
     def build(destination="./BUILD", debug=false) {
-        build_cmd = [
+        def build_cmd = [
             "tito build",
             (debug ? '--debug' : ''),
             '--offline',

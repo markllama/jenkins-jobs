@@ -232,7 +232,7 @@ node(TARGET_NODE) {
 
         stage("tag and push") {
             echo "tag and push"
-            rpm.tag(debug=debug)
+            rpm.tag(debug)
         }
 
         stage("build") {
