@@ -141,10 +141,11 @@ class GitHubRepository {
         }
     }
 
-    def set_attribute(String filepath, String attrname, String attrvalue) {
-        // check if the attribute is already set some day
-        def command = "echo '${filepath} ${attrname}=${attrvalue}' >> .gitattributes"
-        pipeline.echo command
-    }
+    def set_attributes() {
+        pipeline.dir(path) {
+            def gitattributes = ".gitattributes"
+            sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
+            sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
+        }
     
 }
