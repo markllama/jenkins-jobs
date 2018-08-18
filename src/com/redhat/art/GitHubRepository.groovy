@@ -141,14 +141,14 @@ class GitHubRepository {
         }
     }
 
-    def set_attributes() {
+    def set_attribute(String filename) {
         pipeline.dir(path) {
             def gitattributes = ".gitattributes"
             pipeline.sh(
-                script: "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
+                script: "echo '${filename} merge=ours' >> ${gitattributes}"
             )
             pipeline.sh(
-                script: "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
+                script: "echo '${filename} merge=ours' >> ${gitattributes}"
             )
         }
     }

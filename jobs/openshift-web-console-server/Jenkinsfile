@@ -216,7 +216,8 @@ node(TARGET_NODE) {
 
         stage("configure dummy merge") {
             package_repo.config("merge.ours.driver", "true")
-            package_repo.set_attributes()
+            package_repo.set_attribute("pkg/assets/bindata.go")
+            package_repo.set_attribute("pkg/assets/java/bindata.go")
         }
 
         stage("build upstream") {
