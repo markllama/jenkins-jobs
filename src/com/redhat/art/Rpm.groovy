@@ -25,16 +25,14 @@ class Rpm {
 
     def tag(Map args) {
 
-       String version_spec
-       if (args.version && args.release) {
+        String version_spec
+        if (args.version && args.release) {
             version_spec = "--use-version ${args.version} --use-release ${args.release}"
-       } else {
+        } else {
             version_spec = "--keep-version"
-       }
-
-        if (args.debug) {
-            pipeline.echo("Tagging with ${version_spec}")
         }
+        
+        pipeline.echo("Tagging with ${version_spec}")
         
         def build_cmd = [
             "tito tag",
@@ -47,9 +45,7 @@ class Rpm {
             build_cmd = "scl enable ${collection} '${build_cmd}'"
         }
 
-        if (args.debug) {
-            pipeline.echo("tagging with cli: ${build_cmd}")
-        }
+        pipeline.echo("tagging with cli: ${build_cmd}")
         
         pipeline.dir(repo.path) {
             pipeline.sh(
