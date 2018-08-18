@@ -144,8 +144,12 @@ class GitHubRepository {
     def set_attributes() {
         pipeline.dir(path) {
             def gitattributes = ".gitattributes"
-            sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
-            sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
+            pipeline.sh(
+                script: "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
+            )
+            pipeline.sh(
+                script: "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
+            )
         }
     }
 }
