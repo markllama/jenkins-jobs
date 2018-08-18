@@ -264,17 +264,11 @@ node(TARGET_NODE) {
 
         stage("tag and push") {
             echo "tag and push"
-            dir(package_repo.path) {
-                shell(
-                    [
-                        "tito tag",
-                        (debug ? '--debug' : ''),
-                        '--accept-auto-changelog',
-                        '--use-version', "${build_version}.1",
-                        '--use-release', '1'
-                    ].join(' ')
-                )
-            }
+            rpm.tag(
+                version: build_version + ".1",
+                release: "1",
+                debug: debug
+            )
         }
 
         stage("build") {
