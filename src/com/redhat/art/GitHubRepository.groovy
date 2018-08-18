@@ -147,9 +147,6 @@ class GitHubRepository {
             pipeline.sh(
                 script: "echo '${filename} merge=ours' >> ${gitattributes}"
             )
-            pipeline.sh(
-                script: "echo '${filename} merge=ours' >> ${gitattributes}"
-            )
         }
     }
 }
