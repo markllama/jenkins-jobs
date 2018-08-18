@@ -173,7 +173,7 @@ node(TARGET_NODE) {
     def branch_name
     if (BUILD_VERSION in ['master', 'stage']) {
         branch_name = BUILD_VERSION
-    } else if (releases.find { it == build_version } != -1) {
+    } else if (releases.find { it == BUILD_VERSION } != -1) {
         branch_name = branch_prefix + BUILD_VERSION
     } else {
         error "invalid build version ${BUILD_VERSION}"
@@ -181,7 +181,7 @@ node(TARGET_NODE) {
     package_repo.branch = branch_name
     
     if (debug) {
-        echo "build_version: ${build_version}, branch_name: ${branch_name}"
+        echo "build_version: ${BUILD_VERSION}, branch_name: ${branch_name}"
     }
 
     rpm = new Rpm([
