@@ -162,8 +162,8 @@ node(TARGET_NODE) {
         [
             owner: GITHUB_OWNER,
             project: package_name,
-            pipeline: this
-            
+            path: package_name,
+            pipeline: this,
         ]
     )
     
