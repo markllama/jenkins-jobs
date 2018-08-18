@@ -45,7 +45,7 @@ class Rpm {
             build_cmd = "scl enable ${collection} '${build_cmd}'"
         }
 
-        pipeline.echo("tagging with cli: ${build_command}")
+        pipeline.echo("tagging with cli: ${build_cmd}")
         
         pipeline.dir(repo.path) {
             pipeline.sh(
