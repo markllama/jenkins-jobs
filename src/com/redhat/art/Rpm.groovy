@@ -32,7 +32,9 @@ class Rpm {
             version_spec = "--keep-version"
        }
 
-        pipeline.echo("Tagging with ${version_spec}")
+        if (debug) {
+            pipeline.echo("Tagging with ${version_spec}")
+        }
         
         def build_cmd = [
             "tito tag",
@@ -45,7 +47,9 @@ class Rpm {
             build_cmd = "scl enable ${collection} '${build_cmd}'"
         }
 
-        pipeline.echo("tagging with cli: ${build_cmd}")
+        if (debug) {
+            pipeline.echo("tagging with cli: ${build_cmd}")
+        }
         
         pipeline.dir(repo.path) {
             pipeline.sh(
