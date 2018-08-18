@@ -279,4 +279,3 @@ node(TARGET_NODE) {
 
     archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/**"
 }
->
