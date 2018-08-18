@@ -289,8 +289,8 @@ node(TARGET_NODE) {
 
         stage("configure dummy merge") {
             package_repo.config("merge.ours.driver", "true")
-            package_repo.set_attribute('pkg/assets/bindata.go', 'merge'='ours')
-            package_repo.set_attribute('pkg/assets/java/bindata.go', 'merge'='ours')
+            package_repo.set_attribute('pkg/assets/bindata.go', 'merge', 'ours')
+            package_repo.set_attribute('pkg/assets/java/bindata.go', 'merge', 'ours')
         }
 
         stage("add upstream remote") {
