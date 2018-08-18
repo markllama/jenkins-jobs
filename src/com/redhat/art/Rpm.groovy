@@ -27,7 +27,7 @@ class Rpm {
 
         String version_spec
         if (args.version && args.release) {
-            version_spec = "--use-version ${version} --use-release ${release}"
+            version_spec = "--use-version ${args.version} --use-release ${args.release}"
         } else {
             version_spec = "--keep-version"
         }
