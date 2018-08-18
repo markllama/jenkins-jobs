@@ -232,11 +232,14 @@ node(TARGET_NODE) {
 
         stage("tag and push") {
             echo "tag and push"
-            rpm.tag(debug)
+            rpm.tag(debug: debug)
         }
 
         stage("build") {
-            rpm.build(debug=debug)
+            rpm.build(
+                destination: env.WORKSPACE + "/BUILD",
+                debug: debug
+            )
         }
     }
 

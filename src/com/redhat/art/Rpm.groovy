@@ -23,13 +23,19 @@ class Rpm {
     //    
     //}
 
-    def tag(debug=false) {
+    def tag(Map args) {
+        
+        if (args.version && args.release) {
+            version_spec = "--use-version ${version} --use-release ${release}"
+        } else {
+            version_spec = "--keep-version"
+        }
+
         def build_cmd = [
             "tito tag",
-            (debug ? '--debug' : ''),
+            (args.debug ? '--debug' : ''),
             '--accept-auto-changelog',
-            //          '--use-version', new_version,
-            //          '--use-release', new_release
+            version_spec
         ].join(' ')
         
         if (collection) {
@@ -54,7 +60,8 @@ class Rpm {
 
         if (collection) {
             build_cmd = "scl enable ${collection} '${build_cmd}'"
-        } 
+        }
+
         pipeline.dir(repo.path) {
             pipeline.sh(
                 script: build_cmd

@@ -203,6 +203,12 @@ node(TARGET_NODE) {
     if (debug) {
         echo "build_version: ${build_version}, branch_name: ${branch_name}"
     }
+
+    rpm = new Rpm([
+            repo: package_repo,
+            pipeline: this
+        ]
+    )
     
     sshagent([SSH_KEY_ID]) {
 
@@ -272,20 +278,7 @@ node(TARGET_NODE) {
         }
 
         stage("build") {
-            //tito_release(this, package_name, new_version, scratch)
-            //tito_build(this, package_name)
-            def output_root = env.WORKSPACE + '/BUILD'
-            dir(package_repo.path) {
-                shell(
-                    [
-                        "tito build",
-                        (debug ? '--debug' : ''),
-                        '--offline',
-                        '--rpm',
-                        '--output', output_root,
-                    ].join(' ')
-                )
-            }
+            rpm.build(env.WORKSPACE + '/BUILD', debug)
         }
 
     }

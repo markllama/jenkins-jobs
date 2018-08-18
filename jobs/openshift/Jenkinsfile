@@ -256,6 +256,13 @@ node(TARGET_NODE) {
     }
 
     package_repo.branch = branch_name
+
+    rpm = new Rpm(
+        [
+            repo: package_repo,
+            pipeline: this
+        ]
+    )
     
     sshagent([SSH_KEY_ID]) {
         stage("clone ${repo_name}") {
@@ -285,7 +292,7 @@ node(TARGET_NODE) {
             echo "go-toolset-7 software collection disabled"
             collection = null
         }
-        def shell = wrap_script(this, collection)
+        rpm.collection = collection
 
         stage("configure dummy merge") {
             package_repo.config("merge.ours.driver", "true")
@@ -334,36 +341,18 @@ node(TARGET_NODE) {
 
         stage("tag and push") {
             echo "tag and push"
-            dir(repo_name) {
-                patch_tito(this)
-                shell(
-                    [
-                        "tito tag",
-                        (debug ? '--debug' : ''),
-                        '--accept-auto-changelog',
-                        '--keep-version',
-                        //'--use-version', new_version,
-                        //'--use-release', new_release
-                    ].join(' ')
-                )
-            }
+            rpm.tag(
+                version: new_version,
+                release, new_release,
+                debug: debug
+            )
         }
 
         stage("build") {
-            //tito_release(this, repo_name, new_version, scratch)
-            //tito_build(this, repo_name)
-            def output_root = env.WORKSPACE + '/BUILD'
-            dir(repo_name) {
-                shell(
-                    [
-                        "tito build",
-                        (debug ? '--debug' : ''),
-                        '--offline',
-                        '--rpm',
-                        '--output', output_root,
-                    ].join(' ')
-                )
-            }
+            rpm.build(
+                destination: env.WORKSPACE + '/BUILD',
+                debug: debug
+            )
         }
     }
 
