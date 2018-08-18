@@ -158,9 +158,14 @@ node(TARGET_NODE) {
     branch_prefix = "release-"
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
 
-    package_repo = new GitHubRepository(GITHUB_OWNER, package_name)
-    // the pipeline isn't persistent when set in the constructor
-    package_repo.pipeline=this
+    package_repo = new GitHubRepository(
+        [
+            owner: GITHUB_OWNER,
+            project: package_name,
+            pipeline: this
+            
+        ]
+    )
     
     releases = package_repo.releases(branch_prefix)
     
@@ -178,6 +183,12 @@ node(TARGET_NODE) {
     if (debug) {
         echo "build_version: ${build_version}, branch_name: ${branch_name}"
     }
+
+    rpm = new Rpm([
+            repo: package_repo,
+            pipeline: this
+        ]
+    )
     
     sshagent([SSH_KEY_ID]) {
         stage("clone ${package_name}") {
@@ -221,22 +232,11 @@ node(TARGET_NODE) {
 
         stage("tag and push") {
             echo "tag and push"
-            dir(package_name) {
-                sh(
-                    script: [
-                        "tito tag",
-                        (debug ? '--debug' : ''),
-                        '--accept-auto-changelog',
-              //          '--use-version', new_version,
-              //          '--use-release', new_release
-                    ].join(' ')
-                )
-            }
+            rpm.tag(debug=debug)
         }
 
         stage("build") {
-            //tito_release(this, package_name, new_version, scratch)
-            tito_build(this, package_name)
+            rpm.build(debug=debug)
         }
     }
 
