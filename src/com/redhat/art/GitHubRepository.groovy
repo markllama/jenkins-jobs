@@ -147,5 +147,5 @@ class GitHubRepository {
             sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
             sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
         }
-    
+    }
 }
