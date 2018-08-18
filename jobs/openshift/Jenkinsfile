@@ -288,12 +288,9 @@ node(TARGET_NODE) {
         def shell = wrap_script(this, collection)
 
         stage("configure dummy merge") {
-            dir(repo_name) {
-                sh "git config merge.ours.driver true"
-            }
-            def gitattributes = repo_name + "/.gitattributes"
-            sh "echo 'pkg/assets/bindata.go merge=ours' >> ${gitattributes}"
-            sh "echo 'pkg/assets/java/bindata.go merge=ours' >> ${gitattributes}"
+            package_repo.config("merge.ours.driver", "true")
+            package_repo.set_attribute('pkg/assets/bindata.go', 'merge'='ours')
+            package_repo.set_attribute('pkg/assets/java/bindata.go', 'merge'='ours')
         }
 
         stage("add upstream remote") {
