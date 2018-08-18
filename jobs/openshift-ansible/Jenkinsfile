@@ -232,6 +232,7 @@ node(TARGET_NODE) {
 
         stage("tag and push") {
             echo "tag and push"
+            echo "tagging RPM id: ${new_version}-${new_release}"            
             rpm.tag(
                 version: new_version,
                 release: new_release,
