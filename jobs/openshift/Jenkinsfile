@@ -342,8 +342,8 @@ node(TARGET_NODE) {
         stage("tag and push") {
             echo "tag and push"
             rpm.tag(
-                version: "${new_version}",
-                release, "${new_release}",
+                version: "3.11.5",
+                release, "1",
                 debug: debug
             )
         }
