@@ -30,7 +30,7 @@ class Rpm {
             '--accept-auto-changelog',
             //          '--use-version', new_version,
             //          '--use-release', new_release
-        ].join()
+        ].join(' ')
         
         if (collection) {
             build_cmd = "scl enable ${collection} '${build_cmd}'"
@@ -44,15 +44,20 @@ class Rpm {
     }
 
     def build(destination="./BUILD", debug=false) {
+        build_cmd = [
+            "tito build",
+            (debug ? '--debug' : ''),
+            '--offline',
+            '--rpm',
+            '--output', destination,
+        ].join(' ')
+
+        if (collection) {
+            build_cmd = "scl enable ${collection} '${build_cmd}'"
+        } 
         pipeline.dir(repo.path) {
-            shell(
-                [
-                    "tito build",
-                    (debug ? '--debug' : ''),
-                    '--offline',
-                    '--rpm',
-                    '--output', destination,
-                ].join(' ')
+            pipeline.sh(
+                script: build_cmd
             )
         }
     }
