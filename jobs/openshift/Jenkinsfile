@@ -287,7 +287,7 @@ node(TARGET_NODE) {
 
             echo "new RPM id: ${new_version}-${new_release}"
             
-            //writeFile file: spec_path, text: rpm_spec.body
+            writeFile file: rpm.specpath, text: rpm_spec.body
 
             dir(repo_name) {
                 sh "git commit --allow-empty -m 'updated version to ${new_version}-${new_release}' ${package_repo.specfile}"
