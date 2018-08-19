@@ -301,8 +301,8 @@ node(TARGET_NODE) {
             echo new_version as String
             echo "new version: ${new_version}, new release: ${new_release}"
             rpm.tag(
-                version: "${new_version}",
-                release, "${new_release}",
+                version: new_version,
+                release: new_release,
                 debug: debug
             )
         }
