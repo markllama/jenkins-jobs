@@ -102,20 +102,6 @@ def gopath_setup() {
     echo "Initialized env.GOPATH: ${env.GOPATH}"
 }
 
-def wrap_script(shell, collection=null) {
-    if (collection) {
-        echo "running build tools in collection ${collection}"
-        wrapper = "scl enable ${collection}"
-        return { script -> shell.sh("${wrapper} '${script}'") }
-    }
-
-    return { script -> shell.sh script }
-}
-
-def Boolean package_installed(String package_name) {
-    return sh(returnStatus: true, script: "rpm -q --quiet ${package_name}") == 0
-}
-
 // ***************************************************************************
 //
 //
@@ -175,17 +161,8 @@ node(TARGET_NODE) {
         build_version = new Version(BUILD_VERSION)
     }
 
-    if (build_version > new Version("3.11")) {
-        if (package_installed("go-toolset-7")) {   
-            collection = 'go-toolset-7'
-        } else {
-            error("missing package go-toolset-7 is required for version $build_version")
-        }
-    } else {
-        collection = null
-    }
-    def shell = wrap_script(this, collection)
-
+    echo "Build version: ${build_version}"
+    
     gopath_setup()
  
     // select the branch to build
