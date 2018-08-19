@@ -243,7 +243,8 @@ node(TARGET_NODE) {
 
         stage("tag and push") {
 
-            def new_version = build_version + ".1"
+            echo "Build version: ${build_version}"
+            def new_version = "${build_version}.1"
             def new_release = "1"
             echo "tag and push ${new_version}-${new_release}"
             
