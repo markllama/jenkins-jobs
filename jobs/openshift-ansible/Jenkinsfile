@@ -91,58 +91,6 @@ debug = DEBUG.toBoolean()
 //
 //
 // ===========================================================================
-
-def tito_release(pipeline, package_name, version, scratch=true)  {
-    pipeline.dir(package_name) {
-        def tito_output = pipeline.sh(
-            returnStdout: true,
-            script: [
-                'tito release',
-                (debug ? '--debug' : ''),
-                '--yes',
-                '--test',
-                (scratch ? '--scratch' : ''),
-                "aos-${new_version}"
-            ].join(' ')
-        )
-
-        def tito_lines = tito_output.tokenize('\n')
-        def task_line = tito_lines.find{ it =~ /^Created Task: / }
-        def task_matcher = task_line =~ /^Created Task:\s+([0-9]+)/
-        brew_task_id = task_matcher[0][1]
-        brew_task_url = brew_task_url_prefix + brew_task_id
-        pipeline.echo "${package_name} rpm brew task: ${brew_task_id}"
-    
-        try {
-            pipeline.sh "brew watch-task ${brew_task_id}"
-        } catch (build_err) {
-            pipeline.echo "Error in ${package_name} build task: ${brew_task_url}"
-            throw build_err
-        }
-    }
-}
-
-def tito_build(pipeline, package_name)  {
-    def output_root = pipeline.env.WORKSPACE + '/BUILD'
-    pipeline.dir(package_name) {
-        pipeline.sh(
-            //returnStdout: true,
-            script: [
-                'tito build',
-                (debug ? '--debug' : ''),
-                '--offline',
-                '--rpm',
-                '--output', output_root
-            ].join(' ')
-        )
-    }
-}
-
-// ===========================================================================
-//
-//
-//
-// ===========================================================================
 node(TARGET_NODE) {
 
     if (mock == true) {
