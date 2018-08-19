@@ -19,9 +19,9 @@ class Rpm {
         return repo.specpath
     }
     
-    //RpmSpec getSpec() {
-    //    
-    //}
+    RpmSpec getSpec() {
+        
+    }
 
     def tag(Map args) {
 
