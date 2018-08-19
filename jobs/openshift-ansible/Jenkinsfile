@@ -114,8 +114,10 @@ node(TARGET_NODE) {
             pipeline: this,
         ]
     )
-    
-    releases = package_repo.releases(branch_prefix)
+
+    sshagent([SSH_KEY_ID]) {
+        releases = package_repo.releases(branch_prefix)
+    }
     
     // select the branch to build
     def branch_name
