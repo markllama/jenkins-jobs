@@ -8,7 +8,7 @@ package com.redhat.art
 // ===========================================================================
 
 class RpmSpec {
-    
+
     def lines
     
     def RpmSpec(content) {

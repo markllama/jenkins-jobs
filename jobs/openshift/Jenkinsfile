@@ -221,10 +221,10 @@ node(TARGET_NODE) {
             package_repo.clone()
         }
         
-        def rpm_spec = new RpmSpec(readFile(package_repo.specpath))
+        def spec = rpm.spec
         if (build_version == 'master') {
             echo("detecting master version")
-            def version_string = rpm_spec.version
+            def version_string = spec.version
             def version = new Version(version_string)
             echo "version: ${version}"
             echo "MajorMinor: ${version.majorminor}"
@@ -289,7 +289,7 @@ node(TARGET_NODE) {
             
             writeFile file: rpm.specpath, text: rpm_spec.body
 
-            dir(repo_name) {
+            dir(repo.path) {
                 sh "git commit --allow-empty -m 'updated version to ${new_version}-${new_release}' ${package_repo.specfile}"
                 //sh "git tag ${new_version}-${new_release}"
             }
