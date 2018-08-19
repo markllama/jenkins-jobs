@@ -263,8 +263,13 @@ node(TARGET_NODE) {
         
         // need new version and new release
         stage("update build/release numbers") {
-            def cv = new Version(rpm_spec.version)
-            def cr = new Version(rpm_spec.release)
+            def spec = rpm.spec
+
+            current_version = spec.version
+            current_release = spec.release
+            
+            def cv = new Version(current_version)
+            def cr = new Version(current_release)
 
             echo "current RPM id: ${cv}-${cr}"
 
@@ -282,7 +287,7 @@ node(TARGET_NODE) {
 
             echo "new RPM id: ${new_version}-${new_release}"
             
-            writeFile file: spec_path, text: rpm_spec.body
+            //writeFile file: spec_path, text: rpm_spec.body
 
             dir(repo_name) {
                 sh "git commit --allow-empty -m 'updated version to ${new_version}-${new_release}' ${package_repo.specfile}"
