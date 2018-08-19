@@ -263,7 +263,7 @@ node(TARGET_NODE) {
         
         // need new version and new release
         stage("update build/release numbers") {
-            def spec = rpm.spec
+            //def spec = rpm.spec
 
             current_version = spec.version
             current_release = spec.release
