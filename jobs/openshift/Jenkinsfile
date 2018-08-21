@@ -290,7 +290,7 @@ node(TARGET_NODE) {
 
             spec.save()
 
-            dir(repo.path) {
+            dir(rpm.repo.path) {
                 sh "git commit --allow-empty -m 'updated version to ${new_version}-${new_release}' ${package_repo.specfile}"
                 //sh "git tag ${new_version}-${new_release}"
             }
