@@ -142,9 +142,7 @@ node(TARGET_NODE) {
     
     sshagent([SSH_KEY_ID]) {
         stage("clone ${rpm.repo.project}") {
-            echo "cloning ${rpm.repo.project} to ${rpm.repo.path}"
             rpm.repo.clone()
-            echo "cloning complete"
         }
 
         // need new version and new release
@@ -172,10 +170,8 @@ node(TARGET_NODE) {
             new_release = spec.release
 
             echo "new RPM id: ${new_version}-${new_release}"
-            
-            //writeFile file: spec_path, text: rpm_spec.body
 
-            //sh "git tag ${new_version}-${new_release}"
+            spec.save()
         }
 
         stage("tag and push") {

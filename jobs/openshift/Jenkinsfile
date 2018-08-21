@@ -181,8 +181,6 @@ node(TARGET_NODE) {
             pipeline: this
         ])
 
-    spec_path = package_repo.specpath
-
     sshagent([SSH_KEY_ID]) {
         releases = package_repo.releases(branch_prefix)
     }
@@ -211,17 +209,15 @@ node(TARGET_NODE) {
 
     rpm = new Rpm(repo: package_repo, pipeline: this)
 
-    def spec = rpm.spec
+    spec = rpm.spec
 
     sshagent([SSH_KEY_ID]) {
         stage("clone ${rpm.repo.project}") {
             rpm.repo.clone()
         }
 
-        echo "inside sshagent spec: ${spec}"
-        echo "inside sshagent spec filename: ${spec.filename}"
-        echo "inside sshagent spec pipeline: ${spec.pipeline}"
         spec.load()
+
         if (build_version == 'master') {
             echo("detecting master version")
             def version_string = spec.version
@@ -263,8 +259,6 @@ node(TARGET_NODE) {
         
         // need new version and new release
         stage("update build/release numbers") {
-            spec = rpm.spec
-            spec.load()
 
             current_version = spec.version
             current_release = spec.release
