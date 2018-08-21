@@ -51,6 +51,7 @@ class RpmSpec {
         def v_match = v_line =~ /^Version:\s*([.0-9]+)/
         return v_match[0][1].trim()
     }
+
     void setVersion(String new_version) {
         // find the version line
         def line_no = lines.findIndexOf{ it =~ /^Version: / }
