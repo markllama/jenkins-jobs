@@ -13,12 +13,19 @@ class Rpm {
         this.repo = init.repo
         this.collection = init.collection
         this.pipeline = init.pipeline
+
+        if (this.pipeline != null) {
+            this.pipeline.echo("Creating new RPM")
+        }
+                                  
     }
 
+    @NonCPS
     String getSpecpath() {
         return repo.specpath
     }
-    
+
+    @NonCPS
     RpmSpec getSpec() {
 
         pipeline.echo("getting RPM spec")
