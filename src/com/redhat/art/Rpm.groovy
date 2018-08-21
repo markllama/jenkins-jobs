@@ -20,9 +20,7 @@ class Rpm {
     }
     
     RpmSpec getSpec() {
-        def spec_file = repo.specpath
-        pipeline.echo "looking up spec_file: ${spec_file}"
-        return new RpmSpec(pipeline.readFile(spec_file))
+        return new RpmSpec(filename: repo.specpath, pipeline: pipeline)
     }
 
     def tag(Map args) {

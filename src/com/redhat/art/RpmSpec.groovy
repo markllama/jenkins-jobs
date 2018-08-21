@@ -9,12 +9,28 @@ package com.redhat.art
 
 class RpmSpec {
 
+    def filename
     def lines
+    def pipeline
+
+    def RpmSpec(Map init) {
+        this.filename = init.filename
+        this.lines = init.lines
+        this.pipeline = pipeline
+    }
     
-    def RpmSpec(content) {
-        lines = content.tokenize("\n")
+    //def RpmSpec(content) {
+    //    lines = content.tokenize("\n")
+    //}
+
+    def load() {
+        lines = pipeline.readFile(filename).tokenize("\n")
     }
 
+    def save() {
+        pipeline.writeFile(file: filename, text: body)
+    }
+    
     String getBody() {
         return lines.join('\n')
     }

@@ -263,7 +263,8 @@ node(TARGET_NODE) {
         
         // need new version and new release
         stage("update build/release numbers") {
-            //def spec = rpm.spec
+            spec = rpm.spec
+            spec.load()
 
             current_version = spec.version
             current_release = spec.release
@@ -279,15 +280,15 @@ node(TARGET_NODE) {
             def nv = new Version(cv)
             def nr = cr.incrMajor()
 
-            rpm_spec.version = nv as String
-            rpm_spec.release = nr as String
+            spec.version = nv as String
+            spec.release = nr as String
 
-            new_version = rpm_spec.version
-            new_release = rpm_spec.release
+            new_version = spec.version
+            new_release = spec.release
 
             echo "new RPM id: ${new_version}-${new_release}"
-            
-            writeFile file: rpm.specpath, text: rpm_spec.body
+
+            spec.save()
 
             dir(repo.path) {
                 sh "git commit --allow-empty -m 'updated version to ${new_version}-${new_release}' ${package_repo.specfile}"
