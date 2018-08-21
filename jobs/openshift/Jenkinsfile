@@ -309,10 +309,7 @@ node(TARGET_NODE) {
         }
 
         stage("build") {
-            rpm.build(
-                destination: env.WORKSPACE + '/BUILD',
-                debug: debug
-            )
+            rpm.build([destination: env.WORKSPACE + '/BUILD', debug: debug])
         }
     }
 
