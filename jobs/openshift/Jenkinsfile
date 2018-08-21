@@ -224,7 +224,6 @@ node(TARGET_NODE) {
             package_repo.clone()
         }
 
-        if 
         spec.load()
         if (build_version == 'master') {
             echo("detecting master version")
