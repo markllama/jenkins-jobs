@@ -24,6 +24,7 @@ class Rpm {
         return repo.specpath
     }
 
+    @NonCPM
     RpmSpec getSpec() {
 
         pipeline.echo("getting RPM spec")
