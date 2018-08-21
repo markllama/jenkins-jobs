@@ -225,9 +225,8 @@ node(TARGET_NODE) {
             rpm.package_repo.clone()
         }
 
-        def spec = rpm.spec
-        echo "spec: ${spec}"
-        echo "spec filename: ${spec.filename}"
+        echo "inside sshagent spec: ${spec}"
+        echo "inside sshagent spec filename: ${spec.filename}"
     
         spec.load()
         if (build_version == 'master') {
