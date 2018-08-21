@@ -19,7 +19,7 @@ class RpmSpec {
         this.pipeline = init.pipeline
 
         if (this.pipeline != null) {
-            echo "New RpmSpec: filename = ${init.filename}"
+            this.pipeline.echo "New RpmSpec: filename = ${this.filename}"
         }
     }
     
