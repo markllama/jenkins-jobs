@@ -217,6 +217,7 @@ node(TARGET_NODE) {
     )
 
     spec = rpm.spec
+    echo "spec: ${spec}"
     echo "spec filename: ${spec.filename}"
     
     sshagent([SSH_KEY_ID]) {
