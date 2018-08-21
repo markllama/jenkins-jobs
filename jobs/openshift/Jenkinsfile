@@ -216,8 +216,8 @@ node(TARGET_NODE) {
     echo "spec filename: ${spec.filename}"
     
     sshagent([SSH_KEY_ID]) {
-        stage("clone ${rpm.package_repo.project}") {
-            rpm.package_repo.clone()
+        stage("clone ${rpm.repo.project}") {
+            rpm.repo.clone()
         }
 
         echo "inside sshagent spec: ${spec}"
