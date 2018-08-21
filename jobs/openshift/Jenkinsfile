@@ -264,7 +264,14 @@ node(TARGET_NODE) {
         // need new version and new release
         stage("update build/release numbers") {
             spec = rpm.spec
+
+            echo "Loading spec file: ${spec.filename}"
             spec.load()
+            if (spec.lines == null) {
+                echo "spec.lines is null after load"
+            }
+
+            echo "spec.line size = ${spec.lines.size}"
 
             current_version = spec.version
             current_release = spec.release
