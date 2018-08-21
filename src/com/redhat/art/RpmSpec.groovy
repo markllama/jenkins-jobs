@@ -17,6 +17,10 @@ class RpmSpec {
         this.filename = init.filename
         this.lines = init.lines
         this.pipeline = pipeline
+
+        if (this.pipeline != null) {
+            echo "New RpmSpec: filename = ${init.filename}"
+        }
     }
     
     //def RpmSpec(content) {
