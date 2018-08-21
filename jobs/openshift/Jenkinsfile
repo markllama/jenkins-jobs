@@ -216,7 +216,7 @@ node(TARGET_NODE) {
         ]
     )
 
-    spec = rpm.spec
+    def spec = rpm.spec
     echo "spec: ${spec}"
     echo "spec filename: ${spec.filename}"
     
