@@ -216,7 +216,7 @@ node(TARGET_NODE) {
             }
         }
         
-        stage("merge upstream into ${upstream_repo.project}") {
+        stage("merge upstream into ${rpm.repo.project}") {
             dir(rpm.repo.path) {
                 // the resulting commit is used in the downstream merge message
                 VC_COMMIT =  sh(

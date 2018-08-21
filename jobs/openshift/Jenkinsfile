@@ -291,6 +291,10 @@ node(TARGET_NODE) {
 
         }
 
+        dir(rpm.repo.path) {
+            patch_tito(this)
+        }
+        
         stage("tag and push") {
             echo "tag and push"
             echo new_version as String
