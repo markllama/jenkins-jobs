@@ -24,6 +24,7 @@ class RpmSpec {
     //}
 
     def load() {
+        echo "Loading RPM spec: ${filename}"
         lines = pipeline.readFile(filename).tokenize("\n")
     }
 
