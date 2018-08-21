@@ -20,7 +20,6 @@ class Rpm {
                                   
     }
 
-    @NonCPS
     String getSpecpath() {
         return repo.specpath
     }

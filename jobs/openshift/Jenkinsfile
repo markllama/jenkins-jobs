@@ -209,12 +209,7 @@ node(TARGET_NODE) {
 
     package_repo.branch = branch_name
 
-    rpm = new Rpm(
-        [
-            repo: package_repo,
-            pipeline: this
-        ]
-    )
+    rpm = new Rpm(repo: package_repo, pipeline: this)
 
     def spec = rpm.spec
     echo "spec: ${spec}"
