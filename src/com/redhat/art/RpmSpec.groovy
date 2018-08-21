@@ -16,7 +16,7 @@ class RpmSpec {
     def RpmSpec(Map init) {
         this.filename = init.filename
         this.lines = init.lines
-        this.pipeline = pipeline
+        this.pipeline = init.pipeline
 
         if (this.pipeline != null) {
             echo "New RpmSpec: filename = ${init.filename}"

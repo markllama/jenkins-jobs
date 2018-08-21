@@ -31,6 +31,11 @@ class Rpm {
         pipeline.echo("Spec Path: ${specpath}")
 
         def spec = new RpmSpec([filename: repo.specpath, pipeline: pipeline])
+
+        pipeline.echo("New Spec filename: ${spec.filename}")
+        pipeline.echo("New Spec pipeline: ${spec.pipeline}")
+
+
         return spec
     }
 
