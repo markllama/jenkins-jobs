@@ -214,6 +214,7 @@ node(TARGET_NODE) {
     def spec = rpm.spec
     echo "spec: ${spec}"
     echo "spec filename: ${spec.filename}"
+    echo "spec pipeline: ${spec.pipeline}"
     
     sshagent([SSH_KEY_ID]) {
         stage("clone ${rpm.repo.project}") {
@@ -222,7 +223,7 @@ node(TARGET_NODE) {
 
         echo "inside sshagent spec: ${spec}"
         echo "inside sshagent spec filename: ${spec.filename}"
-    
+        echo "inside sshagent spec pipeline: ${spec.pipeline}"
         spec.load()
         if (build_version == 'master') {
             echo("detecting master version")
