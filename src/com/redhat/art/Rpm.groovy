@@ -25,14 +25,13 @@ class Rpm {
         return repo.specpath
     }
 
-    @NonCPS
     RpmSpec getSpec() {
 
         pipeline.echo("getting RPM spec")
         def specpath = repo.specpath
         pipeline.echo("Spec Path: ${specpath}")
 
-        def spec = new RpmSpec(filename: repo.specpath, pipeline: pipeline)
+        def spec = new RpmSpec([filename: repo.specpath, pipeline: pipeline])
         return spec
     }
 
