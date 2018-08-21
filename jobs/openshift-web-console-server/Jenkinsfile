@@ -192,7 +192,7 @@ node(TARGET_NODE) {
     sshagent([SSH_KEY_ID]) {
 
         stage("clone ${package_name}") {
-            package_repo.clone()
+            rpm.repo.clone()
         }
 
         stage("clone ${upstream_name}") {
@@ -200,9 +200,9 @@ node(TARGET_NODE) {
         }
 
         stage("configure dummy merge") {
-            package_repo.config("merge.ours.driver", "true")
-            package_repo.set_attribute("pkg/assets/bindata.go", "merge", "true")
-            package_repo.set_attribute("pkg/assets/java/bindata.go", "merge", "true")
+            rpm.repo.config("merge.ours.driver", "true")
+            rpm.repo.set_attribute("pkg/assets/bindata.go", "merge", "true")
+            rpm.repo.set_attribute("pkg/assets/java/bindata.go", "merge", "true")
         }
 
         stage("build upstream") {
@@ -217,7 +217,7 @@ node(TARGET_NODE) {
         }
         
         stage("merge upstream into ${upstream_repo.project}") {
-            dir(package_repo.path) {
+            dir(rpm.repo.path) {
                 // the resulting commit is used in the downstream merge message
                 VC_COMMIT =  sh(
                     script: [
@@ -244,8 +244,6 @@ node(TARGET_NODE) {
         stage("tag and push") {
 
             echo "Build version: ${build_version}"
-            def new_version = "${build_version}.1"
-            def new_release = "1"
             echo "tag and push ${new_version}-${new_release}"
             
             rpm.tag(
