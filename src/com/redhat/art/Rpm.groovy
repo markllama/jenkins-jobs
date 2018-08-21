@@ -13,11 +13,6 @@ class Rpm {
         this.repo = init.repo
         this.collection = init.collection
         this.pipeline = init.pipeline
-
-        if (this.pipeline != null) {
-            this.pipeline.echo("Creating new RPM")
-        }
-                                  
     }
 
     String getSpecpath() {
@@ -26,17 +21,7 @@ class Rpm {
 
     RpmSpec getSpec() {
 
-        pipeline.echo("getting RPM spec")
-        def specpath = repo.specpath
-        pipeline.echo("Spec Path: ${specpath}")
-
-        def spec = new RpmSpec([filename: repo.specpath, pipeline: pipeline])
-
-        pipeline.echo("New Spec filename: ${spec.filename}")
-        pipeline.echo("New Spec pipeline: ${spec.pipeline}")
-
-
-        return spec
+        return new RpmSpec([filename: repo.specpath, pipeline: pipeline])
     }
 
     def tag(Map args) {

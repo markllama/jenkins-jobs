@@ -18,9 +18,6 @@ class RpmSpec {
         this.lines = init.lines
         this.pipeline = init.pipeline
 
-        if (this.pipeline != null) {
-            this.pipeline.echo "New RpmSpec: filename = ${this.filename}"
-        }
     }
     
     //def RpmSpec(content) {
@@ -28,7 +25,6 @@ class RpmSpec {
     //}
 
     def load() {
-        pipeline.echo "Loading RPM spec: ${filename}"
         lines = pipeline.readFile(filename).tokenize("\n")
     }
 

@@ -211,15 +211,8 @@ node(TARGET_NODE) {
 
     rpm = new Rpm(repo: package_repo, pipeline: this)
 
-    echo "rpm: ${rpm}"
-    echo "rpm.repo: ${rpm.repo}"
-    echo "rpm.pipeline: ${rpm.pipeline}"
-
     def spec = rpm.spec
-    echo "spec: ${spec}"
-    echo "spec filename: ${spec.filename}"
-    echo "spec pipeline: ${spec.pipeline}"
-    
+
     sshagent([SSH_KEY_ID]) {
         stage("clone ${rpm.repo.project}") {
             rpm.repo.clone()
