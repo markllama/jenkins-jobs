@@ -217,12 +217,14 @@ node(TARGET_NODE) {
     )
 
     spec = rpm.spec
+    echo "spec filename: {spec.filename}"
     
     sshagent([SSH_KEY_ID]) {
         stage("clone ${repo_name}") {
             package_repo.clone()
         }
-        
+
+        if 
         spec.load()
         if (build_version == 'master') {
             echo("detecting master version")
