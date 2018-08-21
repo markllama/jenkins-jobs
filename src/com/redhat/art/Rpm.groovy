@@ -56,6 +56,7 @@ class Rpm {
     }
 
     def build(destination="./BUILD", debug=false) {
+        
         def build_cmd = [
             "tito build",
             (debug ? '--debug' : ''),
