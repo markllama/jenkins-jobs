@@ -222,6 +222,7 @@ node(TARGET_NODE) {
         }
         
         def spec = rpm.spec
+        spec.read()
         if (build_version == 'master') {
             echo("detecting master version")
             def version_string = spec.version
