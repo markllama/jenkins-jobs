@@ -20,7 +20,9 @@ class Rpm {
     }
     
     RpmSpec getSpec() {
-        return new RpmSpec(filename: repo.specpath, pipeline: pipeline)
+
+        pipeline.echo("getting RPM spec")
+        return new RpmSpec(filename: this.repo.specpath, pipeline: this.pipeline)
     }
 
     def tag(Map args) {
