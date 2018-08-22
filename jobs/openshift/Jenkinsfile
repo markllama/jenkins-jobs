@@ -141,7 +141,7 @@ def patch_tito(pipeline) {
         else:
           return "v{}-{}".format(version, release)
 EOF
-""
+"""
     }
 }
 
