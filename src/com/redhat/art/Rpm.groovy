@@ -76,7 +76,7 @@ class Rpm {
         }
     }
 
-    def release(version, scratch=true) {
+    def release(version, scratch=true, debug=false) {
         pipeline.dir(repo.path) {
             def tito_output = pipeline.sh(
                 returnStdout: true,
@@ -86,7 +86,7 @@ class Rpm {
                     '--yes',
                     '--test',
                     (scratch ? '--scratch' : ''),
-                    "aos-${new_version}"
+                    "aos-${version}"
                 ].join(' ')
             )
 
@@ -104,5 +104,7 @@ class Rpm {
                 throw build_err
             }
         }
+
+        return brew_task_id
     }
 }

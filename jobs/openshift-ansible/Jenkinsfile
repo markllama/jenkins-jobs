@@ -74,6 +74,24 @@ properties(
                     $class: 'hudson.model.BooleanParameterDefinition',
                     defaultValue: false
                 ],
+                [
+                    name: 'NOTIFY_EMAIL',
+                    description: 'An email address to notify on job completion',
+                    $class: 'hudson.model.StringParameterDefinition',
+                ],
+                [
+                    name: 'NOTIFY_ON',
+                    description: 'dont do anything if true',
+                    $class: 'hudson.model.ChoiceParameterDefinition',
+                    choices: [
+                        "success",
+                        "failure",
+                        "all",
+                        "none"
+                    ].join("\n"),
+                    defaultValue: "none"
+                ],
+                
             ]
         ],
         disableConcurrentBuilds()
@@ -85,6 +103,20 @@ release = RELEASE.toBoolean()
 scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
+
+// ===========================================================================
+//
+//
+//
+// ===========================================================================
+//def mailFailure(recipients, message, pipeline) {
+//    pipeline.mail(
+//        to: recipients,
+//        from: "aos-cicd@redhat.com",
+//        subject: "RESUMABLE Error during Image Build for OCP v${BUILD_VERSION}",
+//        body: message);
+//}
+
 
 // ===========================================================================
 //
@@ -139,55 +171,69 @@ node(TARGET_NODE) {
             pipeline: this
         ]
     )
-    
-    sshagent([SSH_KEY_ID]) {
-        stage("clone ${rpm.repo.project}") {
-            rpm.repo.clone()
+
+    // identify the version being built in the job title
+    currentBuild.displayName = "openshift-ansible ${BUILD_VERSION}"
+
+    try {
+        sshagent([SSH_KEY_ID]) {
+            stage("clone ${rpm.repo.project}") {
+                rpm.repo.clone()
+            }
+
+            // need new version and new release
+            stage("update build/release numbers") {
+                def spec = rpm.spec
+                spec.load()
+                current_version = spec.version
+                current_release = spec.release
+
+                def cv = new Version(current_version)
+                def cr = new Version(current_release)
+
+                echo "current RPM id: ${current_version}-${current_release}"
+                
+                // release builds increment the revision and leave the build
+                // number at 1.  Dunno why
+                //cv.incrRevision()
+                def nv = new Version(cv)
+                def nr = cr.incrMajor()
+
+                spec.version = nv as String
+                spec.release = nr as String
+
+                new_version = spec.version
+                new_release = spec.release
+
+                echo "new RPM id: ${new_version}-${new_release}"
+
+                spec.save()
+            }
+
+            stage("tag and push") {
+                echo "tag and push"
+                echo "tagging RPM id: ${new_version}-${new_release}"            
+                rpm.tag(
+                    version: new_version,
+                    release: new_release,
+                    debug: debug
+                )
+            }
+
+            stage("build") {
+                if (release) {
+                    echo "Building a copy in brew"
+                    rpm.release(new_version.majorminor, scratch)
+                } else {
+                    echo "Building a local copy"
+                    rpm.build(env.WORKSPACE + "/BUILD", debug)
+                }
+            }
         }
-
-        // need new version and new release
-        stage("update build/release numbers") {
-            def spec = rpm.spec
-            spec.load()
-            current_version = spec.version
-            current_release = spec.release
-
-            def cv = new Version(current_version)
-            def cr = new Version(current_release)
-
-            echo "current RPM id: ${current_version}-${current_release}"
-
-            // release builds increment the revision and leave the build
-            // number at 1.  Dunno why
-            //cv.incrRevision()
-            def nv = new Version(cv)
-            def nr = cr.incrMajor()
-
-            spec.version = nv as String
-            spec.release = nr as String
-
-            new_version = spec.version
-            new_release = spec.release
-
-            echo "new RPM id: ${new_version}-${new_release}"
-
-            spec.save()
-        }
-
-        stage("tag and push") {
-            echo "tag and push"
-            echo "tagging RPM id: ${new_version}-${new_release}"            
-            rpm.tag(
-                version: new_version,
-                release: new_release,
-                debug: debug
-            )
-        }
-
-        stage("build") {
-            rpm.build(env.WORKSPACE + "/BUILD", debug)
-        }
+    } catch (error) {
+        
+        mail 
+    } finally {
+        archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/**"
     }
-
-    archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/**"
 }
