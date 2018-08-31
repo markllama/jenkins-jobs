@@ -231,8 +231,7 @@ node(TARGET_NODE) {
             }
         }
     } catch (error) {
-        
-        mail 
+        echo "Error: {error}" 
     } finally {
         archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/**"
     }
