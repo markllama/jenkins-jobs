@@ -231,8 +231,8 @@ node(TARGET_NODE) {
                 }
             }
         }
-    } catch (error) {
-        fail("Yeah, it failed: ${error}")
+    } catch (err) {
+        error("Yeah, it failed: ${err}")
     } finally {
         archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/**"
     }
