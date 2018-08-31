@@ -78,7 +78,7 @@ class Rpm {
     def release(scratch=true, debug=false) {
         def s = spec
         s.load()
-        def version = s.version
+        def version = new Version(s.version)
         pipeline.dir(repo.path) {
             def tito_output = pipeline.sh(
                 returnStdout: true,
