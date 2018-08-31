@@ -20,7 +20,6 @@ class Rpm {
     }
 
     RpmSpec getSpec() {
-
         return new RpmSpec([filename: repo.specpath, pipeline: pipeline])
     }
 
@@ -76,7 +75,10 @@ class Rpm {
         }
     }
 
-    def release(version, scratch=true, debug=false) {
+    def release(scratch=true, debug=false) {
+        def spec = repo.spec
+        spec.load()
+        def version = spec.version
         pipeline.dir(repo.path) {
             def tito_output = pipeline.sh(
                 returnStdout: true,
@@ -86,7 +88,7 @@ class Rpm {
                     '--yes',
                     '--test',
                     (scratch ? '--scratch' : ''),
-                    "aos-${version}"
+                    "aos-${version.majorminor}"
                 ].join(' ')
             )
 
