@@ -224,7 +224,7 @@ node(TARGET_NODE) {
             stage("build") {
                 if (release) {
                     echo "Building a copy in brew"
-                    rpm.release(new_version.majorminor, scratch)
+                    rpm.release(new_version, scratch)
                 } else {
                     echo "Building a local copy"
                     rpm.build(env.WORKSPACE + "/BUILD", debug)
