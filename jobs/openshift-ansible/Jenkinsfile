@@ -90,7 +90,7 @@ properties(
                         "all",
                         "none"
                     ].join("\n"),
-                    defaultValue: "none"
+                    defaultValue: "failure"
                 ],
                 
             ]
