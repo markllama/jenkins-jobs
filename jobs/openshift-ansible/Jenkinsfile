@@ -232,7 +232,7 @@ node(TARGET_NODE) {
             }
         }
     } catch (error) {
-        echo "Error: {error}" 
+        echo "Error: ${error}" 
     } finally {
         archiveArtifacts allowEmptyArchive: true, artifacts: "BUILD/**"
     }
