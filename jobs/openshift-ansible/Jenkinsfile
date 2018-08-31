@@ -78,6 +78,7 @@ properties(
                     name: 'NOTIFY_EMAIL',
                     description: 'An email address to notify on job completion',
                     $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: "mlamouri+jenkins@redhat.com"
                 ],
                 [
                     name: 'NOTIFY_ON',
