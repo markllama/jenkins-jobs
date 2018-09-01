@@ -10,8 +10,8 @@ properties(
             logRotator(
                 artifactDaysToKeepStr: '',
                 artifactNumToKeepStr: '',
-                daysToKeepStr: '',
-                numToKeepStr: '10'
+                daysToKeepStr: '5',
+                numToKeepStr: '5'
             )
         ),
         [
