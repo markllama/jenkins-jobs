@@ -1,0 +1,9 @@
+
+node('container') {
+    stage("Copy A File") {
+        copy(
+            srcFile: "/var/lib/jenkins/.ssh/kerberos.keytab",
+            dstFile: "kerberos.keytab"
+        )
+    }
+}
