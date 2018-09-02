@@ -2,7 +2,7 @@
 
 node('container') {
     
-    stage("get kerberos ticket) {
+    stage("get kerberos ticket") {
         sh "pwd"
         sh "ls"
         sh "klist -a"
