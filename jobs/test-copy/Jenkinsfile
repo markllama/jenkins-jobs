@@ -1,13 +1,13 @@
 
-stage("run on master") {
-    sh "pwd"
-    sh "ls"
-    sh "cp /var/lib/jenkins/,ssh/mlamouri.keytab ."
-}
 
 node('container') {
     stage("Copy A File") {
 
+        stage("run on master") {
+            sh "pwd"
+            sh "ls"
+            sh "cp /jenkins/agent/.ssh/mlamouri.keytab ."
+        }
 
         copy(
             srcFile: "kerberos.keytab",
