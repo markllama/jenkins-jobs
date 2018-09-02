@@ -1,21 +1,12 @@
 
+sh "pwd"
+sh "ls"
+sh "cp /var/lib/jenkins/,ssh/mlamouri.keytab ."
+
+
 node('container') {
     stage("Copy A File") {
 
-        step(
-            [
-                $class: 'FileOperationsBuilder',
-                fileOperations: [
-                    [
-                        $class: 'FileCopyOperation',
-                        includes: '/var/lib/jenkins/.ssh/kerberos.keytab',
-                        excludes: '',
-                        flattenFiles: false,
-                        targetLocation: '.'
-                    ]
-                ]
-            ]
-        )
 
         copy(
             srcFile: "kerberos.keytab",
