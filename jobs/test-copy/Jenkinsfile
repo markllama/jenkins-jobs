@@ -8,9 +8,9 @@ node('container') {
                 fileOperations: [
                     [
                         $class: 'FileCopyOperation',
+                        includes: '/var/lib/jenkins/.ssh/kerberos.keytab',
                         excludes: '',
                         flattenFiles: false,
-                        includes: '**/*.xml',
                         targetLocation: '.'
                     ]
                 ]
