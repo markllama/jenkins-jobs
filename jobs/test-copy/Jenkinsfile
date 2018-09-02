@@ -5,7 +5,7 @@ node('container') {
     stage("get kerberos ticket") {
         sh "pwd"
         sh "ls"
-        sh "klist -a"
+        sh "klist -a || echo no keys found"
         sh "kinit -k -t /jenkins/agent/.ssh/mlamouri.keytab"
         sh "klist -a"
     }
