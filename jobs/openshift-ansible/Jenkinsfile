@@ -45,6 +45,18 @@ properties(
                     defaultValue: 'markllama'
                 ],
                 [
+                    name: 'KRB5_KEYTAB_FILE',
+                    description: 'Name of the keyfile for kerberos access',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: 'jenkins.keytab'
+                ],
+                [
+                    name: 'KRB5_PRINCIPAL',
+                    description: 'The name of the kerberos principal to authenticate',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: 'jenkins'
+                ],
+                [
                     name: 'BUILD_VERSION',
                     description: 'OCP Version to build',
                     $class: 'hudson.model.StringParameterDefinition',
@@ -224,6 +236,7 @@ node(TARGET_NODE) {
             stage("build") {
                 if (release) {
                     echo "Building a copy in brew"
+                    sh "kinit -k -t /jenkins/agent/.ssh/${KRB5_KEYTAB_FILE} ${KRB_PRINCIPAL}"
                     buildid = rpm.release(scratch, debug)
                     echo "brew build id: ${buildid}"
                 } else {
