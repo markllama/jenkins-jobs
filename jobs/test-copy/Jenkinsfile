@@ -6,7 +6,7 @@ node('container') {
         sh "pwd"
         sh "ls"
         sh "klist -a || echo no keys found"
-        sh "kinit -k -t /jenkins/agent/.ssh/mlamouri.keytab"
+        sh "kinit -k -t /jenkins/agent/.ssh/mlamouri.keytab mlamouri@REDHAT.COM"
         sh "klist -a"
     }
 }
