@@ -1,17 +1,12 @@
 
 
 node('container') {
-    stage("Copy A File") {
-
-        stage("run on master") {
-            sh "pwd"
-            sh "ls"
-            sh "cp /jenkins/agent/.ssh/mlamouri.keytab ."
-        }
-
-        copy(
-            srcFile: "kerberos.keytab",
-            dstFile: "kerberos.keytab"
-        )
+    
+    stage("get kerberos ticket) {
+        sh "pwd"
+        sh "ls"
+        sh "klist -a"
+        sh "kinit -k -t /jenkins/agent/.ssh/mlamouri.keytab"
+        sh "klist -a"
     }
 }
