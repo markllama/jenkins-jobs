@@ -1,6 +1,22 @@
 
 node('container') {
     stage("Copy A File") {
+
+        step(
+            [
+                $class: 'FileOperationsBuilder',
+                fileOperations: [
+                    [
+                        $class: 'FileCopyOperation',
+                        excludes: '',
+                        flattenFiles: false,
+                        includes: '**/*.xml',
+                        targetLocation: '.'
+                    ]
+                ]
+            ]
+        )
+
         copy(
             srcFile: "kerberos.keytab",
             dstFile: "kerberos.keytab"
