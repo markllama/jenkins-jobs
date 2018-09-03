@@ -51,7 +51,7 @@ properties(
                     defaultValue: 'jenkins.keytab'
                 ],
                 [
-                    name: 'KRB5_PRINCIPLE',
+                    name: 'KRB5_PRINCIPAL',
                     description: 'The name of the kerberos principle to authenticate',
                     $class: 'hudson.model.StringParameterDefinition',
                     defaultValue: 'jenkins'
@@ -158,7 +158,7 @@ node(TARGET_NODE) {
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
 
     if (release) {
-        kinit(KRB5_KEYTAB_FILE, KRB5_PRINCIPLE)
+        kinit(KRB5_KEYTAB_FILE, KRB5_PRINCIPAL)
     }
 
     package_repo = new GitHubRepository(
