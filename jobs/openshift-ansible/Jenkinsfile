@@ -51,8 +51,8 @@ properties(
                     defaultValue: 'jenkins.keytab'
                 ],
                 [
-                    name: 'KRB5_PRINCIPAL',
-                    description: 'The name of the kerberos principal to authenticate',
+                    name: 'KRB5_PRINCIPLE',
+                    description: 'The name of the kerberos principle to authenticate',
                     $class: 'hudson.model.StringParameterDefinition',
                     defaultValue: 'jenkins'
                 ],
@@ -117,6 +117,12 @@ scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
 
+// get a kerberos ticket
+def kinit(keytab, principle) {
+    def secrets_dir = "/jenkins/agent/.ssh"
+    sh "kinit -k -t ${secrets_dir}/${keytab} ${principle}"
+}
+
 // ===========================================================================
 //
 //
@@ -150,6 +156,10 @@ node(TARGET_NODE) {
     package_name = "openshift-ansible"
     branch_prefix = "release-"
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
+
+    if (release) {
+        kinit(KRB5_KEYTAB_FILE, KRB5_PRINCIPLE)
+    }
 
     package_repo = new GitHubRepository(
         [
