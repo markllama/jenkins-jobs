@@ -157,10 +157,6 @@ node(TARGET_NODE) {
     branch_prefix = "release-"
     brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
 
-    if (release) {
-        kinit(KRB5_KEYTAB_FILE, KRB5_PRINCIPAL)
-    }
-
     package_repo = new GitHubRepository(
         [
             owner: GITHUB_OWNER,
@@ -246,7 +242,15 @@ node(TARGET_NODE) {
             stage("build") {
                 if (release) {
                     echo "Building a copy in brew"
-                    sh "kinit -k -t /jenkins/agent/.ssh/${KRB5_KEYTAB_FILE} ${KRB_PRINCIPAL}"
+
+                    def brew = new BrewServer([
+                            url: "brewweb.engineering.redhat.com",
+                            principal: KRB5_PRINCIPAL,
+                            keytab: KRB5_KEYTAB_FILE,
+                            pipeline: self
+                        ])
+                    brew.login()
+    }
                     buildid = rpm.release(scratch, debug)
                     echo "brew build id: ${buildid}"
                 } else {
