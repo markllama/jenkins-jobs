@@ -12,13 +12,13 @@ class BrewServer {
 
     BrewServer(Map init) {
         url = init.url
-        principle = init.principle
+        principal = init.principal
         keytab = init.keytab
         pipeline = init.pipeline
     }
 
     def login() {
-        pipeline.sh "kinit -k -t ${keytab} ${principle}"
+        pipeline.sh "kinit -k -t ${keytab} ${principal}"
     }
 }
 
