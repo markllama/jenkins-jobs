@@ -9,7 +9,7 @@ class BrewServer {
     def keytab
     def pipeline
 
-    def BrewServer(Map init) {
+    BrewServer(Map init) {
         url = init.url
         principle = init.principle
         keytab = init.keytab
