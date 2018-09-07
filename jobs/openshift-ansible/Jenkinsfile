@@ -250,7 +250,6 @@ node(TARGET_NODE) {
                             pipeline: self
                         ])
                     brew.login()
-    }
                     buildid = rpm.release(scratch, debug)
                     echo "brew build id: ${buildid}"
                 } else {
