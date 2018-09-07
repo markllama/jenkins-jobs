@@ -117,12 +117,6 @@ scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
 
-// get a kerberos ticket
-def kinit(keytab, principle) {
-    def secrets_dir = "/jenkins/agent/.ssh"
-    sh "kinit -k -t ${secrets_dir}/${keytab} ${principle}"
-}
-
 // ===========================================================================
 //
 //
@@ -155,6 +149,7 @@ node(TARGET_NODE) {
     // get the list of release numbers from the branch names
     package_name = "openshift-ansible"
     branch_prefix = "release-"
+    secret_dir = "~jenkins/.ssh"
 
     package_repo = new GitHubRepository(
         [
@@ -241,15 +236,15 @@ node(TARGET_NODE) {
             stage("build") {
                 if (release) {
                     echo "Building a copy in brew"
-                    def brewserver = new BrewServer(
+                    def brew = new BrewServer(
                         [
                             url: "brewweb.engineering.redhat.com",
                             principal: KRB5_PRINCIPAL,
-                            keytab: KRB5_KEYTAB_FILE,
+                            keytab: secrets_dir + "/" + KRB5_KEYTAB_FILE,
                             pipeline: this
                         ]
                     )
-                    brewserver.login()
+                    brew.login()
                     buildid = rpm.release(scratch, debug)
                     echo "brew build id: ${buildid}"
                 } else {
