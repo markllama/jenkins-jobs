@@ -3,7 +3,7 @@
 // Brew/Koji build system
 //
 
-class BrewServer() {
+class BrewServer {
     def url
     def principle
     def keytab
