@@ -2,6 +2,7 @@
 // This library describes a class of objects to manage interactions with the
 // Brew/Koji build system
 //
+package com.redhat.art
 
 class BrewServer {
     def url
