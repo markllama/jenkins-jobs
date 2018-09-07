@@ -246,7 +246,7 @@ node(TARGET_NODE) {
                             url: "brewweb.engineering.redhat.com",
                             principal: KRB5_PRINCIPAL,
                             keytab: KRB5_KEYTAB_FILE,
-                            pipeline: self
+                            pipeline: this
                         ]
                     )
                     brewserver.login()
