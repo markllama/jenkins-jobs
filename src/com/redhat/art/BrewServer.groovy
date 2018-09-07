@@ -11,10 +11,10 @@ class BrewServer {
     def pipeline
 
     BrewServer(Map init) {
-        url = init.url
-        principal = init.principal
-        keytab = init.keytab
-        pipeline = init.pipeline
+        this.url = init.url
+        this.principal = init.principal
+        this.keytab = init.keytab
+        this.pipeline = init.pipeline
     }
 
     def login() {
