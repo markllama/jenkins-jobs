@@ -6,7 +6,7 @@ package com.redhat.art
 
 class BrewServer {
     def url
-    def principle
+    def principal
     def keytab
     def pipeline
 
