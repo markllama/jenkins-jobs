@@ -155,7 +155,6 @@ node(TARGET_NODE) {
     // get the list of release numbers from the branch names
     package_name = "openshift-ansible"
     branch_prefix = "release-"
-    brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
 
     package_repo = new GitHubRepository(
         [
@@ -241,9 +240,8 @@ node(TARGET_NODE) {
 
             stage("build") {
                 if (release) {
-                    def brew
                     echo "Building a copy in brew"
-                    brew = new BrewServer(
+                    def brewserver = new BrewServer(
                         [
                             url: "brewweb.engineering.redhat.com",
                             principal: KRB5_PRINCIPAL,
@@ -251,7 +249,7 @@ node(TARGET_NODE) {
                             pipeline: self
                         ]
                     )
-                    brew.login()
+                    brewserver.login()
                     buildid = rpm.release(scratch, debug)
                     echo "brew build id: ${buildid}"
                 } else {
