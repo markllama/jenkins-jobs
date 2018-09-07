@@ -97,8 +97,8 @@ properties(
                     description: 'dont do anything if true',
                     $class: 'hudson.model.ChoiceParameterDefinition',
                     choices: [
-                        "success",
                         "failure",
+                        "success",
                         "all",
                         "none"
                     ].join("\n"),
