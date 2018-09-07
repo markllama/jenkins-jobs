@@ -241,14 +241,16 @@ node(TARGET_NODE) {
 
             stage("build") {
                 if (release) {
+                    def brew
                     echo "Building a copy in brew"
-
-                    def brew = new BrewServer([
+                    brew = new BrewServer(
+                        [
                             url: "brewweb.engineering.redhat.com",
                             principal: KRB5_PRINCIPAL,
                             keytab: KRB5_KEYTAB_FILE,
                             pipeline: self
-                        ])
+                        ]
+                    )
                     brew.login()
                     buildid = rpm.release(scratch, debug)
                     echo "brew build id: ${buildid}"
