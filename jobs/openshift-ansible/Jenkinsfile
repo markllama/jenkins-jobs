@@ -185,8 +185,9 @@ node(TARGET_NODE) {
         ]
     )
 
+    def mode = release ? "release" : "build"
     // identify the version being built in the job title
-    currentBuild.displayName = "openshift-ansible ${BUILD_VERSION}"
+    currentBuild.displayName = "openshift-ansible ${BUILD_VERSION} ${mode}"
 
     try {
         sshagent([SSH_KEY_ID]) {
