@@ -149,7 +149,7 @@ node(TARGET_NODE) {
     // get the list of release numbers from the branch names
     package_name = "openshift-ansible"
     branch_prefix = "release-"
-    secret_dir = "~jenkins/.ssh"
+    secrets_dir = "~jenkins/.ssh"
 
     package_repo = new GitHubRepository(
         [
