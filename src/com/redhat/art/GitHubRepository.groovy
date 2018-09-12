@@ -106,9 +106,6 @@ class GitHubRepository {
         pipeline.echo("Cloning repo ${remote}")
     }
     
-    /*
-     *
-     */
     def addRemote(remote_name, remote_project) {
         // git remote add ${remote_name} ${remote_spec}
         def remote_spec = "git@github.com:${owner}/${remote_project}.git"
