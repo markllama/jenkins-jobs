@@ -20,10 +20,6 @@ class RpmSpec {
 
     }
     
-    //def RpmSpec(content) {
-    //    lines = content.tokenize("\n")
-    //}
-
     def load() {
         lines = pipeline.readFile(filename).tokenize("\n")
     }

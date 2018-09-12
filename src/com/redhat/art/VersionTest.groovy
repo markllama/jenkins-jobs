@@ -9,13 +9,6 @@ class VersionTest extends GroovyTestCase {
     def VersionTest(pipeline_env=null) {
         env = pipeline_env
     }
-
-    //protected Version v0
-    //protected Version v1
-    
-    //protected void setUp() {
-
-    //}
     
     void testConstructorString() {
         def vs = new Version('3.2.1')
