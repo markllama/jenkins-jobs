@@ -50,10 +50,16 @@ properties(
                     defaultValue: 'master'
                 ],
                 [
-                    name: 'RELEASE',
-                    description: 'build local or release',
+                    name: 'MERGE',
+                    description: 'Merge upstream master or release branch',
                     $class: 'hudson.model.BooleanParameterDefinition',
                     defaultValue: false
+                ],
+                [
+                    name: 'LOCAL',
+                    description: 'build local or remote (in brew)',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: true
                 ],
                 [
                     name: 'SCRATCH',
@@ -80,7 +86,8 @@ properties(
 )
 
 // convert property strings to proper logical values
-release = RELEASE.toBoolean()
+merge= MERGE.toBoolean()
+local = LOCAL.toBoolean()
 scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
@@ -251,8 +258,13 @@ node(TARGET_NODE) {
         }
 
         stage("merge upstream") {
-            package_repo.fetch('upstream')
-            package_repo.merge("upstream", upstream_branch_name)
+            if (merge) {
+                echo "Merging upstream branch ${upstream_branch_name}"
+                package_repo.fetch('upstream')
+                package_repo.merge("upstream", upstream_branch_name)
+            } else {
+                echo "Not merging upstream branch"
+            }
         }
         
         // need new version and new release
