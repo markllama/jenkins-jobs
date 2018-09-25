@@ -176,13 +176,9 @@ node(TARGET_NODE) {
         }
 
         stage("merge upstream") {
-            if (merge) {
-                echo "Merging upstream branch ${upstream_branch_name}"
-                package_repo.fetch('upstream')
-                package_repo.merge("upstream", upstream_branch_name)
-            } else {
-                echo "Not merging upstream branch"
-            }
+            echo "Merging upstream branch ${upstream_branch_name}"
+            package_repo.fetch('upstream')
+            package_repo.merge("upstream", upstream_branch_name)
         }
 
         stage("push downstream") {
