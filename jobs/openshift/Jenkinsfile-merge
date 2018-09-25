@@ -139,6 +139,7 @@ node(TARGET_NODE) {
        }
     }
 
+    currentBuild.displayName = "openshift merge ${build_version}: ${branch_name}"
     if (debug) {
         echo "build_version: ${build_version}, branch_name: ${branch_name}"
     }
