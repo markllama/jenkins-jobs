@@ -98,7 +98,7 @@ class GitHubRepository {
             returnStdout: false,
             script: [
                 "git clone",
-                this.branch ? "--single-branch --branch=${this.branch} --depth=1" : "",
+                // this.branch ? "--single-branch --branch=${this.branch} --depth=1" : "",
                 remote,
                 path
             ].join(' ')
