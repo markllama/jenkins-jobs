@@ -187,8 +187,17 @@ node(TARGET_NODE) {
         }
 
         stage("commit to changes") {
-            echo "Pushing merged content downstream"
+            echo "Committing merge changes"
             package_repo.commit("merged origin:${upstream_branch_name}")
+        }
+
+        stage("push changes downstream") {
+            if (push) {
+                echo "Pushing merged content downstream"
+                package_repo.push()
+            } else {
+                echo "Not pushing merged changes"
+            }
         }
     }
 }
