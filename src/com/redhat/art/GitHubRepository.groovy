@@ -132,6 +132,14 @@ class GitHubRepository {
         }
     }
 
+    def commit(String message) {
+        pipeline.dir(path) {
+            pipeline.sh(
+                script: "git commit -m '${message}'"
+            )
+        }
+    }
+
     def config(String key, String value) {
         pipeline.dir(path) {
             pipeline.sh "git config ${key} ${value}"
