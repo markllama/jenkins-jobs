@@ -162,4 +162,13 @@ class GitHubRepository {
             )
         }
     }
+
+    def hash(String branch='HEAD') {
+        pipeline.dir(path) {
+            return pipeline.sh(
+                script: "git rev-parse ${branch}"
+                returnStdout: true
+            )
+        }
+    }
 }
