@@ -1,0 +1,196 @@
+// Build the OpenShift Ansible RPM
+
+@Library('artlib')
+import com.redhat.art.*
+
+properties(
+    [
+        buildDiscarder(
+            logRotator(
+                artifactDaysToKeepStr: '',
+                artifactNumToKeepStr: '',
+                daysToKeepStr: '5',
+                numToKeepStr: '10'
+            )
+        ),
+        [
+            $class: 'ParametersDefinitionProperty',
+            parameterDefinitions: [
+                [
+                    name: 'TARGET_NODE',
+                    description: 'Jenkins agent node',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: 'container'
+                ],
+                [
+                    name: 'GITHUB_OWNER',
+                    description: 'Github ownerfor repos',
+                    $class: 'hudson.model.ChoiceParameterDefinition',
+                    choices: [
+                        "openshift",
+                        "markllama"
+                    ].join("\n"),
+                    defaultValue: 'openshift'
+                ],
+                [
+                    name: 'SSH_KEY_ID',
+                    description: 'SSH credential id to use',
+                    $class: 'hudson.model.ChoiceParameterDefinition',
+                    choices: [
+                        "openshift-bot",
+                        "markllama-aos-cd-bot",
+                        "markllama"
+                    ].join("\n"),
+                    defaultValue: 'markllama'
+                ],
+                [
+                    name: 'BUILD_VERSION',
+                    description: 'OCP Version to build',
+                    $class: 'hudson.model.StringParameterDefinition',
+                    defaultValue: 'master'
+                ],
+                [
+                    name: 'PUSH',
+                    description: 'push the result of the merge back to the repo',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: false
+                ],
+                [
+                    name: 'DEBUG',
+                    description: 'ask commands to print details',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: false
+                ],
+                [
+                    name: 'MOCK',
+                    description: 'dont do anything if true',
+                    $class: 'hudson.model.BooleanParameterDefinition',
+                    defaultValue: false
+                ],
+            ]
+        ],
+        disableConcurrentBuilds()
+    ]
+)
+
+// convert property strings to proper logical values
+mock = MOCK.toBoolean()
+push = PUSH.toBoolean()
+debug = DEBUG.toBoolean()
+debug_shell = debug ? "-x" : ""
+
+// ***************************************************************************
+//
+//
+//
+// ***************************************************************************
+
+def Boolean package_installed(String package_name) {
+    return sh(returnStatus: true, script: "rpm -q --quiet ${package_name}") == 0
+}
+
+// ===========================================================================
+//
+//
+//
+// ===========================================================================
+node(TARGET_NODE) {
+
+    if (mock == true) {
+        error "MOCK: just download new copy of pipeline code"
+    }
+
+    checkout scm
+
+    gopath_setup()
+
+    collection_installed = package_installed('go-toolset-7')
+
+    // get the list of release numbers from the branch names
+    repo_name = "ose"
+    upstream_project = "origin"
+    branch_prefix = "enterprise-"
+    brew_task_url_prefix = 'https://brewweb.engineering.redhat.com/brew/taskinfo?taskI='
+
+    // clean up before starting
+    sh "rm -rf $repo_name"
+
+    package_repo = new GitHubRepository(
+        [
+            owner: GITHUB_OWNER,
+            project: "ose",
+            package_name: "origin",
+            pipeline: this
+        ])
+
+    sshagent([SSH_KEY_ID]) {
+        releases = package_repo.releases(branch_prefix)
+    }
+    
+    // select the branch to build
+    def branch_name
+    if (BUILD_VERSION in ['master', 'stage']) {
+        build_version = BUILD_VERSION
+        branch_name = BUILD_VERSION
+        upstream_branch_name = BUILD_VERSION
+    } else {
+        build_version = new Version(BUILD_VERSION)
+        if (releases.find { it == build_version } != -1) {
+            branch_name = branch_prefix + build_version
+            upstream_branch_name = 'release-' + build_version
+        } else {
+            error "invalid build version ${BUILD_VERSION}"
+       }
+    }
+
+    if (debug) {
+        echo "build_version: ${build_version}, branch_name: ${branch_name}"
+    }
+
+    package_repo.branch = branch_name
+
+    rpm = new Rpm(repo: package_repo, pipeline: this)
+
+    spec = rpm.spec
+
+    sshagent([SSH_KEY_ID]) {
+        stage("clone ${rpm.repo.project}") {
+            rpm.repo.clone()
+        }
+
+        spec.load()
+
+        if (build_version == 'master') {
+            echo("detecting master version")
+            def version_string = spec.version
+            def version = new Version(version_string)
+            echo "version: ${version}"
+            echo "MajorMinor: ${version.majorminor}"
+            build_version = new Version(version.majorminor)
+        }
+
+        stage("configure dummy merge") {
+            package_repo.config("merge.ours.driver", "true")
+            package_repo.set_attribute('pkg/assets/bindata.go', 'merge', 'ours')
+            package_repo.set_attribute('pkg/assets/java/bindata.go', 'merge', 'ours')
+        }
+
+        stage("add upstream remote") {
+            package_repo.addRemote("upstream", upstream_project)
+        }
+
+        stage("merge upstream") {
+            if (merge) {
+                echo "Merging upstream branch ${upstream_branch_name}"
+                package_repo.fetch('upstream')
+                package_repo.merge("upstream", upstream_branch_name)
+            } else {
+                echo "Not merging upstream branch"
+            }
+        }
+
+        stage("push downstream") {
+            echo "Pushing merged content downstream"
+        }
+    }
+}
