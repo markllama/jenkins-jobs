@@ -175,9 +175,13 @@ node(TARGET_NODE) {
             package_repo.addRemote("upstream", upstream_project)
         }
 
+        stage("fetch upstream branch") {
+            echo "Fetching upstream branch ${upstream_branch_name}"
+            package_repo.fetch('upstream')
+        }
+        
         stage("merge from upstream") {
             echo "Merging upstream branch ${upstream_branch_name}"
-            package_repo.fetch('upstream')
             package_repo.merge("upstream", upstream_branch_name)
         }
 
