@@ -102,10 +102,6 @@ node(TARGET_NODE) {
 
     checkout scm
 
-    gopath_setup()
-
-    collection_installed = package_installed('go-toolset-7')
-
     // get the list of release numbers from the branch names
     repo_name = "ose"
     upstream_project = "origin"
