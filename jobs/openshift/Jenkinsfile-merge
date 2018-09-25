@@ -186,9 +186,9 @@ node(TARGET_NODE) {
             package_repo.merge("upstream", upstream_branch_name)
         }
 
-        stage("push to downstream") {
+        stage("commit to changes") {
             echo "Pushing merged content downstream"
-            package_repo.commit("merged origin:${upstream-branch}")
+            package_repo.commit("merged origin:${upstream_branch_name}")
         }
     }
 }
