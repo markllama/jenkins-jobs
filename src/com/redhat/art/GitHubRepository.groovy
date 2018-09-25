@@ -135,7 +135,7 @@ class GitHubRepository {
     def commit(String message) {
         pipeline.dir(path) {
             pipeline.sh(
-                script: "git commit -m '${message}'"
+                script: "git commit --allow-empty -m '${message}'"
             )
         }
     }
