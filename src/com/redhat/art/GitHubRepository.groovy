@@ -140,6 +140,14 @@ class GitHubRepository {
         }
     }
 
+    def push(String remote_name="") {
+        pipeline.dir(path) {
+            pipeline.sh(
+                script: "git push ${remote_name}"
+            )
+        }        
+    }
+
     def config(String key, String value) {
         pipeline.dir(path) {
             pipeline.sh "git config ${key} ${value}"
