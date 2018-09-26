@@ -221,14 +221,13 @@ node(TARGET_NODE) {
     }
 
     def summary = """=== SUMMARY ===
-initial commit hash - openshift/ose/${branch_name}: ${base_commit}
+initial commit hash  - openshift/ose/${branch_name}: ${base_commit}
 upstream commit hash - openshift/origin/${upstream_branch_name}: ${upstream_commit}
-final commit hash - openshift/ose/${branch_name}: ${final_commit}
+final commit hash    - openshift/ose/${branch_name}: ${final_commit}
 
 merge report:
 
 ${merge_log}
-
 ==============
 """
         
