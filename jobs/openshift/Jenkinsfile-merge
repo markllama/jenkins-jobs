@@ -188,7 +188,8 @@ node(TARGET_NODE) {
             upstream_commit = rpm.repo.hash("upstream/${upstream_branch_name}")
             echo "upstream commit hash - openshift ${upstream_branch_name}: ${upstream_commit}"
             merge_log = package_repo.merge("upstream", upstream_branch_name)
-            echo "merge log: ${merge_log}"
+            echo "merge log: '${merge_log}'"
+            if (merge_log.strip()) == "Already up-to-date."
         }
 
         stage("commit to changes") {
