@@ -187,7 +187,15 @@ node(TARGET_NODE) {
             echo "Merging upstream branch ${upstream_branch_name}"
             upstream_commit = rpm.repo.hash("upstream/${upstream_branch_name}")
             echo "upstream commit hash - openshift ${upstream_branch_name}: ${upstream_commit}"
-            merge_log = package_repo.merge("upstream", upstream_branch_name)
+
+            // capture fail for email report
+            //try {
+                merge_log = package_repo.merge("upstream", upstream_branch_name)
+            //} catch(merge_error) {
+            //  compose email
+            //  send email
+            //  flag run failed
+            //}
             echo "merge log: '${merge_log}'"
             if (merge_log.trim() == "Already up-to-date.") {
                 echo "No need to merge.  how to quit?"
@@ -210,7 +218,9 @@ node(TARGET_NODE) {
             }
         }
 
-        def sumamry = """=== SUMMARY ===
+    }
+
+    def summary = """=== SUMMARY ===
 initial commit hash - openshift/ose/${branch_name}: ${base_commit}
 upstream commit hash - openshift/origin/${upstream_branch_name}: ${upstream_commit}
 final commit hash - openshift/ose/${branch_name}: ${final_commit}
@@ -222,8 +232,8 @@ ${merge_log}
 ==============
 """
         
-    }
-
+    echo summary
+    
     writeFile(file: "merge_summary.txt", text: summary)
     archiveArtifacts allowEmptyArchive: true, artifacts: "merge_summary.txt"
 }
