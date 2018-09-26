@@ -210,12 +210,20 @@ node(TARGET_NODE) {
             }
         }
 
-        echo """=== SUMMARY ===
+        def sumamry = """=== SUMMARY ===
 initial commit hash - openshift/ose/${branch_name}: ${base_commit}
 upstream commit hash - openshift/origin/${upstream_branch_name}: ${upstream_commit}
 final commit hash - openshift/ose/${branch_name}: ${final_commit}
+
+merge report:
+
+${merge_log}
+
 ==============
 """
         
     }
+
+    writeFile(file: "merge_summary.txt", text: summary)
+    archiveArtifacts allowEmptyArchive: true, artifacts: "merge_summary.txt"
 }
