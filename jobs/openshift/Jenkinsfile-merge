@@ -153,6 +153,8 @@ node(TARGET_NODE) {
     sshagent([SSH_KEY_ID]) {
         stage("clone ${rpm.repo.project}") {
             rpm.repo.clone()
+            base_commit = rpm.repo.hash()
+            echo "initial commit hash - ose ${branch_name}: ${base_commit}"
         }
 
         spec.load()
@@ -183,12 +185,16 @@ node(TARGET_NODE) {
         
         stage("merge from upstream") {
             echo "Merging upstream branch ${upstream_branch_name}"
+            upstream_commit = rpm.repo.hash(upstream_branch_name)
+            echo "upstream commit hash - ose ${branch_name}: ${upstream_commit}"
             package_repo.merge("upstream", upstream_branch_name)
         }
 
         stage("commit to changes") {
             echo "Committing merge changes"
             package_repo.commit("merged origin:${upstream_branch_name}")
+            final_commit = rpm.repo.hash()
+            echo "final commit hash - ose ${branch_name}: ${final_commit}"
         }
 
         stage("push changes downstream") {
