@@ -189,7 +189,9 @@ node(TARGET_NODE) {
             echo "upstream commit hash - openshift ${upstream_branch_name}: ${upstream_commit}"
             merge_log = package_repo.merge("upstream", upstream_branch_name)
             echo "merge log: '${merge_log}'"
-            if (merge_log.strip()) == "Already up-to-date."
+            if (merge_log.strip() == "Already up-to-date.") {
+                echo "No need to merge.  how to quit?"
+            }
         }
 
         stage("commit to changes") {
