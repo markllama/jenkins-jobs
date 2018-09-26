@@ -205,5 +205,12 @@ node(TARGET_NODE) {
                 echo "Not pushing merged changes"
             }
         }
+
+        echo """=== SUMMARY ===
+upstream commit hash - openshift ${upstream_branch_name}: ${upstream_commit}
+final commit hash - ose ${branch_name}: ${final_commit}
+initial commit hash - ose ${branch_name}: ${base_commit}
+"""
+        
     }
 }
