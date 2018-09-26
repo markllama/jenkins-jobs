@@ -207,9 +207,9 @@ node(TARGET_NODE) {
         }
 
         echo """=== SUMMARY ===
-initial commit hash - ose ${branch_name}: ${base_commit}
-upstream commit hash - openshift ${upstream_branch_name}: ${upstream_commit}
-final commit hash - ose ${branch_name}: ${final_commit}
+initial commit hash - ose/${branch_name}: ${base_commit}
+upstream commit hash - openshift/${upstream_branch_name}: ${upstream_commit}
+final commit hash - ose/${branch_name}: ${final_commit}
 ==============
 """
         
