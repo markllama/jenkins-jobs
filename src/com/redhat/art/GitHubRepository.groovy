@@ -166,8 +166,8 @@ class GitHubRepository {
     def hash(String branch='HEAD') {
         pipeline.dir(path) {
             return pipeline.sh(
+                returnStdout: true,
                 script: "git rev-parse ${branch}"
-                returnStdout: true
             )
         }
     }
