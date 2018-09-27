@@ -95,7 +95,7 @@ class Rpm {
             pipeline.echo "--- tito output\n${tito_output} ----"
 
             def tito_lines = tito_output.tokenize('\n')
-            def task_line = tito_lines.find{ it =~ /^Created Task: / }
+            def task_line = tito_lines.find{ it =~ /^Created task: / }
             pipeline.echo "task line: ${task_line}"
             def task_matcher = task_line =~ /^Created Task:\s+([0-9]+)/
             
