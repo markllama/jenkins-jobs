@@ -52,7 +52,7 @@ properties(
                 ],
                 [
                     name: 'KRB5_PRINCIPAL',
-                    description: 'The name of the kerberos principle to authenticate',
+                    description: 'The name of the kerberos principal to authenticate',
                     $class: 'hudson.model.StringParameterDefinition',
                     defaultValue: 'jenkins'
                 ],
@@ -116,6 +116,9 @@ release = RELEASE.toBoolean()
 scratch = SCRATCH.toBoolean()
 mock = MOCK.toBoolean()
 debug = DEBUG.toBoolean()
+
+// RHPKG uses the KRB5 principal as user for accessing brew/koji and image repos
+rhpkg_user = KRB5_PRINCIPAL.tokenize('/')[0]
 
 // ===========================================================================
 //
