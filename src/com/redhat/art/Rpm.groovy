@@ -105,10 +105,13 @@ class Rpm {
             if (debug) {
                 pipeline.echo "task matches: ${task_matcher[0]}"
             }
-
             // check if the matcher has any results
             def brew_task_id = task_matcher[0][1]
-            def brew_task_url = brew_task_url_prefix + brew_task_id
+
+            def url_line = tito_lines.find { it =~ /^Task info: / }
+            def url_match = url_line =~ /^Task info: (.*)$/
+            def brew_task_url = url_match[0][1]
+
             pipeline.echo "${package_name} rpm brew task: ${brew_task_id}"
     
             try {
