@@ -93,8 +93,12 @@ class Rpm {
             )
 
             def tito_lines = tito_output.tokenize('\n')
+            pipeline.echo "$--- tito output\n{tito_lines} ----"
+            
             def task_line = tito_lines.find{ it =~ /^Created Task: / }
+            pipeline.echo "task line: ${task_line}"
             def task_matcher = task_line =~ /^Created Task:\s+([0-9]+)/
+            
             brew_task_id = task_matcher[0][1]
             brew_task_url = brew_task_url_prefix + brew_task_id
             pipeline.echo "${package_name} rpm brew task: ${brew_task_id}"
