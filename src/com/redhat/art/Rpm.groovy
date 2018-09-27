@@ -103,7 +103,7 @@ class Rpm {
             }
             def task_matcher = task_line =~ /^Created task:\s+([0-9]+),*/
             if (debug) {
-                pipeline.echo "task matcher: ${task_matcher}"
+                pipeline.echo "task matches: ${task_matcher[0]}"
             }
 
             // check if the matcher has any results
