@@ -92,13 +92,19 @@ class Rpm {
                 ].join(' ')
             )
 
-            pipeline.echo "--- tito output\n${tito_output} ----"
+            if (debug) {
+                pipeline.echo "--- tito output\n${tito_output} ----"
+            }
 
             def tito_lines = tito_output.tokenize('\n')
             def task_line = tito_lines.find{ it =~ /^Created task: / }
-            pipeline.echo "task line: ${task_line}"
-            def task_matcher = task_line =~ /^Created Task:\s+([0-9]+)/
-            
+            if (debug) {
+                pipeline.echo "task line: ${task_line}"
+            }
+            def task_matcher = task_line =~ /^Created task:\s+([0-9]+)/
+            if (debug) {
+                pipeline.echo "task matcher: ${task_matcher}"
+            }
             brew_task_id = task_matcher[0][1]
             brew_task_url = brew_task_url_prefix + brew_task_id
             pipeline.echo "${package_name} rpm brew task: ${brew_task_id}"
