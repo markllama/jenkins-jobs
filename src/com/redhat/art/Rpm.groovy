@@ -93,7 +93,7 @@ class Rpm {
             )
 
             def tito_lines = tito_output.tokenize('\n')
-            pipeline.echo "$--- tito output\n{tito_lines} ----"
+            pipeline.echo "--- tito output\n${tito_lines} ----"
             
             def task_line = tito_lines.find{ it =~ /^Created Task: / }
             pipeline.echo "task line: ${task_line}"
