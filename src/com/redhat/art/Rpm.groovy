@@ -79,6 +79,7 @@ class Rpm {
         def s = spec
         s.load()
         def version = new Version(s.version)
+        def brew_task_id
         pipeline.dir(repo.path) {
             def tito_output = pipeline.sh(
                 returnStdout: true,
@@ -106,7 +107,7 @@ class Rpm {
                 pipeline.echo "task matches: ${task_matcher[0]}"
             }
             // check if the matcher has any results
-            def brew_task_id = task_matcher[0][1]
+            brew_task_id = task_matcher[0][1]
 
             def url_line = tito_lines.find { it =~ /^Task info: / }
             if (debug) {
