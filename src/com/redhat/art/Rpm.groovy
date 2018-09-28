@@ -129,7 +129,6 @@ class Rpm {
             //}
         }
 
-        // return brew_task_id
-        return "1234"
+        return brew_task_id
     }
 }
