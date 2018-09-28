@@ -123,6 +123,7 @@ class Rpm {
     
             try {
                 def watch_task_command = "brew watch-task ${brew_task_id}"
+                pipeline.echo watch_task_command
                 pipeline.sh(
                     script: watch_task_command
                 )
