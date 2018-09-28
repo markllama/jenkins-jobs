@@ -99,27 +99,8 @@ class Rpm {
             }
 
             def tito_lines = tito_output.tokenize('\n')
-            def task_line = tito_lines.find{ it =~ /^Created task: / }
-            if (debug) {
-                pipeline.echo "task line: '${task_line}'"
-            }
-            def task_matcher = task_line =~ /^Created task:\s+([0-9]+),*/
-            if (debug) {
-                pipeline.echo "task matches: ${task_matcher[0]}"
-            }
-            // check if the matcher has any results
-            brew_task_id = task_matcher[0][1]
-
-            def url_line = tito_lines.find { it =~ /^Task info: / }
-            if (debug) {
-                pipeline.echo("Build URL line: ${url_line}")
-            }
-            def url_match = url_line =~ /^Task info: (.*)$/
-            if (debug) {
-                pipeline.echo("url matches: ${url_match[0]}")
-            }
-            def brew_task_url = url_match[0][1]
-
+            brew_task_id = this.get_task_id(tito_lines)
+            def brew_task_url = this.get_task_url(tito_lines)
             pipeline.echo "${repo.package_name} rpm brew task: ${brew_task_id}"
     
             try {
@@ -136,5 +117,19 @@ class Rpm {
         }
 
         return brew_task_id
+    }
+
+    @NonCPS
+    def get_task_id(text_array) {
+        def task_line = text_array.find{ it =~ /^Created task: / }
+        def task_matcher = task_line =~ /^Created task:\s+([0-9]+),*/
+        return task_matcher[0][1]
+    }
+
+    @NonCPS
+    def get_task_url(text_array) {
+        def url_line = text_array.find { it =~ /^Task info: / }
+            def url_match = url_line =~ /^Task info: (.*)$/
+            return = url_match[0][1]
     }
 }
