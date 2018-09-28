@@ -130,6 +130,6 @@ class Rpm {
     def get_task_url(text_array) {
         def url_line = text_array.find { it =~ /^Task info: / }
             def url_match = url_line =~ /^Task info: (.*)$/
-            return = url_match[0][1]
+            return url_match[0][1]
     }
 }
