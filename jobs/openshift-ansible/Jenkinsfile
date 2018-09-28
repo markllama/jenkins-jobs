@@ -250,7 +250,8 @@ node(TARGET_NODE) {
                     )
                     brew.login()
                     buildid = rpm.release(scratch, debug)
-                    echo "brew build id: ${buildid}"
+                    echo "brew build release returned"
+                    // echo "brew build id: ${buildid}"
                 } else {
                     echo "Building a local copy"
                     rpm.build(env.WORKSPACE + "/BUILD", debug)
