@@ -122,7 +122,7 @@ class Rpm {
             pipeline.echo "${repo.package_name} rpm brew task: ${brew_task_id}"
     
             try {
-                watch_task_command = "brew watch-task ${brew_task_id}"
+                def watch_task_command = "brew watch-task ${brew_task_id}"
                 pipeline.sh(
                     script: watch_task_command
                 )
