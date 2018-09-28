@@ -122,7 +122,10 @@ class Rpm {
             pipeline.echo "${repo.package_name} rpm brew task: ${brew_task_id}"
     
             try {
-                pipeline.sh "brew watch-task ${brew_task_id}"
+                watch_task_command = "brew watch-task ${brew_task_id}"
+                pipeline.sh(
+                    script: watch_task_command
+                )
             } catch (build_err) {
                 pipeline.echo "Error in ${repo.package_name} build task: ${brew_task_url}"
                 pipeline.echo "brew watch task error: ${build_err}"
