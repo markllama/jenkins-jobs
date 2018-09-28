@@ -75,6 +75,7 @@ class Rpm {
         }
     }
 
+    @NonCPS
     def release(scratch=true, debug=false) {
         def s = spec
         s.load()
