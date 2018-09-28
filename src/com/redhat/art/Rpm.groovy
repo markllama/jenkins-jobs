@@ -112,12 +112,12 @@ class Rpm {
             def url_match = url_line =~ /^Task info: (.*)$/
             def brew_task_url = url_match[0][1]
 
-            pipeline.echo "${package_name} rpm brew task: ${brew_task_id}"
+            pipeline.echo "${repo.package_name} rpm brew task: ${brew_task_id}"
     
             try {
                 pipeline.sh "brew watch-task ${brew_task_id}"
             } catch (build_err) {
-                pipeline.echo "Error in ${package_name} build task: ${brew_task_url}"
+                pipeline.echo "Error in ${repo.package_name} build task: ${brew_task_url}"
                 throw build_err
             }
         }
